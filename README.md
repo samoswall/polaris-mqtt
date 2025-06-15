@@ -178,6 +178,7 @@
 |188|PWK-1775CGLD|kettle|:heavy_check_mark:|volume, backlight, child_lock, temperature, |![all](https://images.cdn.polaris-iot.com/8/08/f91f4-f117-4074-aa8a-d3d177d7c657/60.webp)
 |223|PWK-1775CGLD|kettle|:heavy_check_mark:|volume, backlight, child_lock, temperature, weight|![all](https://images.cdn.polaris-iot.com/8/08/f91f4-f117-4074-aa8a-d3d177d7c657/60.webp)
 |263|PWK-1775CGLD|kettle|:heavy_check_mark:|volume, backlight, child_lock, temperature, weight|![all](https://images.cdn.polaris-iot.com/8/08/f91f4-f117-4074-aa8a-d3d177d7c657/60.webp)
+|275|PWK-1775CGLD|kettle|:heavy_check_mark:|volume, backlight, child_lock, temperature, weight|![all](https://images.cdn.polaris-iot.com/8/08/f91f4-f117-4074-aa8a-d3d177d7c657/60.webp)
 |85|PWK-1775CGLD-SMART|kettle|:heavy_check_mark:|volume, backlight, child_lock, temperature, |![all](https://images.cdn.polaris-iot.com/8/08/f91f4-f117-4074-aa8a-d3d177d7c657/60.webp)
 |139|PWK-1775CGLD-VOICE|kettle|:heavy_check_mark:|volume, backlight, child_lock, temperature, |![all](https://images.cdn.polaris-iot.com/8/08/f91f4-f117-4074-aa8a-d3d177d7c657/60.webp)
 |175|PWK-1823CGLD|kettle|:heavy_check_mark:|night, volume, backlight, child_lock, temperature, |![all](https://images.cdn.polaris-iot.com/5/f2/5158d-edd3-4018-a391-2a97626f3bb9/60.webp)
@@ -233,10 +234,11 @@
 |200|PACM-2081AC|coffeemaker|:heavy_check_mark:|speed, timer, amount, volume, weight, pressure, child_lock, water_tank, temperature, |![all](https://images.cdn.polaris-iot.com/c/11/747d1-b6ce-417f-980d-665512b3a6ad/60.webp)
 |166|PACM-2085GC|coffeemaker|:heavy_check_mark:|speed, amount, volume, weight, pressure, child_lock, water_tank, temperature, |![all](https://images.cdn.polaris-iot.com/b/2b/8c952-9291-4c02-bce2-4d73f853452d/60.webp)
 |247|PCM-1255|coffeemaker|:heavy_check_mark:|timer, amount, volume, weight, ioniser, child_lock, |![all](https://images.cdn.polaris-iot.com/6/7e/b8e87-9593-4023-b339-3fb6da5df931/60.webp)
-|45|PCM-1540WIFI|coffeemaker|:heavy_check_mark:|amount, volume, child_lock, water_tank, temperature, |![all](https://images.cdn.polaris-iot.com/a/44/ec0b3-ea7f-4d75-bd2a-ba174bf1817d/60.webp)
+|274|PCM-1540WIFI|coffeemaker|:heavy_check_mark:|amount, volume, child_lock, water_tank, temperature, |![all](https://images.cdn.polaris-iot.com/a/44/ec0b3-ea7f-4d75-bd2a-ba174bf1817d/60.webp)
 |222|PCM-1540WIFI|coffeemaker|:heavy_check_mark:|amount, volume, child_lock, water_tank, temperature, |![all](https://images.cdn.polaris-iot.com/a/44/ec0b3-ea7f-4d75-bd2a-ba174bf1817d/60.webp)
 |190|PCM-1560|coffeemaker|:heavy_check_mark:|amount, volume, child_lock, water_tank, temperature, |![all](https://images.cdn.polaris-iot.com/6/7e/b8e87-9593-4023-b339-3fb6da5df931/60.webp)
 |207|PCM-2070CG|coffeemaker|:heavy_check_mark:|turbo, amount, volume, child_lock, water_tank, stream_warm, temperature, |![all](https://images.cdn.polaris-iot.com/2/72/b2f22-3608-40b7-b435-7485fe68dfc2/60.webp)
+|45|PCM-1540WIFI|coffeemaker|:heavy_check_mark:|amount, volume, child_lock, water_tank, temperature, |![all](https://images.cdn.polaris-iot.com/a/44/ec0b3-ea7f-4d75-bd2a-ba174bf1817d/60.webp)
 |172|PAW-0804|air-cleaner|:heavy_check_mark:|speed, timer, volume, backlight, |![all](https://images.cdn.polaris-iot.com/6/8d/81a02-893f-467d-a375-1c004bb31548/60.webp)
 |140|PAW-0804(c3-test)|air-cleaner|:heavy_check_mark:|speed, timer, turbo, volume, ioniser, backlight, |![all](https://images.cdn.polaris-iot.com/0/f0/440b3-27bd-49f8-81e4-0af6f8e13dee/60.webp)
 |151|PPA-2025|air-cleaner|:heavy_check_mark:|speed, timer, volume, ioniser, backlight, child_lock, stream_warm, |![all](https://images.cdn.polaris-iot.com/5/de/94ac7-2530-446f-a4bd-566ddc4edd16/60.webp)
@@ -375,6 +377,7 @@
 | ID    | Модель           | Тип устройства | Поддержка | Функции | Изображение |
 | :---: |------------------|----------------|-----------|---------|    :---:    |
 |69|Ballu ASP-100|air-cleaner|:heavy_check_mark:|fan speed, volume, sound, backlight |![all](https://m-files.cdn1.cc/lpfile/1/2/b/12b3c2e3a488530bce9bcf8d2723188b/-/crop/0x0x1920x1920/-/resize/100/-/quality/95/f.jpg)
+|876|Electrolux EWH-50|boiler|:heavy_check_mark:|mode, temperature, smart, bss, child_lock |![all](https://rkcdn.ru/products/479233ce-2f07-11ef-b8d8-00505601218a/main_small.jpg)
 
 </details>
 
@@ -386,11 +389,11 @@
 
 ![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_1.png)
 
-2. Заменяем в полном пути топика rusclimate на polaris, вводим в окно сообщения свой mac адрес, ставим галочку Retain и нажимаем кнопку PUBLISH
+2. Заменяем в полном пути топика rusclimate на polaris,<br> для устройств с ID > 800 заменяем ID добавив цифру 8 (должно получиться например polaris/876/aaabbb...и т.д.)<br> вводим в окно сообщения свой mac адрес, ставим галочку Retain и нажимаем кнопку PUBLISH
 
 ![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_2.png)
 
-Должно получиться: в топике polaris - топик 69 (тип вашего устройства) - топик aaabbbcccdddeeefff (токен вашего устройства) - топик state - топик mac (с mac адресом вашего устройства)
+Должно получиться: в топике polaris - топик c цифрой (тип вашего устройства) - топик aaabbbcccdddeeefff (токен вашего устройства) - топик state - топик mac (с mac адресом вашего устройства)
 
 ![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_3.png)
 
