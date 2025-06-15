@@ -23,28 +23,28 @@
 > Обратите внимание - устройства одинаковые, а функции могут быть разные (наличие/отсутствие веса или ночника). После изменения (публикации) типа - надо удалить устройство в интеграции и создать заново.<br>
 > Вот тут есть [мини инструкция](https://github.com/samoswall/hacs-polaris/issues/9#issuecomment-2707181427) на примере чайника.
 
-:information_source: **Добавлены**: <br>
-:heavy_check_mark: Чайники <br>
-:heavy_check_mark: Увлажнители <br>
-:heavy_check_mark: Мультиварки <br>
-:heavy_check_mark: Кофемашины <br>
-:heavy_check_mark: Очистители воздуха <br>
+ℹ️ **Добавлены**: <br>
+✔️ Чайники <br>
+✔️ Увлажнители <br>
+✔️ Мультиварки <br>
+✔️ Кофемашины <br>
+✔️ Очистители воздуха <br>
 
-:information_source: **Как добавить новое устройство**: <br>
+ℹ️ **Как добавить новое устройство**: <br>
 Создаем issues - Добавить ...  <br>
 Обязательно указать type(ID) устройства и желательно развернутый mqtt топик для понимания, что добавлять. <br>
 
-:information_source: **Возможные проблемы**: <br>
+ℹ️ **Возможные проблемы**: <br>
 В чайниках - может отсутствовать(быть лишним) сенсор веса и сенсор на базе. Так же может не работать Ночник (потому что в чайнике его нет)<br>
 Проблема - есть одинаковые модели как с весом так и без, с ночником и без. Отличаются type(ID). <br>
 Не стесняемся, создаем issues - отсутствует(лишний) сенсор ... type ... <br>
 По другим предложениям (проблемам, логике работы, иконкам, переводам) пишем issues <br>
 
-:information_source: **Планы для доработок**: <br>
-:heavy_check_mark: Добавить поддержку старых устройств (со старой структурой топика) <br>
-:heavy_check_mark: Добавить сенсор ошибок <br>
-:heavy_check_mark: Добавить устройсто online/offline <br>
-:black_large_square: Добавить пылесосы и т.д.<br>
+ℹ️ **Планы для доработок**: <br>
+✔️ Добавить поддержку старых устройств (со старой структурой топика) <br>
+✔️ Добавить сенсор ошибок <br>
+✔️ Добавить устройсто online/offline <br>
+⬛ Добавить пылесосы и т.д.<br>
 
 Доступно обсуждение тут: [Telegram](https://t.me/polarishomeassistant)
 
@@ -376,8 +376,8 @@
 
 | ID    | Модель           | Тип устройства | Поддержка | Функции | Изображение |
 | :---: |------------------|----------------|-----------|---------|    :---:    |
-|69|Ballu ASP-100|air-cleaner|:heavy_check_mark:|fan speed, volume, sound, backlight |![all](https://m-files.cdn1.cc/lpfile/1/2/b/12b3c2e3a488530bce9bcf8d2723188b/-/crop/0x0x1920x1920/-/resize/100/-/quality/95/f.jpg)
-|876|Electrolux EWH-50|boiler|:heavy_check_mark:|mode, temperature, smart, bss, child_lock |![all](https://rkcdn.ru/products/479233ce-2f07-11ef-b8d8-00505601218a/main_small.jpg)
+|69|Ballu ASP-100|air-cleaner|✔️|fan speed, volume, sound, backlight |![all](https://m-files.cdn1.cc/lpfile/1/2/b/12b3c2e3a488530bce9bcf8d2723188b/-/crop/0x0x1920x1920/-/resize/100/-/quality/95/f.jpg)
+|876|Electrolux EWH-50|boiler|✔️|mode, temperature, smart, bss, child_lock |![all](https://rkcdn.ru/products/479233ce-2f07-11ef-b8d8-00505601218a/main_small.jpg)
 
 </details>
 
