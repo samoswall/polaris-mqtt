@@ -46,6 +46,12 @@
       },
       "ultraviolet_switch": {
         "name": "Ультрафиолет"
+      },
+      "smart_mode": {
+        "name": "Умный режим"
+      },
+      "bss_mode": {
+        "name": "Антибактериальная очистка"
       }
     },
     "water_heater": {
@@ -57,6 +63,16 @@
           "electric": "Разогрев",
           "heat_pump": "Разогрев с удержанием",
           "eco": "IQ Кипячение"
+        }
+      },
+      "water_boiler": {
+        "name": "Бойлер",
+        "state": {
+          "off": "Выключен",
+          "performance": "Низкий",
+          "electric": "Средний",
+          "heat_pump": "Высокий",
+          "eco": "Экономичный"
         }
       }
     },
@@ -170,6 +186,9 @@
       },
       "clean_retain": {
         "name": "Остаток до очистки бака"
+      },
+      "anode_retain": {
+        "name": "Остаток до замены анода"
       },
       "mode_sensor": {
         "name": "Режим работы",
