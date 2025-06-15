@@ -25,12 +25,15 @@ from .const import (
     DEVICETYPE,
     POLARIS_DEVICE,
     WATER_HEATERS,
+    WATER_BOILERS,
     PolarisWaterHeaterEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
+    POLARIS_BOILER_TYPE,
 )
 
-#_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.DEBUG)
 
 async def async_setup_entry(
     hass: HomeAssistant, config: ConfigEntry, async_add_entities: AddEntitiesCallback,
@@ -46,6 +49,25 @@ async def async_setup_entry(
         # Create water heater for kettle devices
         WATER_HEATERS_LC = copy.deepcopy(WATER_HEATERS)
         for description in WATER_HEATERS_LC:
+            description.mqttTopicCommandTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandTemperature}"
+            description.mqttTopicCurrentTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentTemperature}"
+            description.mqttTopicTargetTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicTargetTemperature}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.device_prefix_topic = device_prefix_topic
+            waterheaterList.append(
+                PolarisWaterHeater(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in POLARIS_BOILER_TYPE):
+        # Create water boiler
+        WATER_BOILERS_LC = copy.deepcopy(WATER_BOILERS)
+        for description in WATER_BOILERS_LC:
             description.mqttTopicCommandTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandTemperature}"
             description.mqttTopicCurrentTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentTemperature}"
             description.mqttTopicTargetTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicTargetTemperature}"
@@ -87,7 +109,7 @@ class PolarisWaterHeater(PolarisBaseEntity, WaterHeaterEntity):
         self.temperature_unit=UnitOfTemperature.CELSIUS
         self._attr_min_temp=description.min_temp
         self._attr_max_temp=description.max_temp
-        self.target_temperature = 100
+        self.target_temperature = description.max_temp
         self._unit_of_measurement = UnitOfTemperature.CELSIUS
         self._away = None
         self._attr_is_on = True
@@ -103,6 +125,7 @@ class PolarisWaterHeater(PolarisBaseEntity, WaterHeaterEntity):
         #self.entity_picture = "https://images.cdn.polaris-iot.com/a/8c/aad08-4d13-489c-9b0f-028486297ac1/60.webp"
         self._attr_has_entity_name = True
         self._attr_available = False
+
 
     async def async_added_to_hass(self):
         @callback
@@ -173,6 +196,8 @@ class PolarisWaterHeater(PolarisBaseEntity, WaterHeaterEntity):
 
     def set_temperature(self, **kwargs):
         self.target_temperature = kwargs.get(ATTR_TEMPERATURE)
+        topic = f"{self.entity_description.mqttTopicCommandTemperature}"
+        mqtt.publish(self.hass, topic, int(self.target_temperature))
         self.schedule_update_ha_state()
 
     @property

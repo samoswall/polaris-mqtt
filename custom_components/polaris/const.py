@@ -191,6 +191,7 @@ POLARIS_DEVICE = {
     222: {"model": "PCM-1540WIFI", "class": "coffeemaker"},
     235: {"model": "AM7310-(test)", "class": "coffeemaker"},
     247: {"model": "PCM-1255", "class": "coffeemaker"},
+    274: {"model": "PCM-1540WIFI", "class": "coffeemaker"},
     1:   {"model": "EVO-0225", "class": "cooker"},
     9:   {"model": "PMC-0526WIFI", "class": "cooker"},
     10:  {"model": "PMC-0521WIFI", "class": "cooker"},
@@ -314,6 +315,7 @@ POLARIS_DEVICE = {
     244: {"model": "PWK-1716CGLD", "class": "kettle"},
     245: {"model": "PWK-0105", "class": "kettle"},
     263: {"model": "PWK-1775CGLD", "class": "kettle"},
+    275: {"model": "PWK-1775CGLD", "class": "kettle"},
     32:  {"model": "PMG-2580", "class": "meat_grinder"},
     216: {"model": "PMG-3060", "class": "meat_grinder"},
     237: {"model": "SM-8095", "class": "multicooker"},
@@ -322,12 +324,13 @@ POLARIS_DEVICE = {
     94:  {"model": "PSS-7070KWIFI", "class": "steamer"},
     50:  {"model": "PETB-0202TC", "class": "toothbrush"},
     69:  {"model": "Ballu-OneAir-ASP-100", "class": "air-cleaner"},
+    876:  {"model": "Electrolux-EWH-50", "class": "boiler"},
 }
 
-POLARIS_KETTLE_TYPE = ["2","6","8","29","36","37","38","51","52","53","54","56","57","58","59","60","61","62","63","67","82","83","84","85","86","97","105","117","121","139","165","175","176","189","194","196","205","209"]
-POLARIS_KETTLE_WITH_WEIGHT_TYPE = ["98","106","164","177","185","188","208","223","244","245","263"]
+POLARIS_KETTLE_TYPE = ["2","6","8","29","36","37","38","51","52","53","54","56","57","58","59","60","61","62","63","67","82","83","84","85","86","97","105","106","117","121","139","165","175","176","177","189","194","196","205","209"]
+POLARIS_KETTLE_WITH_WEIGHT_TYPE = ["98","164","185","188","208","223","244","245","263", "275"]
 POLARIS_KETTLE_WITH_NIGHT_TYPE = ["36","37","86","97","106","117","164","175","176","177","189","194","196","205","208","209","244"]
-POLARIS_KETTLE_WITH_BACKLIGHT_TYPE = ["36","37","51","52","53","54","60","61","62","63","67","82","83","84","85","86","97","98","105","106","117","139","164","175","176","177","188","189","194","196","208","209","223","244","245","263"]
+POLARIS_KETTLE_WITH_BACKLIGHT_TYPE = ["36","37","51","52","53","54","60","61","62","63","67","82","83","84","85","86","97","98","105","106","117","139","164","175","176","177","188","189","194","196","208","209","223","244","245","263", "275"]
 POLARIS_HUMIDDIFIER_TYPE = ["4","15","17","18","25","44","70","71","72","73","74","75","87","99","137","147","153","155","157","158"]
 POLARIS_HUMIDDIFIER_WITH_IONISER_TYPE = ["4","15","17","18","44","70","72","73","74","137","147","153","155","157","158"]
 POLARIS_HUMIDDIFIER_WITH_WARM_STREAM_TYPE = ["4","15","17","18","44","70","72","74","147","157","158"]
@@ -342,10 +345,11 @@ POLARIS_HUMIDDIFIER_1_MODE_TYPE = ["137"]
 POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240"]
 POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240"]
 POLARIS_COFFEEMAKER_TYPE = ["103", "166", "200"]
-POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247"]
+POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247", "274"]
 POLARIS_CLIMATE_TYPE = ["69"]
 POLARIS_AIRCLEANER_TYPE = ["140", "151", "152", "172", "203", "204", "236", "238", "239", "250", "251"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
+POLARIS_BOILER_TYPE = ["876"]
 
 HUMIDDIFIER_5A_AVAILABLE_MODES = {"auto": "1", "comfort": "2", "baby": "3", "sleep": "4", "boost": "5"}
 HUMIDDIFIER_5B_AVAILABLE_MODES = {"auto": "1", "sleep": "4", "boost": "5", "home": "6", "eco": "7"}
@@ -807,6 +811,61 @@ SENSORS_VACUUM = [
         icon="mdi:map-marker-radius",
     ),
 ]
+
+SENSORS_WATER_BOILER = [
+    PolarisSensorEntityDescription(
+        key="firmware",
+        name="Firmware Version",
+        translation_key="firmware_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_registry_enabled_default=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="devtype",
+        name="Device Type",
+        translation_key="type_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="diag/rssi",
+        name="RSSI",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:wifi",
+    ),
+    PolarisSensorEntityDescription(
+        key="expendables",
+        name="anode_retain",
+        translation_key="anode_retain",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.DAYS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:sign-pole",
+    ),
+    PolarisSensorEntityDescription(
+        key="sensor/temperature",
+        name="Temperature",
+        translation_key="temperature_sensor",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:thermometer",
+    ),
+]
+
 @dataclass
 class PolarisSwitchEntityDescription(SwitchEntityDescription):
 
@@ -819,7 +878,7 @@ SWITCHES_ALL_DEVICES = [
     PolarisSwitchEntityDescription(
         key="power",
         translation_key="power_switch",
-        entity_category=EntityCategory.CONFIG,
+#        entity_category=EntityCategory.CONFIG,
         name="Power",
         mqttTopicCommand="control/mode",
         mqttTopicCurrentValue="state/mode",
@@ -1129,6 +1188,56 @@ SWITCHES_VACUUM = [
     ),
 ]
 
+SWITCHES_WATER_BOILER = [
+    PolarisSwitchEntityDescription(
+        key="power",
+        translation_key="power_switch",
+#        entity_category=EntityCategory.CONFIG,
+        name="Power",
+        mqttTopicCommand="control/mode",
+        mqttTopicCurrentValue="state/mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+        icon="mdi:power-standby",
+    ),
+    PolarisSwitchEntityDescription(
+        key="child_lock",
+        translation_key="child_lock_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Child lock",
+        mqttTopicCommand="control/child_lock",
+        mqttTopicCurrentValue="state/child_lock",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="smart_mode",
+        translation_key="smart_mode",
+        entity_category=EntityCategory.CONFIG,
+        name="smart_mode",
+        mqttTopicCommand="control/smart_mode",
+        mqttTopicCurrentValue="state/smart_mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:water-boiler-auto",
+    ),
+    PolarisSwitchEntityDescription(
+        key="bss_mode",
+        translation_key="bss_mode",
+        entity_category=EntityCategory.CONFIG,
+        name="bss_mode",
+        mqttTopicCommand="control/bss",
+        mqttTopicCurrentValue="state/bss",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:molecule",
+    ),
+]
+
 @dataclass
 class PolarisWaterHeaterEntityDescription(WaterHeaterEntityEntityDescription): # breaks_in_ha_version="2026.1"
 
@@ -1148,7 +1257,7 @@ WATER_HEATERS = [
     PolarisWaterHeaterEntityDescription(
         key="water_heater",
         translation_key="water_heater",
-        entity_category=EntityCategory.CONFIG,
+#        entity_category=EntityCategory.CONFIG,
         name="water_heater",
         mqttTopicCommandMode="control/mode",
         mqttTopicCommandTemperature="control/temperature",
@@ -1162,6 +1271,26 @@ WATER_HEATERS = [
         max_temp=100,
         mode="off",
         operation_list = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5"}
+    )
+]
+
+WATER_BOILERS = [
+    PolarisWaterHeaterEntityDescription(
+        key="water_boiler",
+        translation_key="water_boiler",
+        name="water_boiler",
+        mqttTopicCommandMode="control/mode",
+        mqttTopicCommandTemperature="control/temperature",
+        mqttTopicCurrentMode="state/mode",
+        mqttTopicCurrentTemperature="state/sensor/temperature",
+        mqttTopicTargetTemperature="state/temperature",
+        payload_on="1",
+        payload_off="0",
+#        icon="mdi:water-boiler",
+        min_temp=30,
+        max_temp=75,
+        mode="off",
+        operation_list = {"off": "0", "performance": "1", "electric": "2", "heat_pump": "3", "eco": "6"}
     )
 ]
 

@@ -35,6 +35,7 @@ from .const import (
     SWITCHES_CLIMATE,
     SWITCHES_AIRCLEANER,
     SWITCHES_VACUUM,
+    SWITCHES_WATER_BOILER,
     PolarisSwitchEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -48,6 +49,7 @@ from .const import (
     POLARIS_CLIMATE_TYPE,
     POLARIS_AIRCLEANER_TYPE,
     POLARIS_VACUUM_TYPE,
+    POLARIS_BOILER_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -267,6 +269,22 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
+    if (device_type in POLARIS_BOILER_TYPE):
+        # Create switches for boiler
+        SWITCHES_WATER_BOILER_LC = copy.deepcopy(SWITCHES_WATER_BOILER)
+        for description in SWITCHES_WATER_BOILER_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     async_add_entities(switchList, update_before_add=True)
 
 class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
@@ -298,7 +316,7 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         @callback
         def message_received(message):
             if POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker":
-                if int(self.device_type) == 45:
+                if int(self.device_type) in POLARIS_COFFEEMAKER_ROG_TYPE:
                     if str(message.payload) in ("1", "2", "3", "4", "5", "6"):
                         self._attr_is_on = True
                     else:

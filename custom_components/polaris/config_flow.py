@@ -57,6 +57,8 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         device_oldid = topic.split("/")[2]
         if device_id not in self._device_found:
             self._device_found[device_id] = device_type
+            if int(device_type) > 800:
+                device_type = str(int(device_type) - 800)  # For Rusclimate
             self._device_prefix_topic[device_id] = f"{device_type}/{device_oldid}"
 
     async def async_step_user(self, user_input=None):

@@ -32,6 +32,7 @@ from .const import (
     SENSORS_CLIMATE,
     SENSORS_AIRCLEANER,
     SENSORS_VACUUM,
+    SENSORS_WATER_BOILER,
     PolarisSensorEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -42,6 +43,7 @@ from .const import (
     POLARIS_CLIMATE_TYPE,
     POLARIS_AIRCLEANER_TYPE,
     POLARIS_VACUUM_TYPE,
+    POLARIS_BOILER_TYPE,
     KETTLE_ERROR,
     HUMIDDIFIER_ERROR,
     COOKER_ERROR,
@@ -267,6 +269,20 @@ async def async_setup_entry(
                     device_id=deviceID,
                 )
             )
+    if (devicetype in POLARIS_BOILER_TYPE):
+        SENSORS_WATER_BOILER_CP = copy.deepcopy(SENSORS_WATER_BOILER)
+        for description in SENSORS_WATER_BOILER_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
     async_add_entities(sensorList)
 
 
@@ -342,6 +358,8 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                     dev_error = VACUUM_ERROR[payload_message]
                 payload_message = dev_error
             if self.entity_description.name == "filter_retain":
+                payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[0]
+            if self.entity_description.name == "anode_retain":
                 payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[0]
             if self.entity_description.name == "clean_retain":
                 payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[1]
