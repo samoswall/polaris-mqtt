@@ -389,7 +389,7 @@
 
 ![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_1.png)
 
-2. Заменяем в полном пути топика rusclimate на polaris,<br> для устройств с ID > 800 заменяем ID добавив цифру 8 (должно получиться например polaris/876/aaabbb...и т.д.)<br> вводим в окно сообщения свой mac адрес, ставим галочку Retain и нажимаем кнопку PUBLISH
+2. Заменяем в полном пути топика rusclimate на polaris,<br> ___для устройств с ID > 800 заменяем ID добавив цифру 8 (должно получиться например polaris/876/aaabbb...и т.д.)___<br> вводим в окно сообщения свой mac адрес, ставим галочку Retain и нажимаем кнопку PUBLISH
 
 ![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_2.png)
 
