@@ -444,7 +444,7 @@
       }
     }
   },
-  "device_types": {
+  "common": {
     "All": "All",
     "air-cleaner": "Air cleaner",
     "blender": "Blender",
