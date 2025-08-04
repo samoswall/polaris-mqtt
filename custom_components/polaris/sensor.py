@@ -33,6 +33,7 @@ from .const import (
     SENSORS_AIRCLEANER,
     SENSORS_VACUUM,
     SENSORS_WATER_BOILER,
+    SENSORS_IRRIGATOR,
     PolarisSensorEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -44,6 +45,7 @@ from .const import (
     POLARIS_AIRCLEANER_TYPE,
     POLARIS_VACUUM_TYPE,
     POLARIS_BOILER_TYPE,
+    POLARIS_IRRIGATOR_TYPE,
     KETTLE_ERROR,
     HUMIDDIFIER_ERROR,
     COOKER_ERROR,
@@ -283,6 +285,20 @@ async def async_setup_entry(
                     device_id=deviceID,
                 )
             )
+    if (devicetype in POLARIS_IRRIGATOR_TYPE):
+        SENSORS_IRRIGATOR_CP = copy.deepcopy(SENSORS_IRRIGATOR)
+        for description in SENSORS_IRRIGATOR_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
     async_add_entities(sensorList)
 
 
@@ -369,15 +385,14 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                 payload_message = self.entity_description.valueMap[payload_message]
             if self.entity_description.name == "go_area":
 #                _LOGGER.debug("go_area %s", payload_message)
-
                 list_dubleint = self.bytes_to_int16_array(payload_message)
 #                _LOGGER.debug("bytes_to_int16 %s",list_dubleint)
 #                list_dubleint = self.bytes_to_int16_array(payload_message, byteorder='big')
 #                _LOGGER.debug("list_integers %s",list_dubleint)
-
-                
                 payload_message = list_dubleint
-                
+            if self.entity_description.name == "quality":
+                payload_message = str( int(payload_message) / 100 )
+            
             self._attr_native_value = payload_message
             self.async_write_ha_state()
 

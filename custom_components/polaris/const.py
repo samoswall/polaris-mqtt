@@ -94,7 +94,7 @@ MANUFACTURER = "Polaris IQ Home"
 CUSTOM_SELECT_FILE_PATH = "www/polaris/polaris_custom_select.js"
 
 POLARIS_DEVICE = {
-    0:   {"model": "All devices", "class": "All"},
+    0:   {"model": "Unknown", "class": "All"},
     140: {"model": "PAW-0804(c3-test)", "class": "air-cleaner"},
     151: {"model": "PPA-2025", "class": "air-cleaner"},
     152: {"model": "PPA-4050", "class": "air-cleaner"},
@@ -192,6 +192,7 @@ POLARIS_DEVICE = {
     235: {"model": "AM7310-(test)", "class": "coffeemaker"},
     247: {"model": "PCM-1255", "class": "coffeemaker"},
     274: {"model": "PCM-1540WIFI", "class": "coffeemaker"},
+    279: {"model": "PCM-1540WIFI", "class": "coffeemaker"},
     1:   {"model": "EVO-0225", "class": "cooker"},
     9:   {"model": "PMC-0526WIFI", "class": "cooker"},
     10:  {"model": "PMC-0521WIFI", "class": "cooker"},
@@ -323,7 +324,8 @@ POLARIS_DEVICE = {
     92:  {"model": "PGS-1450CWIFI", "class": "steamer"},
     94:  {"model": "PSS-7070KWIFI", "class": "steamer"},
     50:  {"model": "PETB-0202TC", "class": "toothbrush"},
-    69:  {"model": "Ballu-OneAir-ASP-100", "class": "air-cleaner"},
+    69:  {"model": "Ballu-OneAir-ASP-100", "class": "air-cleaner"}, # совместимость с <= v1.0.8
+    869:  {"model": "Ballu-OneAir-ASP-100", "class": "air-cleaner"},
     876:  {"model": "Electrolux-EWH-50", "class": "boiler"},
 }
 
@@ -345,11 +347,12 @@ POLARIS_HUMIDDIFIER_1_MODE_TYPE = ["137"]
 POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240"]
 POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240"]
 POLARIS_COFFEEMAKER_TYPE = ["103", "166", "200"]
-POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247", "274"]
-POLARIS_CLIMATE_TYPE = ["69"]
+POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247", "274", "279"]
+POLARIS_CLIMATE_TYPE = ["69", "869"]
 POLARIS_AIRCLEANER_TYPE = ["140", "151", "152", "172", "203", "204", "236", "238", "239", "250", "251"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
 POLARIS_BOILER_TYPE = ["876"]
+POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 
 HUMIDDIFIER_5A_AVAILABLE_MODES = {"auto": "1", "comfort": "2", "baby": "3", "sleep": "4", "boost": "5"}
 HUMIDDIFIER_5B_AVAILABLE_MODES = {"auto": "1", "sleep": "4", "boost": "5", "home": "6", "eco": "7"}
@@ -866,6 +869,60 @@ SENSORS_WATER_BOILER = [
     ),
 ]
 
+SENSORS_IRRIGATOR = [
+    PolarisSensorEntityDescription(
+        key="firmware",
+        name="Firmware Version",
+        translation_key="firmware_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_registry_enabled_default=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="devtype",
+        name="Device Type",
+        translation_key="type_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="diag/rssi",
+        name="RSSI",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:wifi",
+    ),
+    PolarisSensorEntityDescription(
+        key="time",
+        name="time_to_end",
+        translation_key="time_to_end_sensor",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:timer",
+    ),
+    PolarisSensorEntityDescription(
+        key="program_data/0",
+        name="quality",
+        translation_key="quality",
+        device_class=None,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:equalizer",
+    ),
+]
+
+
 @dataclass
 class PolarisSwitchEntityDescription(SwitchEntityDescription):
 
@@ -1238,6 +1295,45 @@ SWITCHES_WATER_BOILER = [
     ),
 ]
 
+SWITCHES_IRRIGATOR = [
+    PolarisSwitchEntityDescription(
+        key="smart_mode",
+        translation_key="smart_mode_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Massage",
+        mqttTopicCommand="control/smart_mode",
+        mqttTopicCurrentValue="state/smart_mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+        icon="mdi:hand-wave",
+    ),
+    PolarisSwitchEntityDescription(
+        key="ioniser",
+        translation_key="ozonation_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="O3",
+        mqttTopicCommand="control/ioniser",
+        mqttTopicCurrentValue="state/ioniser",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:atom-variant",
+    ),
+    PolarisSwitchEntityDescription(
+        key="power_switch",
+        translation_key="power_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Power",
+        mqttTopicCommand="control/mode",
+        mqttTopicCurrentValue="state/mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+        icon="mdi:power",
+    ),
+]
+
 @dataclass
 class PolarisWaterHeaterEntityDescription(WaterHeaterEntityEntityDescription): # breaks_in_ha_version="2026.1"
 
@@ -1563,6 +1659,25 @@ NUMBERS_AIRCLEANER = [
     ),
 ]
 
+NUMBERS_IRRIGATOR = [
+    PolarisNumberEntityDescription(
+        key="speed_irrigator",
+        name="speed_irrigator",
+        translation_key="speed_irrigator",
+        mqttTopicCurrent = "state/speed",
+        mqttTopicCommand = "control/speed",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=True,
+        native_max_value=10,
+        native_min_value=1,
+        native_step=1,
+        native_value=1,
+        mode="slider",
+        icon="mdi:speedometer",
+    ),
+]
+
+
 @dataclass
 class PolarisSelectEntityDescription(SelectEntityDescription):
 
@@ -1752,6 +1867,27 @@ SELECT_VACUUM = [
         entity_registry_enabled_default=True,
     )
 ]
+
+SELECT_IRRIGATOR = [
+    PolarisSelectEntityDescription(
+        key="select_irrigator",
+        name="Preset",
+        translation_key="select_irrigator",
+        mqttTopicCurrentMode="state/program_data/1",
+        mqttTopicCommandMode="control/",
+        options={
+          "preset1": 1,
+          "preset2": 2,
+          "preset3": 3,
+        },
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        icon="mdi:format-list-numbered",
+        entity_registry_enabled_default=True,
+    )
+]
+
+
 @dataclass
 class PolarisLightEntityDescription(SelectEntityDescription):
 

@@ -33,6 +33,7 @@ from .const import (
     SELECT_COFFEEMAKER_ROG,
     SELECT_CLIMATE,
     SELECT_VACUUM,
+    SELECT_IRRIGATOR,
     PolarisSelectEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -42,6 +43,7 @@ from .const import (
     POLARIS_COFFEEMAKER_ROG_TYPE,
     POLARIS_CLIMATE_TYPE,
     POLARIS_VACUUM_TYPE,
+    POLARIS_IRRIGATOR_TYPE,
 )
 
 
@@ -138,6 +140,21 @@ async def async_setup_entry(
     if (device_type in POLARIS_VACUUM_TYPE):
         SELECT_VACUUM_LC = copy.deepcopy(SELECT_VACUUM)
         for description in SELECT_VACUUM_LC:
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.device_prefix_topic = device_prefix_topic
+            selectList.append(
+                PolarisSelect(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in POLARIS_IRRIGATOR_TYPE):
+        SELECT_IRRIGATOR_LC = copy.deepcopy(SELECT_IRRIGATOR)
+        for description in SELECT_IRRIGATOR_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
             description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
             description.device_prefix_topic = device_prefix_topic
@@ -300,6 +317,20 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         if int(self.device_type) == 69:
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option])
 
+        if POLARIS_DEVICE[int(self.device_type)]['class'] == "irrigator":
+            if self._attr_current_option == "preset3":
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_3[0] == "a" else self._preset_3[0])
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_3[1])
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_3[2])
+            elif self._attr_current_option == "preset2":
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_2[0] == "a" else self._preset_2[0])
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_2[1])
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_2[2])
+            else:
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_1[0] == "a" else self._preset_1[0])
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
+
     async def async_added_to_hass(self):
         @callback
         def message_received_sel(message):
@@ -323,6 +354,22 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             elif int(self.device_type) == 69:
                 self._attr_current_option = self._attr_options[int(payload)]
                 self.async_write_ha_state()
+            elif POLARIS_DEVICE[int(self.device_type)]['class'] == "irrigator":
+                self._preset_1 = [payload[1:2], payload[7:8], payload[13:14]]
+                self._preset_2 = [payload[3:4], payload[9:10], payload[15:16]]
+                self._preset_3 = [payload[5:6], payload[11:12], payload[17:]]
+                if self._attr_current_option == "preset3":
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_3[0] == "a" else self._preset_3[0])
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_3[1])
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_3[2])
+                elif self._attr_current_option == "preset2":
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_2[0] == "a" else self._preset_2[0])
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_2[1])
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_2[2])
+                else:
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_1[0] == "a" else self._preset_1[0])
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentMode, message_received_sel, 1)
         
         @callback

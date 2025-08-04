@@ -30,6 +30,7 @@ from .const import (
     NUMBERS_COFFEEMAKER,
     NUMBERS_COFFEEMAKER_ROG,
     NUMBERS_AIRCLEANER,
+    NUMBERS_IRRIGATOR,
     PolarisNumberEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -39,6 +40,7 @@ from .const import (
     POLARIS_COFFEEMAKER_TYPE,
     POLARIS_COFFEEMAKER_ROG_TYPE,
     POLARIS_AIRCLEANER_TYPE,
+    POLARIS_IRRIGATOR_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -122,6 +124,22 @@ async def async_setup_entry(
     # Create humidifier  
         NUMBERS_AIRCLEANER_LC = copy.deepcopy(NUMBERS_AIRCLEANER)
         for description in NUMBERS_AIRCLEANER_LC:
+            description.mqttTopicCurrent = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrent}" 
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.device_prefix_topic = device_prefix_topic
+            numberList.append(
+                PolarisNumber(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in POLARIS_IRRIGATOR_TYPE): 
+    # Create irrigator  
+        NUMBERS_IRRIGATOR_LC = copy.deepcopy(NUMBERS_IRRIGATOR)
+        for description in NUMBERS_IRRIGATOR_LC:
             description.mqttTopicCurrent = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrent}" 
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.device_prefix_topic = device_prefix_topic

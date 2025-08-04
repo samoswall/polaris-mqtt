@@ -36,6 +36,7 @@ from .const import (
     SWITCHES_AIRCLEANER,
     SWITCHES_VACUUM,
     SWITCHES_WATER_BOILER,
+    SWITCHES_IRRIGATOR,
     PolarisSwitchEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -50,6 +51,7 @@ from .const import (
     POLARIS_AIRCLEANER_TYPE,
     POLARIS_VACUUM_TYPE,
     POLARIS_BOILER_TYPE,
+    POLARIS_IRRIGATOR_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -273,6 +275,22 @@ async def async_setup_entry(
         # Create switches for boiler
         SWITCHES_WATER_BOILER_LC = copy.deepcopy(SWITCHES_WATER_BOILER)
         for description in SWITCHES_WATER_BOILER_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in POLARIS_IRRIGATOR_TYPE):
+        # Create switches for irrigator
+        SWITCHES_IRRIGATOR_LC = copy.deepcopy(SWITCHES_IRRIGATOR)
+        for description in SWITCHES_IRRIGATOR_LC:
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
             description.device_prefix_topic = device_prefix_topic
