@@ -445,7 +445,7 @@
     }
   },
   "common": {
-    "All": "All devices",
+    "all": "All devices",
     "air-cleaner": "Air cleaner",
     "blender": "Blender",
     "boiler": "Boiler",
