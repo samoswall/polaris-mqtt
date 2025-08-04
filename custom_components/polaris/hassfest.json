@@ -1,0 +1,7 @@
+{
+  "ignored": [
+    {
+      "file": "custom_components/*/translations/*"
+    }
+  ]
+}
