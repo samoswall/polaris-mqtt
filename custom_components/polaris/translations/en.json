@@ -1,7 +1,8 @@
 {
   "config": {
     "abort": {
-      "already_configured": "This device has already been configured."
+      "already_configured": "This device has already been configured.",
+      "not_supported": "Error. Not selected device type."
     },
     "error": {
       "cannot_connect": "Failed to connect, please try again.",
@@ -16,6 +17,13 @@
         "data": {
           "DEVICEID": "Select a device (or all devices)",
           "MQTT_ROOT_TOPIC": "Topic Prefix (usually 'polaris')"
+        },
+        "title": "Polaris Local MQTT"
+      },
+      "undef": {
+        "description": "Configuring Polaris device.",
+        "data": {
+          "DEVICETYPE": "Select device type"
         },
         "title": "Polaris Local MQTT"
       }
@@ -38,6 +46,9 @@
       "ioniser_switch": {
         "name": "Ioniser"
       },
+      "ozonation_switch": {
+        "name": "Ozonation"
+      },
       "warm_stream_switch": {
         "name": "Warm stream"
       },
@@ -52,6 +63,9 @@
       },
       "bss_mode": {
         "name": "BSS"
+      },
+      "smart_mode_switch": {
+        "name": "Массаж"
       }
     },
     "water_heater": {
@@ -124,6 +138,9 @@
       },
       "time_timer": {
         "name": "Timer"
+      },
+      "speed_irrigator": {
+        "name": "Speed irrigator"
       }
     },
     "sensor": {
@@ -141,6 +158,9 @@
       },
       "time_to_end_sensor": {
         "name": "Time to end"
+      },
+      "quality": {
+        "name": "Качество чистки"
       },
       "error": {
         "name": "Error",
@@ -301,6 +321,14 @@
           "birdsong": "Birdsong",
           "bonfire": "Bonfire"
         }
+      },
+      "select_irrigator": {
+        "name": "Personal modes",
+        "state": {
+          "preset1": "Mode 1",
+          "preset2": "Mode 2",
+          "preset3": "Mode 3"
+        }
       }
     },
     "light": {
@@ -415,5 +443,28 @@
         }
       }
     }
+  },
+  "device_types": {
+    "All": "All",
+    "air-cleaner": "Air cleaner",
+    "blender": "Blender",
+    "boiler": "Boiler",
+    "cleaner": "Cleaner",
+    "coffeemaker": "Coffeemaker",
+    "cooker": "Cooker",
+    "cordless_cleaner": "Cordless cleaner",
+    "fan": "Fan",
+    "grill": "Grill",
+    "hair_care": "Hair care",
+    "heater": "Heater",
+    "humidifier": "Humidifier",
+    "iron": "Iron",
+    "irrigator": "Irrigator",
+    "kettle": "Kettle",
+    "meat_grinder": "Meat grinder",
+    "multicooker": "Multicooker",
+    "other": "Smart Lid",
+    "steamer": "Steamer",
+    "toothbrush": "Toothbrush"
   }
 }

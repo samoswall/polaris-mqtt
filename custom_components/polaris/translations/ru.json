@@ -1,7 +1,8 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Это устройство уже было настроено."
+      "already_configured": "Это устройство уже было настроено.",
+      "not_supported": "Ошибка. Не выбран тип устройства."
     },
     "error": {
       "cannot_connect": "Не удалось подключиться, пожалуйста, повторите попытку.",
@@ -16,6 +17,13 @@
         "data": {
           "DEVICEID": "Выберите устройство",
           "MQTT_ROOT_TOPIC": "Префикс темы (обычно 'polaris')"
+        },
+        "title": "Polaris Local MQTT"
+      },
+      "undef": {
+        "description": "Конфигурация устройства Polaris.",
+        "data": {
+          "DEVICETYPE": "Выберите тип устройства"
         },
         "title": "Polaris Local MQTT"
       }
@@ -38,6 +46,9 @@
       "ioniser_switch": {
         "name": "Ионизация"
       },
+      "ozonation_switch": {
+        "name": "Озонирование"
+      },
       "warm_stream_switch": {
         "name": "Теплый пар"
       },
@@ -52,6 +63,9 @@
       },
       "bss_mode": {
         "name": "Антибактериальная очистка"
+      },
+      "smart_mode_switch": {
+        "name": "Массаж"
       }
     },
     "water_heater": {
@@ -124,6 +138,9 @@
       },
       "time_timer": {
         "name": "Таймер отключения"
+      },
+      "speed_irrigator": {
+        "name": "Скорость"
       }
     },
     "sensor": {
@@ -141,6 +158,9 @@
       },
       "time_to_end_sensor": {
         "name": "Оставшееся время"
+      },
+      "quality": {
+        "name": "Качество чистки"
       },
       "error": {
         "name": "Ошибка",
@@ -301,6 +321,14 @@
           "birdsong": "Пение птиц",
           "bonfire": "Костер"
         }
+      },
+      "select_irrigator": {
+        "name": "Персональные режимы",
+        "state": {
+          "preset1": "Режим 1",
+          "preset2": "Режим 2",
+          "preset3": "Режим 3"
+        }
       }
     },
     "light": {
@@ -415,5 +443,28 @@
         }
       }
     }
+  },
+  "device_types": {
+    "All": "Выберите тип устройства",
+    "air-cleaner": "Очиститель воздуха",
+    "blender": "Блендер",
+    "boiler": "Бойлер",
+    "cleaner": "Робот пылесос",
+    "coffeemaker": "Кофемашина",
+    "cooker": "Мультиварка",
+    "cordless_cleaner": "Ручной пылесос",
+    "fan": "Вентилятор",
+    "grill": "Гриль",
+    "hair_care": "Фен",
+    "heater": "Обогреватель",
+    "humidifier": "Увлажнитель",
+    "iron": "Утюг",
+    "irrigator": "Ирригатор",
+    "kettle": "Чайник",
+    "meat_grinder": "Мясорубка",
+    "multicooker": "Мультиварка",
+    "other": "Умная крышка",
+    "steamer": "Отпариватель",
+    "toothbrush": "Зубная щетка"
   }
 }
