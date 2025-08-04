@@ -15,13 +15,12 @@
 > Подключить к mqtt брокеру можно в приложении в настройках. Если такой настройки нет, значит у вас старая версия прошивки в устройстве.<br>
 > Новую версию прошивки можно запросить в техподдержке Polaris через приложение.<br>
 > Если по какой-то причине нет возможности обновить прошивку, то можно воспользоваться решением, опиcанным на 4pda, перенаправив трафик в роутере на дополнительный брокер mqtt.<br>
-
-> [!WARNING]
 > Выяснилось, что у некотых устройств установлены пробные (с этапа тестирования) версии прошивок, некоторые из них не доработаны и не публикуют тип устройства (топик polaris/XXXXXXXXXXXX/state/devtype где ХХХХХХХХХХХХ mac адрес вашего устройства).<br>
 > Без типа невозможно понять, что это за устройство. Варианты решения проблемы:<br>
-> Запросить новую прошивку (с публикацией devtype) или самостоятельно опубликовать в топик polaris/XXXXXXXXXXXX/state/devtype тип устройства - число (ID) с установленным статусом retain из таблицы ниже.<br>
-> Обратите внимание - устройства одинаковые, а функции могут быть разные (наличие/отсутствие веса или ночника). После изменения (публикации) типа - надо удалить устройство в интеграции и создать заново.<br>
-> Вот тут есть [мини инструкция](https://github.com/samoswall/hacs-polaris/issues/9#issuecomment-2707181427) на примере чайника.
+> Запросить новую прошивку (с публикацией devtype) или самостоятельно опубликовать в топик polaris/XXXXXXXXXXXX/state/devtype тип устройства - число (ID) с установленным статусом retain 
+> или начиная с версии 1.0.9 для неизвестного устройства (Unknown) выбрать его тип из таблицы ниже. <br>
+> Обратите внимание - устройства одинаковые, а функции могут быть разные (наличие/отсутствие веса или ночника). Если промахнулись с типом, то удалите топик devtype в брокере, удалите устройство и добавьте его заново.<br>
+> Вот тут есть [мини инструкция](https://github.com/samoswall/hacs-polaris/issues/9#issuecomment-2707181427) добавления на примере чайника.
 
 ℹ️ **Добавлены**: <br>
 ✔️ Чайники <br>
@@ -29,16 +28,22 @@
 ✔️ Мультиварки <br>
 ✔️ Кофемашины <br>
 ✔️ Очистители воздуха <br>
+✔️ Ирригатры <br>
+   **Устройства РУСКЛИМАТ**:<br>
+✔️ Бризер Ballu ASP-100 <br>
+✔️ Бойлер Electrolux EWH-50 <br>
+
 
 ℹ️ **Как добавить новое устройство**: <br>
 Создаем issues - Добавить ...  <br>
+Или пишем в чате Telegram <br>
 Обязательно указать type(ID) устройства и желательно развернутый mqtt топик для понимания, что добавлять. <br>
 
 ℹ️ **Возможные проблемы**: <br>
 В чайниках - может отсутствовать(быть лишним) сенсор веса и сенсор на базе. Так же может не работать Ночник (потому что в чайнике его нет)<br>
 Проблема - есть одинаковые модели как с весом так и без, с ночником и без. Отличаются type(ID). <br>
-Не стесняемся, создаем issues - отсутствует(лишний) сенсор ... type ... <br>
-По другим предложениям (проблемам, логике работы, иконкам, переводам) пишем issues <br>
+Не стесняемся, пишем - отсутствует(лишний) сенсор ... type ... <br>
+По другим предложениям (проблемам, логике работы, иконкам, переводам) тоже пишем, по возможности оперативно исправлю<br>
 
 ℹ️ **Планы для доработок**: <br>
 ✔️ Добавить поддержку старых устройств (со старой структурой топика) <br>
@@ -250,6 +255,8 @@
 |236|PPAT-02A|air-cleaner|:heavy_check_mark:|speed, timer, turbo, volume, ioniser, humidity, backlight, child_lock, stream_warm, |![all](https://images.cdn.polaris-iot.com/a/87/e91a5-a8eb-4b7f-9d9d-88b7db5f744e/60.webp)
 |238|PPAT-80P|air-cleaner|:heavy_check_mark:|speed, timer, volume, child_lock, stream_warm, |![all](https://images.cdn.polaris-iot.com/f/66/2b72c-ed43-456e-9524-245e229bb667/60.webp)
 |239|PPAT-90GDi|air-cleaner|:heavy_check_mark:|speed, timer, turbo, volume, humidity, child_lock, water_tank, stream_warm, |![all](https://images.cdn.polaris-iot.com/f/66/2b72c-ed43-456e-9524-245e229bb667/60.webp)
+|132|PWF-2005|irrigator|✔️|speed, timer, ioniser, smart_mode, |![all](https://images.cdn.polaris-iot.com/5/bd/1a68b-9fb5-46e9-acbd-c086748b72bb/60.webp)
+|252|PWF-2005|irrigator|✔️|speed, timer, ioniser, smart_mode, |![all](https://images.cdn.polaris-iot.com/5/bd/1a68b-9fb5-46e9-acbd-c086748b72bb/60.webp)
 |93|PHB-1350-WIFI|blender|:x:|speed, timer, multi_step, |![all](https://images.cdn.polaris-iot.com/e/f8/22f01-dd2f-40e3-8f85-d7dc8f9fddce/60.webp)
 |35|PHB-1503-WIFI-(old)|blender|:x:|speed, timer, child_lock, multi_step, |![all](https://images.cdn.polaris-iot.com/3/a6/45180-5e03-4e43-9de9-a0948262c226/60.webp)
 |34|PHB-1551-WIFI|blender|:x:|speed, timer, child_lock, multi_step, |![all](https://images.cdn.polaris-iot.com/e/f8/22f01-dd2f-40e3-8f85-d7dc8f9fddce/60.webp)
@@ -358,8 +365,6 @@
 |174|PIR-3225AK-3m|iron|:x:|speed, timer, turbo, volume, humidity, child_lock, |![all](https://images.cdn.polaris-iot.com/4/d1/793cf-adc8-4342-9e5d-447a0c8b1724/60.webp)
 |191|PSS-2002K|iron|:x:|volume, child_lock, stream_warm, |![all](https://images.cdn.polaris-iot.com/f/e8/84ba2-8592-412d-b067-ce36ad9442d4/60.webp)
 |159|PSS-9090K|iron|:x:|speed, turbo, volume, child_lock, stream_warm, temperature, |![all](https://images.cdn.polaris-iot.com/4/ba/f6029-12bf-4598-87e0-06a4ca6fe68b/60.webp)
-|132|PWF-2005|irrigator|:x:|speed, timer, ioniser, smart_mode, |![all](https://images.cdn.polaris-iot.com/5/bd/1a68b-9fb5-46e9-acbd-c086748b72bb/60.webp)
-|252|PWF-2005|irrigator|:x:|speed, timer, ioniser, smart_mode, |![all](https://images.cdn.polaris-iot.com/5/bd/1a68b-9fb5-46e9-acbd-c086748b72bb/60.webp)
 |32|PMG-2580|meat_grinder|:x:|speed, turbo, volume, child_lock, |![all](https://images.cdn.polaris-iot.com/7/68/d874e-389d-49e6-8901-705740dbedc8/60.webp)
 |216|PMG-3060|meat_grinder|:x:|speed, timer, volume, child_lock, |![all](https://images.cdn.polaris-iot.com/f/47/83e05-570f-4ccd-9455-612611d6568c/60.webp)
 |237|SM-8095|multicooker|:x:|speed, timer, backlight, child_lock, weight|![all](https://images.cdn.polaris-iot.com/c/da/ab2e1-775a-4bc4-9a18-fe004ffafdc7/60.webp)
@@ -384,6 +389,7 @@
 <details>
   <summary>Инструкция по добавлению устройства РУСКЛИМАТ в интеграцию Polaris</summary>
 
+  **Не актуально начиная с версии 1.0.9 (Устройства находятся автоматически)**
   
 1. В MQTT Explorer выбираем топик с mac адресом своего устройства (справа в разделе Publish появится полный путь топика)
 
