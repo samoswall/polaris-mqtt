@@ -95,17 +95,17 @@ CUSTOM_SELECT_FILE_PATH = "www/polaris/polaris_custom_select.js"
 
 POLARIS_DEVICE = {
     0:   {"model": "Unknown", "class": "all"},
-    140: {"model": "PAW-0804(c3-test)", "class": "air-cleaner"},
-    151: {"model": "PPA-2025", "class": "air-cleaner"},
-    152: {"model": "PPA-4050", "class": "air-cleaner"},
-    172: {"model": "PAW-0804", "class": "air-cleaner"},
-    203: {"model": "PPA-2025", "class": "air-cleaner"},
-    204: {"model": "PPA-4050", "class": "air-cleaner"},
-    236: {"model": "PPAT-02A", "class": "air-cleaner"},
-    238: {"model": "PPAT-80P", "class": "air-cleaner"},
-    239: {"model": "PPAT-90GDi", "class": "air-cleaner"},
-    250: {"model": "PPA-2025", "class": "air-cleaner"},
-    251: {"model": "PPA-4050", "class": "air-cleaner"},
+    140: {"model": "PAW-0804(c3-test)", "class": "air_cleaner"},
+    151: {"model": "PPA-2025", "class": "air_cleaner"},
+    152: {"model": "PPA-4050", "class": "air_cleaner"},
+    172: {"model": "PAW-0804", "class": "air_cleaner"},
+    203: {"model": "PPA-2025", "class": "air_cleaner"},
+    204: {"model": "PPA-4050", "class": "air_cleaner"},
+    236: {"model": "PPAT-02A", "class": "air_cleaner"},
+    238: {"model": "PPAT-80P", "class": "air_cleaner"},
+    239: {"model": "PPAT-90GDi", "class": "air_cleaner"},
+    250: {"model": "PPA-2025", "class": "air_cleaner"},
+    251: {"model": "PPA-4050", "class": "air_cleaner"},
     34:  {"model": "PHB-1551-WIFI", "class": "blender"},
     35:  {"model": "PHB-1503-WIFI-(old)", "class": "blender"},
     93:  {"model": "PHB-1350-WIFI", "class": "blender"},
@@ -324,8 +324,8 @@ POLARIS_DEVICE = {
     92:  {"model": "PGS-1450CWIFI", "class": "steamer"},
     94:  {"model": "PSS-7070KWIFI", "class": "steamer"},
     50:  {"model": "PETB-0202TC", "class": "toothbrush"},
-    69:  {"model": "Ballu-OneAir-ASP-100", "class": "air-cleaner"}, # совместимость с <= v1.0.8
-    869:  {"model": "Ballu-OneAir-ASP-100", "class": "air-cleaner"},
+    69:  {"model": "Ballu-OneAir-ASP-100", "class": "air_cleaner"}, # совместимость с <= v1.0.8
+    869:  {"model": "Ballu-OneAir-ASP-100", "class": "air_cleaner"},
     876:  {"model": "Electrolux-EWH-50", "class": "boiler"},
 }
 
