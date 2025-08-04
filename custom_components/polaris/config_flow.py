@@ -98,8 +98,8 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def get_translated_type(self, device_type_lang):
         language = self.hass.config.language
-        translations = await async_get_translations(self.hass, language, "device_types", {DOMAIN})
-        key = f"component.polaris.device_types.{device_type_lang}"
+        translations = await async_get_translations(self.hass, language, "common", {DOMAIN})
+        key = f"component.polaris.common.{device_type_lang}"
         return translations.get(key, device_type_lang)
         
     async def async_step_user(self, user_input=None):
