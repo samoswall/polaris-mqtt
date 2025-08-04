@@ -12,5 +12,4 @@ jobs:
     steps:
       - uses: "actions/checkout@v3"
       - uses: home-assistant/actions/hassfest@master
-        env:
-          HASSFEST_EXCLUDE: "custom_components/polaris/translations"
+
