@@ -368,7 +368,7 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                     dev_error = HUMIDDIFIER_ERROR[payload_message]
                 if POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker":
                     dev_error = COFFEEMAKER_ERROR[payload_message]
-                if POLARIS_DEVICE[int(self.device_type)]['class'] == "air-cleaner":
+                if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_cleaner":
                     dev_error = AIRCLEANER_ERROR[payload_message]
                 if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner":
                     dev_error = VACUUM_ERROR[payload_message]
