@@ -94,7 +94,7 @@ MANUFACTURER = "Polaris IQ Home"
 CUSTOM_SELECT_FILE_PATH = "www/polaris/polaris_custom_select.js"
 
 POLARIS_DEVICE = {
-    0:   {"model": "Unknown", "class": "All"},
+    0:   {"model": "Unknown", "class": "all"},
     140: {"model": "PAW-0804(c3-test)", "class": "air-cleaner"},
     151: {"model": "PPA-2025", "class": "air-cleaner"},
     152: {"model": "PPA-4050", "class": "air-cleaner"},
