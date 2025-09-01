@@ -382,7 +382,7 @@
 | ID    | Модель           | Тип устройства | Поддержка | Функции | Изображение |
 | :---: |------------------|----------------|-----------|---------|    :---:    |
 |69|Ballu ASP-100|air-cleaner|✔️|fan speed, volume, sound, backlight |![all](https://m-files.cdn1.cc/lpfile/1/2/b/12b3c2e3a488530bce9bcf8d2723188b/-/crop/0x0x1920x1920/-/resize/100/-/quality/95/f.jpg)
-|876|Electrolux EWH-50|boiler|✔️|mode, temperature, smart, bss, child_lock |![all](https://rkcdn.ru/products/479233ce-2f07-11ef-b8d8-00505601218a/main_small.jpg)
+|876|Electrolux EWH-50|boiler|✔️|mode, temperature, smart, bss, child_lock |![all](https://m-files.cdn1.cc/lpfile/8/b/c/8bcc9ef1d44404dd4d1b071a835d1464/-/crop/120x65x584x735/-/resize/100/-/quality/95/f.jpg)
 
 </details>
 
