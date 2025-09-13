@@ -66,6 +66,9 @@
       },
       "smart_mode_switch": {
         "name": "Массаж"
+      },
+      "damper_switch": {
+        "name": "Рециркуляция"
       }
     },
     "water_heater": {
@@ -74,9 +77,11 @@
         "state": {
           "off": "Выключен",
           "performance": "Кипячение",
+          "high_demand": "Кипячение с удержанием",
           "electric": "Разогрев",
           "heat_pump": "Разогрев с удержанием",
-          "eco": "IQ Кипячение"
+          "eco": "IQ Кипячение",
+          "gas": "Чайная церемония"
         }
       },
       "water_boiler": {
@@ -159,6 +164,9 @@
       "time_to_end_sensor": {
         "name": "Оставшееся время"
       },
+      "time_to_end_sensor_turbo": {
+        "name": "Оставшееся время Турбо"
+      },
       "quality": {
         "name": "Качество чистки"
       },
@@ -203,6 +211,9 @@
       },
       "filter_retain": {
         "name": "Остаток фильтра"
+      },
+      "pre_filter_retain": {
+        "name": "Остаток предфильтра"
       },
       "clean_retain": {
         "name": "Остаток до очистки бака"
@@ -397,6 +408,9 @@
       "button_reset_filter": {
         "name": "Сброс таймера фильтра"
       },
+      "button_reset_prefilter": {
+        "name": "Сброс таймера префильтра"
+      },
       "button_reset_tank": {
         "name": "Сброс таймера очистки бака"
       }
@@ -413,7 +427,9 @@
               "4_speed": "4 скорость",
               "5_speed": "5 скорость",
               "6_speed": "6 скорость",
-              "7_speed": "7 скорость"
+              "7_speed": "7 скорость",
+              "8_speed": "8 скорость",
+              "9_speed": "9 скорость"
             }
           },
           "preset_mode": {
@@ -446,24 +462,28 @@
   },
   "common": {
     "all": "Выберите тип устройства",
-    "air_cleaner": "Очиститель воздуха",
-    "blender": "Блендер",
-    "boiler": "Бойлер",
-    "cleaner": "Робот пылесос",
-    "coffeemaker": "Кофемашина",
+    "kettle": "Чайник",
+    "humidifier": "Увлажнитель",
     "cooker": "Мультиварка",
+    "coffeemaker": "Кофемашина",
+    "air_cleaner": "Очиститель воздуха",
+    "irrigator": "Ирригатор",
+    "air_fryer": "Воздухоочиститель",
+    "boiler": "Бойлер",
+    "heater": "Обогреватель",
+    "cleaner": "Робот пылесос",
+    "blender": "Блендер",
+    "cooktop": "Варочная панель",
     "cordless_cleaner": "Ручной пылесос",
     "fan": "Вентилятор",
     "grill": "Гриль",
     "hair_care": "Фен",
-    "heater": "Обогреватель",
-    "humidifier": "Увлажнитель",
+    "hood": "Вытяжка",
     "iron": "Утюг",
-    "irrigator": "Ирригатор",
-    "kettle": "Чайник",
+    "kitchen_machine": "Кухонная машина",
     "meat_grinder": "Мясорубка",
-    "multicooker": "Мультиварка",
     "other": "Умная крышка",
+    "oven": "Духовка",
     "steamer": "Отпариватель",
     "toothbrush": "Зубная щетка"
   }

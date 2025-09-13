@@ -66,6 +66,9 @@
       },
       "smart_mode_switch": {
         "name": "Массаж"
+      },
+      "damper_switch": {
+        "name": "Recycling"
       }
     },
     "water_heater": {
@@ -74,9 +77,11 @@
         "state": {
           "off": "Off",
           "performance": "Boiling",
+          "high_demand": "Keep with warm up",
           "electric": "Warm up",
           "heat_pump": "Warm up with keep",
-          "eco": "IQ boiling"
+          "eco": "IQ boiling",
+          "gas": "Tea Time"
         }
       },
       "water_boiler": {
@@ -159,6 +164,9 @@
       "time_to_end_sensor": {
         "name": "Time to end"
       },
+      "time_to_end_sensor_turbo": {
+        "name": "Time to end Turbo"
+      },
       "quality": {
         "name": "Качество чистки"
       },
@@ -203,6 +211,9 @@
       },
       "filter_retain": {
         "name": "Filter retain"
+      },
+      "pre_filter_retain": {
+        "name": "Pre-filter retain"
       },
       "clean_retain": {
         "name": "Clean retain"
@@ -397,6 +408,9 @@
       "button_reset_filter": {
         "name": "Reset time filter"
       },
+      "button_reset_prefilter": {
+        "name": "Reset time pre-filter"
+      },
       "button_reset_tank": {
         "name": "Reset time water tank"
       }
@@ -413,7 +427,9 @@
               "4_speed": "4 speed",
               "5_speed": "5 speed",
               "6_speed": "6 speed",
-              "7_speed": "7 speed"
+              "7_speed": "7 speed",
+              "8_speed": "8 speed",
+              "9_speed": "9 speed"
             }
           },
           "preset_mode": {
@@ -446,24 +462,28 @@
   },
   "common": {
     "all": "All devices",
-    "air_cleaner": "Air cleaner",
-    "blender": "Blender",
-    "boiler": "Boiler",
-    "cleaner": "Cleaner",
-    "coffeemaker": "Coffeemaker",
+    "kettle": "Kettle",
+    "humidifier": "Humidifier",
     "cooker": "Cooker",
+    "coffeemaker": "Coffeemaker",
+    "air_cleaner": "Air cleaner",
+    "irrigator": "Irrigator",
+    "air_fryer": "Air Fryer",
+    "boiler": "Boiler",
+    "heater": "Heater",
+    "cleaner": "Cleaner",
+    "blender": "Blender",
+    "cooktop": "Cooktop",
     "cordless_cleaner": "Cordless cleaner",
     "fan": "Fan",
     "grill": "Grill",
     "hair_care": "Hair care",
-    "heater": "Heater",
-    "humidifier": "Humidifier",
+    "hood": "Hood",
     "iron": "Iron",
-    "irrigator": "Irrigator",
-    "kettle": "Kettle",
+    "kitchen_machine": "Kitchen machine",
     "meat_grinder": "Meat grinder",
-    "multicooker": "Multicooker",
     "other": "Smart Lid",
+    "oven": "Oven",
     "steamer": "Steamer",
     "toothbrush": "Toothbrush"
   }
