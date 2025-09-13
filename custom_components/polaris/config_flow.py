@@ -37,6 +37,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         self._topic_prefix = {}
         self._device_found = {}
         self._device_prefix_topic = {}
+        self._unknown_devtype = 0
 
 
     async def _get_devtypes_from_mqtt(self):
@@ -52,6 +53,9 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         topic_bool = await self.topic_exists(topic_check)
         if not topic_bool:
             self._device_type = "0"
+        if int(self._device_type) not in POLARIS_DEVICE:
+#            _LOGGER.debug("newdevice unknown - %s", self._device_type)
+            self._unknown_devtype = int(self._device_type)
         if device_id not in self._device_found:
             self._device_found[device_id] = self._device_type
             self._device_prefix_topic[device_id] = device_id
@@ -63,6 +67,9 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         device_id = message.payload
         device_type = topic.split("/")[1]
         device_oldid = topic.split("/")[2]
+        if int(device_type) not in POLARIS_DEVICE:
+#            _LOGGER.debug("olddevice unknown - %s", device_type)
+            self._unknown_devtype = int(device_type)
         if device_id not in self._device_found:
             self._device_found[device_id] = device_type
             self._device_prefix_topic[device_id] = f"{device_type}/{device_oldid}"
@@ -74,6 +81,9 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         device_id = message.payload
         device_type = str(int(topic.split("/")[1]) + 800)
         device_oldid = topic.split("/")[2]
+        if int(device_type) not in POLARIS_DEVICE:
+#            _LOGGER.debug("rusclidevice unknown - %s", device_type)
+            self._unknown_devtype = int(device_type)
         if device_id not in self._device_found:
             self._device_found[device_id] = device_type
             self._device_prefix_topic[device_id] = f"{topic.split("/")[1]}/{device_oldid}"
@@ -116,7 +126,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
                                 options=[
                                     SelectOptionDict(
                                         value=dev_mac,
-                                        label=f"{POLARIS_DEVICE[int(dev_type)]["model"]} (mac: {dev_mac})",
+                                        label=f"{POLARIS_DEVICE[int(dev_type) if int(dev_type) in POLARIS_DEVICE else 0]["model"]} (mac: {dev_mac})",
                                     )
                                     for dev_mac, dev_type in self._device_found.items()
                                 ],
@@ -133,7 +143,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         user_input["DEVPREFIXTOPIC"] = self._device_prefix_topic[user_input[DEVICEID]]
         self.oldstep = user_input
 #        _LOGGER.debug("input1 %s", user_input)
-        if user_input[DEVICETYPE] == "0":
+        if user_input[DEVICETYPE] == "0" or self._unknown_devtype > 0:
             return self.async_show_form(
                 step_id="undef",
                 data_schema=vol.Schema(

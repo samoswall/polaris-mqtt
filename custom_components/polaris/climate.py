@@ -34,6 +34,7 @@ from .const import (
     DEVICETYPE,
     POLARIS_DEVICE,
     CLIMATES,
+    CLIMATES_200,
     AIRCLEANER,
     PolarisClimateEntityDescription,
     POLARIS_CLIMATE_TYPE,
@@ -56,45 +57,48 @@ async def async_setup_entry(
     
     if (device_type in POLARIS_CLIMATE_TYPE):
         # Create humidifier  
+        if (device_type == "859"):
+            CLIMATES_LC = copy.deepcopy(CLIMATES_200)
+        else:
             CLIMATES_LC = copy.deepcopy(CLIMATES)
-            for description in CLIMATES_LC:
-                description.mqttTopicStateTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateTemperature}"
-                description.mqttTopicCommandTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandTemperature}"
-                description.mqttTopicCurrentTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentTemperature}"
-                description.mqttTopicStateFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateFanMode}"
-                description.mqttTopicCommandFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandFanMode}"
-                description.mqttTopicCommandPower = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPower}"
-                description.mqttTopicCurrentPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentPresetMode}"
-                description.mqttTopicCommandPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPresetMode}"
-                description.device_prefix_topic = device_prefix_topic
-                climateList.append(
-                    PolarisClimate(
-                        description=description,
-                        device_friendly_name=device_id,
-                        mqtt_root=mqtt_root,
-                        device_type=device_type,
-                        device_id=device_id
-                    )
+        for description in CLIMATES_LC:
+            description.mqttTopicStateTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateTemperature}"
+            description.mqttTopicCommandTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandTemperature}"
+            description.mqttTopicCurrentTemperature = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentTemperature}"
+            description.mqttTopicStateFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateFanMode}"
+            description.mqttTopicCommandFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandFanMode}"
+            description.mqttTopicCommandPower = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPower}"
+            description.mqttTopicCurrentPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentPresetMode}"
+            description.mqttTopicCommandPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPresetMode}"
+            description.device_prefix_topic = device_prefix_topic
+            climateList.append(
+                PolarisClimate(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
                 )
+            )
     if (device_type in POLARIS_AIRCLEANER_TYPE):
         # Create humidifier  
-            AIRCLEANER_LC = copy.deepcopy(AIRCLEANER)
-            for description in AIRCLEANER_LC:
-                description.mqttTopicStateFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateFanMode}"
-                description.mqttTopicCommandFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandFanMode}"
-                description.mqttTopicCommandPower = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPower}"
-                description.mqttTopicCurrentPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentPresetMode}"
-                description.mqttTopicCommandPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPresetMode}"
-                description.device_prefix_topic = device_prefix_topic
-                climateList.append(
-                    PolarisClimate(
-                        description=description,
-                        device_friendly_name=device_id,
-                        mqtt_root=mqtt_root,
-                        device_type=device_type,
-                        device_id=device_id
-                    )
+        AIRCLEANER_LC = copy.deepcopy(AIRCLEANER)
+        for description in AIRCLEANER_LC:
+            description.mqttTopicStateFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateFanMode}"
+            description.mqttTopicCommandFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandFanMode}"
+            description.mqttTopicCommandPower = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPower}"
+            description.mqttTopicCurrentPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentPresetMode}"
+            description.mqttTopicCommandPresetMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandPresetMode}"
+            description.device_prefix_topic = device_prefix_topic
+            climateList.append(
+                PolarisClimate(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
                 )
+            )
     async_add_entities(climateList, update_before_add=True)
     
     
@@ -247,6 +251,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
 
     async def async_set_fan_mode(self, fan_mode: str) -> None:
         """Set new fan mode."""
+        if (fan_mode == "9_speed"):
+            fan_mode = "8_speed"
         self._attr_fan_mode = fan_mode
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandFanMode, self.entity_description.fan_modes[fan_mode])
         self.async_write_ha_state()

@@ -98,6 +98,7 @@ async def async_setup_entry(
             description.mqttTopicCommandFindMe = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandFindMe}"
             description.mqttTopicCommandGoArea = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandGoArea}"
             description.mqttTopicCommandTest = f"{mqtt_root}/{device_prefix_topic}/state"
+            description.device_prefix_topic = device_prefix_topic
             vacuumList.append(
                 PolarisVacuum(
                     description=description,
@@ -314,6 +315,19 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
             self._attr_battery_level = int(payload)
             self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicBatteryLevel, message_received_batt_level, 1)
+    
+        @callback
+        async def entity_availability(message):
+            if self.entity_description.name != "available":
+                if str(message.payload).lower() in ("1", "true"):
+                    self._attr_available = False
+                else:
+                    self._attr_available = True
+                self.async_write_ha_state()
+        await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/connection", entity_availability, 1)
+
+    
+    
     
         # @callback
         # def message_received_contour(message):

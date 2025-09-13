@@ -53,6 +53,8 @@ from .const import (
     POLARIS_CLIMATE_TYPE,
     POLARIS_AIRCLEANER_TYPE,
     POLARIS_BOILER_TYPE,
+    POLARIS_VACUUM_TYPE,
+    POLARIS_IRRIGATOR_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -134,7 +136,9 @@ async def async_setup_entry(
         device_type in POLARIS_COFFEEMAKER_TYPE or
         device_type in POLARIS_CLIMATE_TYPE or
         device_type in POLARIS_AIRCLEANER_TYPE or
-        device_type in POLARIS_BOILER_TYPE):
+        device_type in POLARIS_BOILER_TYPE or
+        device_type in POLARIS_VACUUM_TYPE or
+        device_type in POLARIS_IRRIGATOR_TYPE):
             BINARYSENSOR_AVAILABLE_LC = copy.deepcopy(BINARYSENSOR_AVAILABLE)
             for description in BINARYSENSOR_AVAILABLE_LC:
                 description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
@@ -182,7 +186,7 @@ class PolarisBinarySensor(PolarisBaseEntity, BinarySensorEntity, ConfigEntry):
     async def async_added_to_hass(self):
         @callback
         async def message_received_base(message):
-            if int(self.device_type) == 45:
+            if int(self.device_type) == 45 and self.entity_description.key == "cappuccinator":
                 if int(message.payload) == 255:
                     self._attr_is_on = False
                     service_data = {}

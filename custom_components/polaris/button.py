@@ -22,6 +22,7 @@ from homeassistant.util import slugify
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers import entity_registry as er
 from .common import PolarisBaseEntity
 # Import global values.
 from .const import (
@@ -38,6 +39,7 @@ from .const import (
     SELECT_COFFEEMAKER,
     SELECT_COFFEEMAKER_ROG,
     BUTTON_CLIMATES,
+    BUTTON_CLIMATES_200,
     BUTTON_AIRCLEANER,
     PolarisButtonEntityDescription,
     POLARIS_KETTLE_TYPE,
@@ -125,20 +127,36 @@ async def async_setup_entry(
                 )
             )
     if (device_type in POLARIS_CLIMATE_TYPE):
-        BUTTON_CLIMATES_LC = copy.deepcopy(BUTTON_CLIMATES)
-        for description in BUTTON_CLIMATES_LC:
-            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
-            description.device_prefix_topic = device_prefix_topic
-            buttonList.append(
-                PolarisButton(
-                    description=description,
-                    device_friendly_name=device_id,
-                    mqtt_root=mqtt_root,
-                    device_type=device_type,
-                    device_id=device_id,
-                    device_prefix_topic=device_prefix_topic,
+        if (device_type == "859"):
+            BUTTON_CLIMATES_200_LC = copy.deepcopy(BUTTON_CLIMATES_200)
+            for description in BUTTON_CLIMATES_200_LC:
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.device_prefix_topic = device_prefix_topic
+                buttonList.append(
+                    PolarisButton(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id,
+                        device_prefix_topic=device_prefix_topic,
+                    )
                 )
-            )
+        else:
+            BUTTON_CLIMATES_LC = copy.deepcopy(BUTTON_CLIMATES)
+            for description in BUTTON_CLIMATES_LC:
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.device_prefix_topic = device_prefix_topic
+                buttonList.append(
+                    PolarisButton(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id,
+                        device_prefix_topic=device_prefix_topic,
+                    )
+                )
     if (device_type in POLARIS_AIRCLEANER_TYPE):
         BUTTON_AIRCLEANER_LC = copy.deepcopy(BUTTON_AIRCLEANER)
         for description in BUTTON_AIRCLEANER_LC:
@@ -245,6 +263,11 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
         if (self.device_type in POLARIS_COFFEEMAKER_TYPE):
             if self.entity_description.key == "button_stop":
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommand+"mode", "0")
+                
+                # Get entity_id by unique_id
+                entity_registry = er.async_get(self.hass)
+                entity_id = entity_registry.async_get_entity_id(DOMAIN, "polaris", self._attr_unique_id)
+                
             else:
                 state_amount = self.hass.states.get(f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_amount").state
                 state_weight = self.hass.states.get(f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_weight").state

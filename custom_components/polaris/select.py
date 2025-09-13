@@ -314,7 +314,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                         service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_{key}"
                         service_data["value"] = val
                         await self.hass.services.async_call("number", "set_value", service_data)
-        if int(self.device_type) == 69:
+        if self.device_type in POLARIS_CLIMATE_TYPE:
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option])
 
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "irrigator":

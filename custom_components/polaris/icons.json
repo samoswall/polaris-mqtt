@@ -28,7 +28,27 @@
           "off": "mdi:kettle-off"
         },
         "state_attributes": {
-          "operation_list": {
+          "operation_mode": {
+            "default": "mdi:circle-medium",
+            "state": {
+              "eco": "mdi:water-plus",
+              "electric": "mdi:heat-wave",
+              "gas": "mdi:fire-circle",
+              "heat_pump": "mdi:water-thermometer",
+              "high_demand": "mdi:finance",
+              "off": "mdi:power",
+              "performance": "mdi:chart-bubble"
+            }
+          }
+        }
+      },
+      "water_boiler": {
+        "default": "mdi:kettle",
+        "state": {
+          "off": "mdi:kettle-off"
+        },
+        "state_attributes": {
+          "operation_mode": {
             "state": {
               "off": "mdi:power",
               "performance": "mdi:chart-bubble",
@@ -102,6 +122,8 @@
               "5_speed": "mdi:fan",
               "6_speed": "mdi:fan",
               "7_speed": "mdi:fan",
+              "8_speed": "mdi:fan",
+              "9_speed": "mdi:fan",
               "off": "mdi:fan-off"
             }
           },

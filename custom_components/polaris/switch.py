@@ -9,6 +9,7 @@ import copy
 
 from homeassistant.components import mqtt
 from homeassistant.components.switch import DOMAIN, SwitchEntity
+#from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.entity import DeviceInfo, EntityCategory
 from homeassistant.util import slugify
 from homeassistant.core import HomeAssistant, callback
@@ -33,6 +34,7 @@ from .const import (
     SWITCHES_COFFEEMAKER,
     SWITCHES_COFFEEMAKER_ROG,
     SWITCHES_CLIMATE,
+    SWITCHES_CLIMATE_200,
     SWITCHES_AIRCLEANER,
     SWITCHES_VACUUM,
     SWITCHES_WATER_BOILER,
@@ -225,6 +227,21 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
+        if (device_type == "859"):
+            SWITCHES_CLIMATE_200_LC = copy.deepcopy(SWITCHES_CLIMATE_200)
+            for description in SWITCHES_CLIMATE_200_LC:
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
     if (device_type in POLARIS_AIRCLEANER_TYPE):
         # Create switches for all devices
         SWITCHES_ALL_DEVICES_LC = copy.deepcopy(SWITCHES_ALL_DEVICES)
@@ -329,6 +346,9 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         self._attr_has_entity_name = True
 #        self._old_mode = "0"
         self._attr_available = False
+#        self._attr_assumed_state = False
+#        self._optimistic = False
+#        self._value_template = self.entity_description.mqttTopicCurrentValue
 
     async def async_added_to_hass(self):
         @callback
@@ -389,11 +409,11 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
 
 
     def turn_on(self, **kwargs):
-        self._attr_is_on = True
+#        self._attr_is_on = True
         self.publishToMQTT(self.payload_on)
 
     def turn_off(self, **kwargs):
-        self._attr_is_on = False
+#        self._attr_is_on = False
         self.publishToMQTT(self.payload_off)
 
     def publishToMQTT(self, send_message: str):
