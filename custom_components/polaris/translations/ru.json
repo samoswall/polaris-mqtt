@@ -69,6 +69,36 @@
       },
       "damper_switch": {
         "name": "Рециркуляция"
+      },
+      "damper_heater": {
+        "name": "Обнаружение открытого окна"
+      },
+      "display_off_heater": {
+        "name": "Автоотключение дисплея"
+      },
+      "half_power_heater": {
+        "name": "Половина мощности"
+      },
+      "backlight_bright": {
+        "name": "Яркость 50/100"
+      },
+      "turbo_switch": {
+        "name": "Турбо режим"
+      },
+      "night_switch": {
+        "name": "Ночной режим"
+      },
+      "self_cleaning": {
+        "name": "Самоочистка"
+      },
+      "delicate_blowing": {
+        "name": "Деликатный обдув"
+      },
+      "eco_mode_switch": {
+        "name": "Экономичный режим"
+      },
+      "auto_heater_switch": {
+        "name": "Автообогрев"
       }
     },
     "water_heater": {
@@ -146,6 +176,12 @@
       },
       "speed_irrigator": {
         "name": "Скорость"
+      },
+      "temperature_difference_eco": {
+        "name": "Разница температур в режиме ECO"
+      },
+      "temperature_difference_antifrost": {
+        "name": "Разница температур в режиме Anti frost"
       }
     },
     "sensor": {
@@ -255,6 +291,12 @@
           "turns_on": "Включается",
           "turns_off": "Выключается"
         }
+      },
+      "сurrent_power": {
+        "name": "Текущая мощность"
+      },
+      "outdoor_unit_temperature": {
+        "name": "Температура внешнего блока"
       }
     },
     "select": {
@@ -339,6 +381,38 @@
           "preset1": "Режим 1",
           "preset2": "Режим 2",
           "preset3": "Режим 3"
+        }
+      },
+      "select_night_backlight": {
+        "name": "Ночная подсветка",
+        "state": {
+          "off": "Выключена",
+          "all_on": "Весь свет включен",
+          "high_on": "Верхний свет включен",
+          "mid_on": "Средний свет включен",
+          "low_on": "Нижний свет включен"
+        }
+      },
+      "select_swing_horizontal": {
+        "name": "Вертикальный обдув",
+        "state": {
+          "off": "Качание",
+          "top": "Вверх",
+          "high": "Выше среднего",
+          "middle": "Среднее",
+          "low": "Ниже среднего",
+          "bottom": "Вниз"
+        }
+      },
+      "select_swing_vertical": {
+        "name": "Горизонтальный обдув",
+        "state": {
+          "off": "Качание",
+          "left": "Влево",
+          "center-left": "Левее центра",
+          "center": "Центр",
+          "center-right": "Правее центра",
+          "right": "Вправо"
         }
       }
     },
@@ -443,6 +517,14 @@
           }
         }
       },
+      "heater": {
+        "name": "Конвектор",
+        "state_attributes": {
+          "fan_mode": {
+            "name": "Мощность нагрева"
+          }
+        }
+      },
       "aircleaner": {
         "name": "Очиститель воздуха",
         "state": {
@@ -454,6 +536,22 @@
               "hands": "Ручной",
               "auto": "Автоматический",
               "night": "Ночной"
+            }
+          },
+          "fan_mode": {
+            "state": {
+              "top": "Турбо"
+            }
+          }
+        }
+      },
+      "conditioner": {
+        "name": "Кондиционер",
+        "state_attributes": {
+          "fan_mode": {
+            "state": {
+              "min": "Минимум",
+              "max": "Максимум"
             }
           }
         }
@@ -485,6 +583,7 @@
     "other": "Умная крышка",
     "oven": "Духовка",
     "steamer": "Отпариватель",
-    "toothbrush": "Зубная щетка"
+    "toothbrush": "Зубная щетка",
+    "air-conditioner": "Кондиционер"
   }
 }
