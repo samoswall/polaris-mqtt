@@ -23,16 +23,8 @@
 > Вот тут есть [мини инструкция](https://github.com/samoswall/hacs-polaris/issues/9#issuecomment-2707181427) добавления на примере чайника.
 
 ℹ️ **Добавлены**: <br>
-✔️ Чайники <br>
-✔️ Увлажнители <br>
-✔️ Мультиварки <br>
-✔️ Кофемашины <br>
-✔️ Очистители воздуха <br>
-✔️ Ирригатры <br>
-   **Устройства РУСКЛИМАТ**:<br>
-✔️ Бризер Ballu ASP-100 <br>
-✔️ Бойлер Electrolux EWH-50 <br>
-
+✔️ Устройста Polaris (см. таблицу) <br>
+✔️ Устройства РУСКЛИМАТ (Hommyn) (см. таблицу)<br>
 
 ℹ️ **Как добавить новое устройство**: <br>
 Создаем issues - Добавить ...  <br>
@@ -40,15 +32,12 @@
 Обязательно указать type(ID) устройства и желательно развернутый mqtt топик для понимания, что добавлять. <br>
 
 ℹ️ **Возможные проблемы**: <br>
-В чайниках - может отсутствовать(быть лишним) сенсор веса и сенсор на базе. Так же может не работать Ночник (потому что в чайнике его нет)<br>
+В устройствах - может отсутствовать(быть лишним) сенсор или переключатель. Так же может не работать Ночник в чайнике (потому что в чайнике его нет)<br>
 Проблема - есть одинаковые модели как с весом так и без, с ночником и без. Отличаются type(ID). <br>
 Не стесняемся, пишем - отсутствует(лишний) сенсор ... type ... <br>
 По другим предложениям (проблемам, логике работы, иконкам, переводам) тоже пишем, по возможности оперативно исправлю<br>
 
 ℹ️ **Планы для доработок**: <br>
-✔️ Добавить поддержку старых устройств (со старой структурой топика) <br>
-✔️ Добавить сенсор ошибок <br>
-✔️ Добавить устройсто online/offline <br>
 ⬛ Добавить пылесосы и т.д.<br>
 
 Доступно обсуждение тут: [Telegram](https://t.me/polarishomeassistant)
@@ -433,7 +422,7 @@
 
 | ID    | Модель           | Тип устройства | Поддержка | Функции | Изображение |
 | :---: |------------------|----------------|-----------|---------|    :---:    |
-|801|Electrolux EAP-1040D/1055D|air-cleaner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/6e/53e7d-b244-4fa3-aab6-4edc79c83fc3/60.webp)
+|801|Electrolux EAP-1040D/1055D|air-cleaner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/d/6e/53e7d-b244-4fa3-aab6-4edc79c83fc3/60.webp)
 |826|Electrolux EAP-2050D/2075D|air-cleaner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/e/ec/989e2-3a9b-4c7f-ab45-f2397174c878/60.webp)
 |803|Ballu ONEAIR ASP-200|ventilation|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/a/7b/b36b0-70aa-4799-bbf6-c5faf24e038d/60.webp)
 |830|Ballu ONEAIR ASP-200S|ventilation|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/a/7b/b36b0-70aa-4799-bbf6-c5faf24e038d/60.webp)
@@ -451,7 +440,7 @@
 |827|Ballu RDU ANTICOVIDgenerator WiFi|recirculator|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/b3/c8e39-e547-4bc8-88eb-786a6e50cb06/60.webp)
 |808|Electrolux Atrium DC / Zanussi Siena DC / Ballu Lagoon|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/a7/5ab4d-2ce4-4b23-a441-7abd441a832d/60.webp)
 |810|Zanussi Massimo Solar|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/7e/85f4a-2572-484b-9acf-3ed07aa085f5/60.webp)
-|813|Electrolux Smartline/ Ballu Eco Smart/ Ice Peak|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/b8/462f8-ce2b-466f-a3fd-19f10b09ddb4/60.webp)
+|813|Electrolux Smartline/ Ballu Eco Smart/ Ice Peak|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/b8/462f8-ce2b-466f-a3fd-19f10b09ddb4/60.webp)
 |815|Electrolux Viking DC / Zanussi Perfecto DC / Ballu Greenland DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/7/be/01024-1bc0-4591-9820-cfee40ff3efc/60.webp)
 |820|Ballu Platinum Evol. DC/Olympio Legend|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/2f/bf74f-cf56-454a-8131-86cb4ca6be11/60.webp)
 |821|Zanussi Moderno DC/Electrolux Loft DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/f/7e/a2a32-9cba-452e-b8ad-0ca146ef34d5/60.webp)
@@ -478,7 +467,7 @@
 |816|Ballu Smart WiFi|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/ae/dbe41-2195-47a3-90bb-41592329be83/60.webp)
 |818|Electrolux Maximus/ Megapolis WiFi/ Zanussi Splendore XP 2.0/ Artendo PRO-C WiFi|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/77/fa842-cb9a-4d98-a875-2dfc11be1232/60.webp)
 |819|Electrolux Regency|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/0/df/38bde-b7f9-44a2-ab2f-f8530e745fb2/60.webp)
-|833|Electrolux Centurio IQ 3.0|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/7d/052d7-a4b4-4b59-b906-39dd8e2dc6bc/60.webp)
+|833|Electrolux Centurio IQ 3.0|boiler|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/7d/052d7-a4b4-4b59-b906-39dd8e2dc6bc/60.webp)
 |844|Royal Thermo Aqua Inverter/ Royal Thermo Aqua Inox Inverter|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/a4/4efd3-7b6c-4e56-92c7-41b5f2a2a4f7/60.webp)
 |874|Aurus S|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/b/7d/f1e52-2725-44b4-99e0-8eb0231f9f74/60.webp)
 |876|Electrolux Royal Flash/ Centurio IQ Inverter|boiler|✔️ WiFi|mode, temperature, smart, bss, child_lock |![all](https://images.cdn.rusklimat.ru/4/7d/052d7-a4b4-4b59-b906-39dd8e2dc6bc/60.webp)
@@ -487,7 +476,7 @@
 |890|Ballu Cetrion Inverter/ Ballu Cetrion Inox Inverter|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/8d/27904-4db3-4bfb-92f5-fedfe051d5f2/60.webp)
 |891|Royal Thermo Regency|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/f/fc/fc57a-c3f4-4b16-a751-f5bbfdd3b77d/60.webp)
 |850|Electrolux 3D Fireplace|fireplace|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/2/d3/1670a-7e6f-4b3b-b8cd-0eb90b13685a/60.webp)
-|806|Transformer DI 3.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
+|806|Transformer DI 3.0|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |809|Transformer DI 3.0 S|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |811|Ballu Rapid|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/d5/3c5f6-2e58-4885-b83b-84542d2419cd/60.webp)
 |814|Transformer DI|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
@@ -495,7 +484,7 @@
 |828|Transformer DI 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |831|Transformer 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |842|Transformer DI 3.0 XS|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
-|846|Transformer DI 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/9e/3c438-8eeb-49f6-827b-41f93b081088/60.webp)
+|846|Transformer DI 4.0|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/d/9e/3c438-8eeb-49f6-827b-41f93b081088/60.webp)
 |847|Wi-Fi Convection Heater|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/8c/a707d-12f9-4f91-8781-3e410dbcd0be/60.webp)
 |849|Transformer 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |871|Transformer DI 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/9e/3c438-8eeb-49f6-827b-41f93b081088/60.webp)
@@ -547,7 +536,7 @@
 
 <br>
 
-   >  **Не актуально начиная с версии 1.0.9 (Устройства находятся автоматически)**
+   >  **Не актуально для интеграции начиная с версии 1.0.9 (Устройства находятся автоматически при подключении их к MQTT брокеру)**
 
 1. В MQTT Explorer выбираем топик с mac адресом своего устройства (справа в разделе Publish появится полный путь топика)
 
