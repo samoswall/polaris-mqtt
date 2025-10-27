@@ -584,6 +584,6 @@
     "oven": "Oven",
     "steamer": "Steamer",
     "toothbrush": "Toothbrush",
-    "air-conditioner": "Conditioner"
+    "air_conditioner": "Conditioner"
   }
 }
