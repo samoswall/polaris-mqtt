@@ -46,7 +46,7 @@ from homeassistant.components.switch import (
     SwitchDeviceClass,
     SwitchEntityDescription,
 )
-from homeassistant.components.water_heater import WaterHeaterEntity, WaterHeaterEntityEntityDescription                                    # removed in HA Core 2026.1
+from homeassistant.components.water_heater import WaterHeaterEntity, WaterHeaterEntityDescription                                    # removed in HA Core 2026.1
 from homeassistant.components.humidifier import HumidifierEntity, HumidifierEntityDescription, HumidifierDeviceClass
 from homeassistant.const import (
     PERCENTAGE,
@@ -1900,7 +1900,7 @@ SWITCHES_AIRCONDITIONER = [
 
 
 @dataclass
-class PolarisWaterHeaterEntityDescription(WaterHeaterEntityEntityDescription): # breaks_in_ha_version="2026.1"
+class PolarisWaterHeaterEntityDescription(WaterHeaterEntityDescription): # breaks_in_ha_version="2026.1"
 
     mqttTopicCurrentMode: str | None = None
     mqttTopicCommandMode: str | None = None
