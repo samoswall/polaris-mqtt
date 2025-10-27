@@ -32,9 +32,12 @@ from .const import (
     SENSORS_CLIMATE,
     SENSORS_CLIMATE_200,
     SENSORS_AIRCLEANER,
+    SENSORS_AIRCLEANER_EAP,
     SENSORS_VACUUM,
     SENSORS_WATER_BOILER,
     SENSORS_IRRIGATOR,
+    SENSORS_HEATER,
+    SENSORS_AIRCONDITIONER,
     PolarisSensorEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -44,9 +47,12 @@ from .const import (
     POLARIS_COFFEEMAKER_ROG_TYPE,
     POLARIS_CLIMATE_TYPE,
     POLARIS_AIRCLEANER_TYPE,
+    POLARIS_AIRCLEANER_EAP_TYPE,
     POLARIS_VACUUM_TYPE,
     POLARIS_BOILER_TYPE,
     POLARIS_IRRIGATOR_TYPE,
+    POLARIS_HEATER_TYPE,
+    POLARIS_AIRCONDITIONER_TYPE,
     KETTLE_ERROR,
     HUMIDDIFIER_ERROR,
     COOKER_ERROR,
@@ -261,6 +267,20 @@ async def async_setup_entry(
                     device_id=deviceID,
                 )
             )
+    if (devicetype in POLARIS_AIRCLEANER_EAP_TYPE):
+        SENSORS_AIRCLEANER_EAP_CP = copy.deepcopy(SENSORS_AIRCLEANER_EAP)
+        for description in SENSORS_AIRCLEANER_EAP_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
     if (devicetype in POLARIS_VACUUM_TYPE):
         SENSORS_VACUUM_CP = copy.deepcopy(SENSORS_VACUUM)
         for description in SENSORS_VACUUM_CP:
@@ -278,6 +298,21 @@ async def async_setup_entry(
     if (devicetype in POLARIS_BOILER_TYPE):
         SENSORS_WATER_BOILER_CP = copy.deepcopy(SENSORS_WATER_BOILER)
         for description in SENSORS_WATER_BOILER_CP:
+            if (devicetype != "833" or description.translation_key != "anode_retain"):
+                description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+                description.device_prefix_topic = device_prefix_topic
+                sensorList.append(
+                    PolarisSensor(
+                        description=description,
+                        device_friendly_name=deviceID,
+                        mqtt_root=mqttRoot,
+                        device_type=devicetype,
+                        device_id=deviceID,
+                    )
+                )
+    if (devicetype in POLARIS_IRRIGATOR_TYPE):
+        SENSORS_IRRIGATOR_CP = copy.deepcopy(SENSORS_IRRIGATOR)
+        for description in SENSORS_IRRIGATOR_CP:
             description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
             description.device_prefix_topic = device_prefix_topic
             sensorList.append(
@@ -289,9 +324,23 @@ async def async_setup_entry(
                     device_id=deviceID,
                 )
             )
-    if (devicetype in POLARIS_IRRIGATOR_TYPE):
-        SENSORS_IRRIGATOR_CP = copy.deepcopy(SENSORS_IRRIGATOR)
-        for description in SENSORS_IRRIGATOR_CP:
+    if (devicetype in POLARIS_HEATER_TYPE):
+        SENSORS_HEATER_CP = copy.deepcopy(SENSORS_HEATER)
+        for description in SENSORS_HEATER_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
+    if (devicetype in POLARIS_AIRCONDITIONER_TYPE):
+        SENSORS_AIRCONDITIONER_CP = copy.deepcopy(SENSORS_AIRCONDITIONER)
+        for description in SENSORS_AIRCONDITIONER_CP:
             description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
             description.device_prefix_topic = device_prefix_topic
             sensorList.append(
@@ -397,6 +446,11 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                 payload_message = list_dubleint
             if self.entity_description.name == "quality":
                 payload_message = str( int(payload_message) / 100 )
+            if self.entity_description.name == "сurrent_power":
+                if self.device_type == "806":
+                    payload_message = str( int(payload_message[:2],16) * 20 )
+                else:
+                    payload_message = str( int(payload_message[:2],16) * 10 )
             
             self._attr_native_value = payload_message
             self.async_write_ha_state()

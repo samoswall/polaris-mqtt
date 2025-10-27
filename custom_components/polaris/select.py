@@ -34,6 +34,9 @@ from .const import (
     SELECT_CLIMATE,
     SELECT_VACUUM,
     SELECT_IRRIGATOR,
+    SELECT_AIRCLEANER_EAP,
+    SELECT_AIRCONDITIONER_SWING_HORIZONTAL,
+    SELECT_AIRCONDITIONER_SWING_VERTICAL,
     PolarisSelectEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -44,6 +47,8 @@ from .const import (
     POLARIS_CLIMATE_TYPE,
     POLARIS_VACUUM_TYPE,
     POLARIS_IRRIGATOR_TYPE,
+    POLARIS_AIRCLEANER_EAP_TYPE,
+    POLARIS_AIRCONDITIONER_TYPE,
 )
 
 
@@ -167,6 +172,51 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
+    if (device_type in POLARIS_AIRCLEANER_EAP_TYPE):
+        SELECT_AIRCLEANER_EAP_LC = copy.deepcopy(SELECT_AIRCLEANER_EAP)
+        for description in SELECT_AIRCLEANER_EAP_LC:
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.device_prefix_topic = device_prefix_topic
+            selectList.append(
+                PolarisSelect(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in POLARIS_AIRCONDITIONER_TYPE):
+        SELECT_AIRCONDITIONER_SWING_HORIZONTAL_LC = copy.deepcopy(SELECT_AIRCONDITIONER_SWING_HORIZONTAL)
+        for description in SELECT_AIRCONDITIONER_SWING_HORIZONTAL_LC:
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.device_prefix_topic = device_prefix_topic
+            selectList.append(
+                PolarisSelect(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in POLARIS_AIRCONDITIONER_TYPE):
+        SELECT_AIRCONDITIONER_SWING_VERTICAL_LC = copy.deepcopy(SELECT_AIRCONDITIONER_SWING_VERTICAL)
+        for description in SELECT_AIRCONDITIONER_SWING_VERTICAL_LC:
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.device_prefix_topic = device_prefix_topic
+            selectList.append(
+                PolarisSelect(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     async_add_entities(selectList, update_before_add=True)
 
 
@@ -195,7 +245,10 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle" or POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker" or POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker" or POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner":
             self._select_options = json.loads(json.dumps(SELECT_COFFEEMAKER[0].options))
-
+        if device_type == "826":
+            self._EAP_data0 = "0000"
+        if device_type == "813":
+            self._conditioner_data0 = "0000"
 
         self._custom_data_select = self._read_file()
         if self._custom_data_select is not None:
@@ -316,6 +369,18 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                         await self.hass.services.async_call("number", "set_value", service_data)
         if self.device_type in POLARIS_CLIMATE_TYPE:
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option])
+        if self.device_type in POLARIS_AIRCONDITIONER_TYPE:
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option])
+            if (int(self.entity_description.options[option]) > 0):
+                if self.entity_description.key == "select_swing_horizontal":
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode[:-1] + "0", self._conditioner_data0[:2] + "00" + self._conditioner_data0[-4:])
+                if self.entity_description.key == "select_swing_vertical":
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode[:-1] + "0", "00" + self._conditioner_data0[-6:])
+            else:
+                if self.entity_description.key == "select_swing_horizontal":
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode[:-1] + "0", self._conditioner_data0[:2] + "01" + self._conditioner_data0[-4:])
+                if self.entity_description.key == "select_swing_vertical":
+                    mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode[:-1] + "0", "01" + self._conditioner_data0[-6:])
 
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "irrigator":
             if self._attr_current_option == "preset3":
@@ -330,6 +395,8 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_1[0] == "a" else self._preset_1[0])
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
+        if (self.device_type == "826" and self._EAP_data0[:2] == "02"):
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self._EAP_data0[:3] + str(self.entity_description.options[option]))
 
     async def async_added_to_hass(self):
         @callback
@@ -354,6 +421,9 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             elif int(self.device_type) == 69:
                 self._attr_current_option = self._attr_options[int(payload)]
                 self.async_write_ha_state()
+            elif int(self.device_type) == 813:
+                self._attr_current_option = self._attr_options[int(payload)]
+                self.async_write_ha_state()
             elif POLARIS_DEVICE[int(self.device_type)]['class'] == "irrigator":
                 self._preset_1 = [payload[1:2], payload[7:8], payload[13:14]]
                 self._preset_2 = [payload[3:4], payload[9:10], payload[15:16]]
@@ -371,6 +441,33 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentMode, message_received_sel, 1)
+        
+        @callback
+        def EAP_data_message_received(message):
+            self._EAP_data0 = message.payload
+#            _LOGGER.debug("EAP data0 message select %s", self._EAP_data0)
+
+
+        if self.device_type == "826":
+            await mqtt.async_subscribe(
+                self.hass,
+                self.entity_description.mqttTopicCurrentMode,
+                EAP_data_message_received,
+                1,
+            )
+            
+        @callback
+        def conditioner_data_message_received(message):
+            self._conditioner_data0 = message.payload
+
+        if self.device_type == "813":
+            await mqtt.async_subscribe(
+                self.hass,
+                self.entity_description.mqttTopicCurrentMode[:-1]+"0",
+                conditioner_data_message_received,
+                1,
+            )
+        
         
         @callback
         async def entity_availability(message):

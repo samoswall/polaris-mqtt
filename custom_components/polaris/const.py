@@ -46,7 +46,7 @@ from homeassistant.components.switch import (
     SwitchDeviceClass,
     SwitchEntityDescription,
 )
-from homeassistant.components.water_heater import WaterHeaterEntity, WaterHeaterEntityEntityDescription
+from homeassistant.components.water_heater import WaterHeaterEntity, WaterHeaterEntityEntityDescription                                    # removed in HA Core 2026.1
 from homeassistant.components.humidifier import HumidifierEntity, HumidifierEntityDescription, HumidifierDeviceClass
 from homeassistant.const import (
     PERCENTAGE,
@@ -377,12 +377,18 @@ POLARIS_DEVICE = {
     69:  {"model": "Ballu-OneAir-ASP-100", "class": "air_cleaner"}, # совместимость с <= v1.0.8
     869: {"model": "Ballu-OneAir-ASP-100", "class": "air_cleaner"},
     859: {"model": "Ballu-OneAir-ASP-200", "class": "air_cleaner"},
-    876: {"model": "Electrolux-EWH-50", "class": "boiler"},
+    826: {"model": "Electrolux-EAP-2050D/2075D", "class": "air_cleaner"},
+    876: {"model": "Electrolux-Royal-Flash/Centurio-IQ-Inverter", "class": "boiler"},
+    833: {"model": "Electrolux-Centurio-IQ-3.0", "class": "boiler"},
+    806: {"model": "Electrolux-Air-Gate-Transformer-DI-3.0", "class": "heater"},
+    846: {"model": "Electrolux-Air-Gate-Transformer-DI-4.0", "class": "heater"},
+    843: {"model": "Electrolux-Smartline/Ballu-Eco-Smart/Ice-Peak", "class": "air-conditioner"},
+    813: {"model": "Electrolux-Smartline/Ballu-Eco-Smart/Ice-Peak", "class": "air-conditioner"},
 }
 
 POLARIS_KETTLE_TYPE = ["2","6","8","29","36","37","38","51","52","53","54","57","58","59","60","61","62","63","67","82","83","84","85","86","97","105","106","117","121","139","165","175","176","177","189","194","196","205","209","253","254","255","260","271","308"]
-POLARIS_KETTLE_WITH_WEIGHT_TYPE = ["56","98","164","185","188","208","223","244","245","262","263","275","294"]
-POLARIS_KETTLE_WITH_NIGHT_TYPE = ["36","37","56","86","97","106","117","164","175","176","177","189","194","196","205","208","209","244","253","254","255","260","271","308"]
+POLARIS_KETTLE_WITH_WEIGHT_TYPE = ["98","164","185","188","208","223","244","245","262","263","275","294"]
+POLARIS_KETTLE_WITH_NIGHT_TYPE = ["36","37","86","97","106","117","164","175","176","177","189","194","196","205","208","209","244","253","254","255","260","271","308"]
 POLARIS_KETTLE_WITH_BACKLIGHT_TYPE = ["36","37","51","52","53","54","60","61","62","63","67","82","83","84","85","86","97","98","105","106","117","139","164","175","176","177","188","189","194","196","208","209","223","244","245","253","254","255","260","262","263","271","275","294","308"]
 POLARIS_KETTLE_WITH_TEA_TIME_MODE_TYPE = ["2","8","51","53","56","58","60","62","85","98","139","165","185","188","205","223","262","263","275","294"]
 POLARIS_KETTLE_WITH_KEEP_WITH_WARM_MODE_TYPE = ["205","262","294"]
@@ -403,9 +409,12 @@ POLARIS_COFFEEMAKER_TYPE = ["103", "166", "200","261","265","276","277","278","2
 POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247", "274", "279"] 
 POLARIS_CLIMATE_TYPE = ["69", "869", "859"]
 POLARIS_AIRCLEANER_TYPE = ["140", "151", "152", "172", "203", "204", "236", "238", "239", "250", "251"]
+POLARIS_AIRCLEANER_EAP_TYPE = ["826"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
-POLARIS_BOILER_TYPE = ["876"]
+POLARIS_BOILER_TYPE = ["833", "876"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
+POLARIS_HEATER_TYPE = ["846", "806"]
+POLARIS_AIRCONDITIONER_TYPE = ["813", "843"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
 KETTLE_WITH_KEEP_WITH_WARM_MODES = {"off": "0", "performance": "1", "high_demand": "2", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
@@ -862,6 +871,70 @@ SENSORS_AIRCLEANER = [
     ),
 ]
 
+SENSORS_AIRCLEANER_EAP = [
+    PolarisSensorEntityDescription(
+        key="sensor/pm2",
+        name="PM2.5",
+        translation_key="pm2_5_sensor",
+        device_class=None,
+        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:molecule",
+    ),
+    PolarisSensorEntityDescription(
+        key="expendables",
+        name="filter_retain",
+        translation_key="filter_retain",
+        device_class=None,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:filter",
+    ),
+    PolarisSensorEntityDescription(
+        key="firmware",
+        name="Firmware Version",
+        translation_key="firmware_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_registry_enabled_default=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="devtype",
+        name="Device Type",
+        translation_key="type_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="diag/rssi",
+        name="RSSI",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:wifi",
+    ),
+    PolarisSensorEntityDescription(
+        key="error/code",
+        name="error",
+        translation_key="error",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:alert",
+    ),
+]
+
 SENSORS_VACUUM = [
     PolarisSensorEntityDescription(
         key="firmware",
@@ -1029,6 +1102,102 @@ SENSORS_IRRIGATOR = [
         state_class=SensorStateClass.MEASUREMENT,
         entity_registry_enabled_default=True,
         icon="mdi:equalizer",
+    ),
+]
+
+SENSORS_HEATER = [
+    PolarisSensorEntityDescription(
+        key="firmware",
+        name="Firmware Version",
+        translation_key="firmware_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_registry_enabled_default=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="devtype",
+        name="Device Type",
+        translation_key="type_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="diag/rssi",
+        name="RSSI",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:wifi",
+    ),
+    PolarisSensorEntityDescription(
+        key="program_data/0",
+        name="сurrent_power",
+        translation_key="сurrent_power",
+        device_class=None,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:equalizer",
+    ),
+    PolarisSensorEntityDescription(
+        key="sensor/temperature",
+        name="Temperature",
+        translation_key="temperature_sensor",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:thermometer",
+    ),
+]
+
+SENSORS_AIRCONDITIONER = [
+    PolarisSensorEntityDescription(
+        key="sensor/temperature",
+        name="Temperature",
+        translation_key="temperature_sensor",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:thermometer",
+    ),
+    PolarisSensorEntityDescription(
+        key="firmware",
+        name="Firmware Version",
+        translation_key="firmware_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_registry_enabled_default=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="devtype",
+        name="Device Type",
+        translation_key="type_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="diag/rssi",
+        name="RSSI",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:wifi",
     ),
 ]
 
@@ -1356,6 +1525,66 @@ SWITCHES_AIRCLEANER = [
     ),
 ]
 
+SWITCHES_AIRCLEANER_EAP = [
+    PolarisSwitchEntityDescription(
+        key="backlight",
+        translation_key="backlight_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Backlight",
+        mqttTopicCommand="control/backlight",
+        mqttTopicCurrentValue="state/backlight",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="ioniser",
+        translation_key="ioniser_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Ioniser",
+        mqttTopicCommand="control/ioniser",
+        mqttTopicCurrentValue="state/ioniser",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:atom-variant",
+    ),
+    PolarisSwitchEntityDescription(
+        key="ultraviolet",
+        translation_key="ultraviolet_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Ultraviolet",
+        mqttTopicCommand="control/uv",
+        mqttTopicCurrentValue="state/uv",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:white-balance-sunny",
+    ),
+    PolarisSwitchEntityDescription(
+        key="power",
+        translation_key="power_switch",
+        name="Power",
+        mqttTopicCommand="control/mode",
+        mqttTopicCurrentValue="state/mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+        icon="mdi:power-standby",
+    ),
+    PolarisSwitchEntityDescription(
+        key="child_lock",
+        translation_key="child_lock_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Child lock",
+        mqttTopicCommand="control/child_lock",
+        mqttTopicCurrentValue="state/child_lock",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+]
+
 SWITCHES_VACUUM = [
     PolarisSwitchEntityDescription(
         key="turbo",
@@ -1440,7 +1669,7 @@ SWITCHES_WATER_BOILER = [
         device_class=SwitchDeviceClass.SWITCH,
         payload_on="true",
         payload_off="false",
-        icon="mdi:molecule",
+        icon="mdi:bacteria",
     ),
 ]
 
@@ -1482,6 +1711,193 @@ SWITCHES_IRRIGATOR = [
         icon="mdi:power",
     ),
 ]
+
+SWITCHES_HEATER = [
+    PolarisSwitchEntityDescription(
+        key="power",
+        translation_key="power_switch",
+#        entity_category=EntityCategory.CONFIG,
+        name="Power",
+        mqttTopicCommand="control/mode",
+        mqttTopicCurrentValue="state/mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+        icon="mdi:power-standby",
+    ),
+    PolarisSwitchEntityDescription(
+        key="volume",
+        translation_key="sound_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Volume",
+        mqttTopicCommand="control/volume",
+        mqttTopicCurrentValue="state/volume",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+    ),
+    PolarisSwitchEntityDescription(
+        key="backlight",
+        translation_key="backlight_bright",
+        entity_category=EntityCategory.CONFIG,
+        name="Backlight",
+        mqttTopicCommand="control/backlight",
+        mqttTopicCurrentValue="state/backlight",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+    ),
+    PolarisSwitchEntityDescription(
+        key="child_lock",
+        translation_key="child_lock_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Child lock",
+        mqttTopicCommand="control/child_lock",
+        mqttTopicCurrentValue="state/child_lock",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="damper_heater",
+        translation_key="damper_heater",
+        entity_category=EntityCategory.CONFIG,
+        name="Detect open window",
+        mqttTopicCommand="control/damper",
+        mqttTopicCurrentValue="state/damper",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="display_off_heater",
+        translation_key="display_off_heater",
+        entity_category=EntityCategory.CONFIG,
+        name="Auto-turn off display",
+        mqttTopicCommand="control/program_data/0",
+        mqttTopicCurrentValue="state/program_data/0",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="01",
+        payload_off="00",
+    ),
+    PolarisSwitchEntityDescription(
+        key="half_power_heater",
+        translation_key="half_power_heater",
+        entity_category=EntityCategory.CONFIG,
+        name="Half the power",
+        mqttTopicCommand="control/program_data/0",
+        mqttTopicCurrentValue="state/program_data/0",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="01",
+        payload_off="00",
+    ),
+]
+
+SWITCHES_AIRCONDITIONER = [
+#    PolarisSwitchEntityDescription(
+#        key="damper",
+#        translation_key="damper_air",
+#        entity_category=EntityCategory.CONFIG,
+#        name="Damper",
+#        mqttTopicCommand="control/damper",
+#        mqttTopicCurrentValue="state/damper",
+#        device_class=SwitchDeviceClass.SWITCH,
+#        payload_on="true",
+#        payload_off="false",
+#        icon="mdi:swap-horizontal-circle-outline",
+#    ),
+#    PolarisSwitchEntityDescription(
+#        key="ioniser",
+#        translation_key="ioniser_switch",
+#        entity_category=EntityCategory.CONFIG,
+#        name="Ioniser",
+#        mqttTopicCommand="control/ionizer",
+#        mqttTopicCurrentValue="state/ionizer",
+#        device_class=SwitchDeviceClass.SWITCH,
+#        payload_on="true",
+#        payload_off="false",
+#        icon="mdi:atom-variant",
+#    ),
+#    PolarisSwitchEntityDescription(
+#        key="bss_mode",
+#        translation_key="bss_mode",
+#        entity_category=EntityCategory.CONFIG,
+#        name="bss_mode",
+#        mqttTopicCommand="control/bss",
+#        mqttTopicCurrentValue="state/bss",
+#        device_class=SwitchDeviceClass.SWITCH,
+#        payload_on="true",
+#        payload_off="false",
+#        icon="mdi:molecule",
+#    ),
+    PolarisSwitchEntityDescription(
+        key="turbo",
+        translation_key="turbo_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Turbo mode",
+        mqttTopicCommand="control/turbo",
+        mqttTopicCurrentValue="state/turbo",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+     PolarisSwitchEntityDescription(
+        key="night",
+        translation_key="night_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Night mode",
+        mqttTopicCommand="control/night",
+        mqttTopicCurrentValue="state/night",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+     PolarisSwitchEntityDescription(
+        key="self-cleaning",
+        translation_key="self_cleaning",
+        entity_category=EntityCategory.CONFIG,
+        name="Self cleaning",
+        mqttTopicCommand="control/program_data/1",
+        mqttTopicCurrentValue="state/program_data/1",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="01",
+        payload_off="00",
+    ),
+     PolarisSwitchEntityDescription(
+        key="delicate-blowing",
+        translation_key="delicate_blowing",
+        entity_category=EntityCategory.CONFIG,
+        name="Delicate blowing",
+        mqttTopicCommand="control/program_data/2",
+        mqttTopicCurrentValue="state/program_data/2",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="01",
+        payload_off="00",
+    ),
+     PolarisSwitchEntityDescription(
+        key="eco_mode_switch",
+        translation_key="eco_mode_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Eco mode",
+        mqttTopicCommand="control/program_data/0",
+        mqttTopicCurrentValue="state/program_data/0",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="01",
+        payload_off="00",
+    ),
+     PolarisSwitchEntityDescription(
+        key="auto_heater_switch",
+        translation_key="auto_heater_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Auto heater",
+        mqttTopicCommand="control/program_data/0",
+        mqttTopicCurrentValue="state/program_data/0",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="01",
+        payload_off="00",
+    ),
+]
+
 
 @dataclass
 class PolarisWaterHeaterEntityDescription(WaterHeaterEntityEntityDescription): # breaks_in_ha_version="2026.1"
@@ -1826,6 +2242,40 @@ NUMBERS_IRRIGATOR = [
     ),
 ]
 
+NUMBERS_HEATER = [
+    PolarisNumberEntityDescription(
+        key="temperature_difference_eco",
+        name="ECO difference temperature",
+        translation_key="temperature_difference_eco",
+        mqttTopicCurrent = "state/program_data/2",
+        mqttTopicCommand = "control/program_data/2",
+        entity_category=EntityCategory.CONFIG,
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        entity_registry_enabled_default=True,
+        native_max_value=7,
+        native_min_value=3,
+        native_step=1,
+        native_value=3,
+        mode="slider",
+    ),
+    PolarisNumberEntityDescription(
+        key="temperature_difference_antifrost",
+        name="Anti frost difference temperature",
+        translation_key="temperature_difference_antifrost",
+        mqttTopicCurrent = "state/program_data/3",
+        mqttTopicCommand = "control/program_data/3",
+        entity_category=EntityCategory.CONFIG,
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        entity_registry_enabled_default=True,
+        native_max_value=7,
+        native_min_value=3,
+        native_step=1,
+        native_value=3,
+        mode="slider",
+    ),
+]
 
 @dataclass
 class PolarisSelectEntityDescription(SelectEntityDescription):
@@ -1980,6 +2430,69 @@ SELECT_CLIMATE = [
         entity_registry_enabled_default=True,
     )
 ]
+
+SELECT_AIRCLEANER_EAP = [
+    PolarisSelectEntityDescription(
+        key="select_night_backlight",
+        name="Night backlight",
+        translation_key="select_night_backlight",
+        mqttTopicCurrentMode="state/program_data/0",
+        mqttTopicCommandMode="control/program_data/0",
+        options={
+          "off": 0,
+          "all_on": 1,
+          "high_on": 2,
+          "mid_on": 3,
+          "low_on": 4,
+        },
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+    )
+]
+
+SELECT_AIRCONDITIONER_SWING_HORIZONTAL  = [
+    PolarisSelectEntityDescription(
+        key="select_swing_horizontal",
+        name="Swing horizontal",
+        translation_key="select_swing_horizontal",
+        mqttTopicCurrentMode="state/program_data/3",
+        mqttTopicCommandMode="control/program_data/3",
+        options={
+          "off": "00",
+          "top": "01",
+          "high": "02",
+          "middle": "03",
+          "low": "04",
+          "bottom": "05",
+        },
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+    )
+]
+
+SELECT_AIRCONDITIONER_SWING_VERTICAL  = [
+    PolarisSelectEntityDescription(
+        key="select_swing_vertical",
+        name="Swing vertical",
+        translation_key="select_swing_vertical",
+        mqttTopicCurrentMode="state/program_data/4",
+        mqttTopicCommandMode="control/program_data/4",
+        options={
+          "off": "00",
+          "left": "01",
+          "center-left": "02",
+          "center": "03",
+          "center-right": "04",
+          "right": "05",
+        },
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+    )
+]
+
 
 SELECT_VACUUM = [
     PolarisSelectEntityDescription(
@@ -2303,11 +2816,15 @@ class PolarisClimateEntityDescription(ClimateEntityDescription):
     mqttTopicCommandPower: str | None = None
     mqttTopicCurrentPresetMode: str | None = None
     mqttTopicCommandPresetMode: str | None = None
+    mqttTopicCommandSwingMode: str | None = None
+    mqttTopicStateSwingMode: str | None = None
     payload_on: str | None = None
     payload_off: str | None = None
     min_temp: int | None = None
     max_temp: int | None = None
     temp_step: int | None = None
+    swing_mode: str | None = None
+    swing_modes: str | None = None
 
 
 CLIMATES = [
@@ -2402,6 +2919,106 @@ AIRCLEANER = [
         mqttTopicCommandPresetMode = "control/mode",
         payload_on = "1",
         payload_off = "0",
+        device_class = None,
+    )
+]
+
+AIRCLEANER_EAP = [
+    PolarisClimateEntityDescription(
+        name = "Aircleaner",
+        key = "aircleaner",
+        translation_key = "aircleaner",
+        fan_mode = "low",
+        fan_modes = {"off": "0", "low": "1", "medium": "2", "high": "3", "top": "4"},
+        preset_mode = "auto",
+        preset_modes = {"auto": "1", "night": "2", "hands": "3"},
+        hvac_modes = [HVACMode.OFF, HVACMode.DRY],
+        supported_features = (
+            ClimateEntityFeature.PRESET_MODE
+            | ClimateEntityFeature.FAN_MODE
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TURN_ON
+        ),
+        mqttTopicStateFanMode = "state/fan_speed",
+        mqttTopicCommandFanMode = "control/fan_speed",
+        mqttTopicCommandPower = "control/mode",
+        mqttTopicCurrentPresetMode = "state/mode",
+        mqttTopicCommandPresetMode = "control/mode",
+        payload_on = "1",
+        payload_off = "0",
+        device_class = None,
+    )
+]
+
+CLIMATES_HEATER = [
+    PolarisClimateEntityDescription(
+        name = "Heater",
+        key = "heater",
+        translation_key = "heater",
+        fan_mode = "auto",
+        fan_modes = {"auto": "0", "10%": "1", "20%": "2", "30%": "3", "40%": "4", "50%": "5", "60%": "6", "70%": "7", "80%": "8", "90%": "9", "100%": "10"},
+        preset_mode = "comfort",
+        preset_modes = {"comfort": "1", "eco": "2", "away": "3"},
+        hvac_modes = [HVACMode.OFF, HVACMode.HEAT],
+        supported_features = (
+            ClimateEntityFeature.TARGET_TEMPERATURE
+            | ClimateEntityFeature.PRESET_MODE
+#            | ClimateEntityFeature.AUX_HEAT
+            | ClimateEntityFeature.FAN_MODE
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TURN_ON
+        ),
+        mqttTopicStateTemperature = "state/temperature",
+        mqttTopicCommandTemperature = "control/temperature",
+        mqttTopicCurrentTemperature = "state/sensor/temperature",
+        mqttTopicStateFanMode = "state/speed",
+        mqttTopicCommandFanMode = "control/speed",
+        mqttTopicCommandPower = "control/mode",
+        mqttTopicCurrentPresetMode = "state/mode",
+        mqttTopicCommandPresetMode = "control/mode",
+        payload_on = "1",
+        payload_off = "0",
+        min_temp = 5,
+        max_temp = 35,
+        temp_step = 1,
+        device_class = None,
+    )
+]
+
+CLIMATES_AIRCONDITIONER = [
+    PolarisClimateEntityDescription(
+        name = "Conditioner",
+        key = "conditioner",
+        translation_key = "conditioner",
+        fan_mode = "auto",
+        fan_modes = {"auto": "0", "min": "1", "low": "2", "middle": "3", "high": "4", "max": "5"},
+        preset_mode = "auto",
+        preset_modes = {"auto": "1", "cooling": "2", "defrosting": "3", "heating": "4", "fan": "5"},
+        hvac_modes = [HVACMode.OFF, HVACMode.HEAT, HVACMode.COOL, HVACMode.FAN_ONLY, HVACMode.DRY, HVACMode.AUTO],
+        swing_mode = "off",
+        swing_modes = {"off": "0", "both": "1", "vertical": "2", "horizontal": "3"},
+        supported_features = (
+            ClimateEntityFeature.TARGET_TEMPERATURE
+            | ClimateEntityFeature.FAN_MODE
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TURN_ON
+            | ClimateEntityFeature.SWING_MODE
+        ),
+        mqttTopicStateTemperature = "state/temperature",
+        mqttTopicCommandTemperature = "control/temperature",
+        mqttTopicCurrentTemperature = "state/sensor/temperature",
+        mqttTopicStateFanMode = "state/speed",
+        mqttTopicCommandFanMode = "control/speed",
+        mqttTopicCommandPower = "control/mode",
+        mqttTopicCurrentPresetMode = "state/mode",
+        mqttTopicCommandPresetMode = "control/mode",
+        mqttTopicCommandSwingMode = "control/program_data/0",
+        mqttTopicStateSwingMode = "state/program_data/0",
+        payload_on = "1",
+        payload_off = "0",
+        min_temp = 16,
+        max_temp = 30,
+        temp_step = 1,
         device_class = None,
     )
 ]

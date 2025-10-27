@@ -43,9 +43,9 @@
         }
       },
       "water_boiler": {
-        "default": "mdi:kettle",
+        "default": "mdi:water-boiler",
         "state": {
-          "off": "mdi:kettle-off"
+          "off": "mdi:water-boiler-off"
         },
         "state_attributes": {
           "operation_mode": {
@@ -77,6 +77,30 @@
         "default": "mdi:alarm-light",
         "state": {
           "off": "mdi:alarm-light-off"
+        }
+      },
+      "backlight_bright": {
+        "default": "mdi:lightbulb-on",
+        "state": {
+          "off": "mdi:lightbulb-on-50"
+        }
+      },
+      "damper_heater": {
+        "default": "mdi:window-closed-variant",
+        "state": {
+          "on": "mdi:window-open-variant"
+        }
+      },
+      "display_off_heater": {
+        "default": "mdi:lightbulb",
+        "state": {
+          "on": "mdi:lightbulb-auto"
+        }
+      },
+      "half_power_heater": {
+        "default": "mdi:fraction-one-half",
+        "state": {
+          "off": "mdi:fraction-one-half"
         }
       }
     },
@@ -151,6 +175,39 @@
               "hands": "mdi:gesture-tap",
               "auto": "mdi:refresh-auto",
               "night": "mdi:weather-night"
+            }
+          },
+          "fan_mode": {
+            "state": {
+              "top": "mdi:rocket-launch"
+            }
+          }
+        }
+      },
+      "heater": {
+        "default": "mdi:radiator",
+        "state": {
+          "off": "mdi:radiator-off"
+        },
+        "state_attributes": {
+          "fan_mode": {
+            "state": {
+              "auto": "mdi:flash-auto",
+              "10%": "mdi:numeric-1-box",
+              "20%": "mdi:numeric-2-box",
+              "30%": "mdi:numeric-3-box",
+              "40%": "mdi:numeric-4-box",
+              "50%": "mdi:numeric-5-box",
+              "60%": "mdi:numeric-6-box",
+              "70%": "mdi:numeric-7-box",
+              "80%": "mdi:numeric-8-box",
+              "90%": "mdi:numeric-9-box",
+              "100%": "mdi:numeric-10-box",
+              "20 %": "mdi:numeric-1-box",
+              "40 %": "mdi:numeric-2-box",
+              "60 %": "mdi:numeric-3-box",
+              "80 %": "mdi:numeric-4-box",
+              "100 %": "mdi:numeric-5-box"
             }
           }
         }

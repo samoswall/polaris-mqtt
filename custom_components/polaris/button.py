@@ -258,6 +258,13 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
             content = None
         return content
         
+        
+    def get_state_by_unique_id(self, entity_domain, entity_name):
+        entity_unique_id = f"{self.device_id}_{entity_name}"
+        entity_registry = er.async_get(self.hass)
+        entity_id = entity_registry.async_get_entity_id(entity_domain, "polaris", entity_unique_id)
+        return self.hass.states.get(entity_id).state
+
 
     async def async_press(self) -> None:
         if (self.device_type in POLARIS_COFFEEMAKER_TYPE):
@@ -265,8 +272,9 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommand+"mode", "0")
                 
                 # Get entity_id by unique_id
-                entity_registry = er.async_get(self.hass)
-                entity_id = entity_registry.async_get_entity_id(DOMAIN, "polaris", self._attr_unique_id)
+                # Работает
+                zzzz = self.get_state_by_unique_id("number", "amount")
+                _LOGGER.debug("state %s", zzzz)
                 
             else:
                 state_amount = self.hass.states.get(f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_amount").state

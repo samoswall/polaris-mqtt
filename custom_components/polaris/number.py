@@ -31,6 +31,7 @@ from .const import (
     NUMBERS_COFFEEMAKER_ROG,
     NUMBERS_AIRCLEANER,
     NUMBERS_IRRIGATOR,
+    NUMBERS_HEATER,
     PolarisNumberEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -41,6 +42,7 @@ from .const import (
     POLARIS_COFFEEMAKER_ROG_TYPE,
     POLARIS_AIRCLEANER_TYPE,
     POLARIS_IRRIGATOR_TYPE,
+    POLARIS_HEATER_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -152,6 +154,22 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
+    if (device_type in POLARIS_HEATER_TYPE): 
+    # Create Heater  
+        NUMBERS_HEATER_LC = copy.deepcopy(NUMBERS_HEATER)
+        for description in NUMBERS_HEATER_LC:
+            description.mqttTopicCurrent = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrent}" 
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.device_prefix_topic = device_prefix_topic
+            numberList.append(
+                PolarisNumber(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     async_add_entities(numberList, update_before_add=True)
 
 
@@ -188,8 +206,9 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
     def set_native_value(self, value: float) -> None:
         if value % 1 > 0:
             self._attr_native_value = STATE_UNAVAILABLE
-#             self._attr_available = False
-        elif self.entity_description.name == "display_time":
+        elif ((self.entity_description.key == "display_time") or
+              (self.entity_description.key == "temperature_difference_antifrost") or
+              (self.entity_description.key == "temperature_difference_eco")):
             self._attr_native_value = int(value)
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{int(value):02x}", 0, True)
         elif self.entity_description.name == "time_timer":

@@ -55,6 +55,7 @@ from .const import (
     POLARIS_BOILER_TYPE,
     POLARIS_VACUUM_TYPE,
     POLARIS_IRRIGATOR_TYPE,
+    POLARIS_HEATER_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -138,7 +139,8 @@ async def async_setup_entry(
         device_type in POLARIS_AIRCLEANER_TYPE or
         device_type in POLARIS_BOILER_TYPE or
         device_type in POLARIS_VACUUM_TYPE or
-        device_type in POLARIS_IRRIGATOR_TYPE):
+        device_type in POLARIS_IRRIGATOR_TYPE or
+        device_type in POLARIS_HEATER_TYPE):
             BINARYSENSOR_AVAILABLE_LC = copy.deepcopy(BINARYSENSOR_AVAILABLE)
             for description in BINARYSENSOR_AVAILABLE_LC:
                 description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
