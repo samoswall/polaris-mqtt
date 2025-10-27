@@ -584,6 +584,6 @@
     "oven": "Духовка",
     "steamer": "Отпариватель",
     "toothbrush": "Зубная щетка",
-    "air-conditioner": "Кондиционер"
+    "air_conditioner": "Кондиционер"
   }
 }
