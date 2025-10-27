@@ -292,7 +292,7 @@
           "turns_off": "Turns off"
         }
       },
-      "сurrent_power": {
+      "current_power": {
         "name": "Current power"
       },
       "outdoor_unit_temperature": {
