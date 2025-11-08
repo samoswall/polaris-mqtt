@@ -138,7 +138,7 @@ async def async_setup_entry(
             )
         SENSORS_HUMIDIFIER_CP = copy.deepcopy(SENSORS_HUMIDIFIER)
         for description in SENSORS_HUMIDIFIER_CP:
-            description.mqttTopicCurrentValue = (f"{mqttRoot}/{deviceID}/state/{description.key}")
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
             description.device_prefix_topic = device_prefix_topic
             sensorList.append(
                 PolarisSensor(

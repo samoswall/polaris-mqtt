@@ -204,7 +204,9 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._attr_hvac_modes = self.entity_description.hvac_modes
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         if device_type == "806":
-            self.entity_description.fan_modes = {"auto": "0", "20 %": "1", "40 %": "2", "60 %": "3", "80 %": "4", "100 %": "5"}
+            self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
+        if device_type == "820":
+            self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}
         self._attr_fan_modes = list(self.entity_description.fan_modes.keys())
         self._attr_supported_features = self.entity_description.supported_features
         self._enable_turn_on_off_backwards_compatibility = False
@@ -212,7 +214,10 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         
         self._attr_precision = self.entity_description.temp_step
         self._attr_target_temperature = 20
-        self._attr_max_temp = self.entity_description.max_temp
+        if device_type == "820":
+            self._attr_max_temp = 32
+        else:
+            self._attr_max_temp = self.entity_description.max_temp
         self._attr_min_temp = self.entity_description.min_temp
         
         self._attr_fan_mode = self.entity_description.fan_mode
@@ -410,6 +415,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandPresetMode, 0)
         elif ((self.device_type in POLARIS_AIRCLEANER_TYPE) or (self.device_type in POLARIS_HEATER_TYPE) or (self.device_type in POLARIS_AIRCLEANER_EAP_TYPE)):
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandPower, 1)
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandFanMode, self.entity_description.fan_modes[self._attr_fan_mode])                   # add for on fan after off heater
         elif (self.device_type in POLARIS_AIRCONDITIONER_TYPE):
             match hvac_mode:
                 case "auto": 

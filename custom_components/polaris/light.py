@@ -39,7 +39,8 @@ from .const import (
     POLARIS_HUMIDDIFIER_TYPE,
 )
 
-#_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.DEBUG)
 
 async def async_setup_entry(
     hass: HomeAssistant, config: ConfigEntry, async_add_entities: AddEntitiesCallback
@@ -104,7 +105,10 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
         @callback
         def message_received_rgb(message):
             rgb = color_util.rgb_hex_to_rgb_list(message.payload)
-            self._attr_rgb_color = rgb
+            if (self.device_type == "176" or self.device_type == "255"):
+                self._attr_rgb_color = [rgb[0], rgb[1], rgb[2]]
+            else:
+                self._attr_rgb_color = rgb
             bright = int(max(rgb)/255*100)
             self._attr_brightness = bright
             self.async_write_ha_state()
@@ -143,6 +147,7 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
 
 
     async def async_turn_on(self, **kwargs: Any) -> None:
+        topic = self.entity_description.mqttTopicCommandColor
         if ATTR_RGB_COLOR in kwargs:
             color = color_util.color_rgb_to_hex(*kwargs[ATTR_RGB_COLOR])
             self._attr_rgb_color = color_util.rgb_hex_to_rgb_list(color)
@@ -152,8 +157,10 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
             bright_factor_old = max(self._attr_rgb_color)/255
             bright_factor_new = level/ 100 / bright_factor_old
             self._attr_rgb_color = [int(value * bright_factor_new) for value in self._attr_rgb_color]
-        topic = self.entity_description.mqttTopicCommandColor
-        mqtt.publish(self.hass, topic,  color_util.color_rgb_to_hex(self._attr_rgb_color[0], self._attr_rgb_color[1],self._attr_rgb_color[2]))
+        if (self.device_type == "176" or self.device_type == "255"):
+            mqtt.publish(self.hass, topic, f"{self._attr_rgb_color[0]:02x}{self._attr_rgb_color[1]:02x}{self._attr_rgb_color[2]:02x}00")
+        else:
+            mqtt.publish(self.hass, topic, color_util.color_rgb_to_hex(self._attr_rgb_color[0], self._attr_rgb_color[1],self._attr_rgb_color[2]))
         topic = self.entity_description.mqttTopicCommandState
         mqtt.publish(self.hass, topic, "true")
         self._attr_is_on = True

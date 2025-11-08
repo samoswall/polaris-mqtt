@@ -102,6 +102,24 @@
         "state": {
           "off": "mdi:fraction-one-half"
         }
+      },
+      "auto_heater_switch": {
+        "default": "mdi:snowflake",
+        "state": {
+          "off": "mdi:snowflake-off"
+        }
+      },
+      "self_cleaning": {
+        "default": "mdi:autorenew",
+        "state": {
+          "off": "mdi:autorenew-off"
+        }
+      },
+      "eco_mode_switch": {
+        "default": "mdi:leaf",
+        "state": {
+          "off": "mdi:leaf-off"
+        }
       }
     },
     "binary_sensor": {
@@ -193,21 +211,35 @@
           "fan_mode": {
             "state": {
               "auto": "mdi:flash-auto",
-              "10%": "mdi:numeric-1-box",
-              "20%": "mdi:numeric-2-box",
-              "30%": "mdi:numeric-3-box",
-              "40%": "mdi:numeric-4-box",
-              "50%": "mdi:numeric-5-box",
-              "60%": "mdi:numeric-6-box",
-              "70%": "mdi:numeric-7-box",
-              "80%": "mdi:numeric-8-box",
-              "90%": "mdi:numeric-9-box",
-              "100%": "mdi:numeric-10-box",
-              "20 %": "mdi:numeric-1-box",
-              "40 %": "mdi:numeric-2-box",
-              "60 %": "mdi:numeric-3-box",
-              "80 %": "mdi:numeric-4-box",
-              "100 %": "mdi:numeric-5-box"
+              "10_percent": "mdi:numeric-1-box",
+              "20_percent": "mdi:numeric-2-box",
+              "30_percent": "mdi:numeric-3-box",
+              "40_percent": "mdi:numeric-4-box",
+              "50_percent": "mdi:numeric-5-box",
+              "60_percent": "mdi:numeric-6-box",
+              "70_percent": "mdi:numeric-7-box",
+              "80_percent": "mdi:numeric-8-box",
+              "90_percent": "mdi:numeric-9-box",
+              "100_percent": "mdi:numeric-10-box",
+              "20_5_percent": "mdi:numeric-1-box",
+              "40_5_percent": "mdi:numeric-2-box",
+              "60_5_percent": "mdi:numeric-3-box",
+              "80_5_percent": "mdi:numeric-4-box",
+              "100_5_percent": "mdi:numeric-5-box"
+            }
+          }
+        }
+      },
+      "conditioner": {
+        "default": "mdi:air-conditioner",
+        "state_attributes": {
+          "fan_mode": {
+            "state": {
+              "min": "mdi:fan-minus",
+              "low": "mdi:fan-speed-1",
+              "middle": "mdi:fan-speed-2",
+              "high": "mdi:fan-speed-3",
+              "max": "mdi:fan-plus"
             }
           }
         }
