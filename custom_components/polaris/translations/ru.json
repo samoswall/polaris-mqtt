@@ -99,6 +99,12 @@
       },
       "auto_heater_switch": {
         "name": "Автообогрев"
+      },
+      "quiet_mode": {
+        "name": "Тихий режим"
+      },
+      "anti_fingus_switch": {
+        "name": "Профилактика грибка"
       }
     },
     "water_heater": {
@@ -521,7 +527,24 @@
         "name": "Конвектор",
         "state_attributes": {
           "fan_mode": {
-            "name": "Мощность нагрева"
+            "name": "Мощность нагрева",
+            "state": {
+              "10_percent": "10 %",
+              "20_percent": "20 %",
+              "30_percent": "30 %",
+              "40_percent": "40 %",
+              "50_percent": "50 %",
+              "60_percent": "60 %",
+              "70_percent": "70 %",
+              "80_percent": "80 %",
+              "90_percent": "90 %",
+              "100_percent": "100 %",
+              "20_5_percent": "20 %",
+              "40_5_percent": "40 %",
+              "60_5_percent": "60 %",
+              "80_5_percent": "80 %",
+              "100_5_percent": "100 %"
+            }
           }
         }
       },
