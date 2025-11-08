@@ -442,7 +442,7 @@
 |810|Zanussi Massimo Solar|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/7e/85f4a-2572-484b-9acf-3ed07aa085f5/60.webp)
 |813|Electrolux Smartline/ Ballu Eco Smart/ Ice Peak|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/b8/462f8-ce2b-466f-a3fd-19f10b09ddb4/60.webp)
 |815|Electrolux Viking DC / Zanussi Perfecto DC / Ballu Greenland DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/7/be/01024-1bc0-4591-9820-cfee40ff3efc/60.webp)
-|820|Ballu Platinum Evol. DC/Olympio Legend|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/2f/bf74f-cf56-454a-8131-86cb4ca6be11/60.webp)
+|820|Ballu Platinum Evol. DC/Olympio Legend|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/c/2f/bf74f-cf56-454a-8131-86cb4ca6be11/60.webp)
 |821|Zanussi Moderno DC/Electrolux Loft DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/f/7e/a2a32-9cba-452e-b8ad-0ca146ef34d5/60.webp)
 |838|Toshiba Shorai EE|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/b1/30a44-26ae-40b1-aa01-2050bcf54111/60.webp)
 |841|Electrolux Monaco DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/f1/5a9ab-521d-424d-b09a-51fa341a1b42/60.webp)
