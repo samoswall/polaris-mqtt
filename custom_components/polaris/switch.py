@@ -360,7 +360,7 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
-    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type == "820"):
+    if (device_type == "820"):
         SWITCHES_AIRCONDITIONER_820_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER_820)
         for description in SWITCHES_AIRCONDITIONER_820_LC:
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
@@ -375,7 +375,7 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    else:
+    if (device_type == "813"):
         SWITCHES_AIRCONDITIONER_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER)
         for description in SWITCHES_AIRCONDITIONER_LC:
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
