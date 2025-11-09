@@ -151,12 +151,12 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
         if ATTR_RGB_COLOR in kwargs:
             color = color_util.color_rgb_to_hex(*kwargs[ATTR_RGB_COLOR])
             self._attr_rgb_color = color_util.rgb_hex_to_rgb_list(color)
-        if ATTR_BRIGHTNESS in kwargs:
-            level = int((kwargs.get(ATTR_BRIGHTNESS, 0) * 100) / 255)
+        elif ATTR_BRIGHTNESS in kwargs:
+            level = int((kwargs.get(ATTR_BRIGHTNESS, 100) * 100) / 255)
             self._attr_brightness = level
-            bright_factor_old = max(self._attr_rgb_color)/255
-            bright_factor_new = level/ 100 / bright_factor_old
-            self._attr_rgb_color = [int(value * bright_factor_new) for value in self._attr_rgb_color]
+        bright_factor_old = max(self._attr_rgb_color)/255
+        bright_factor_new = self._attr_brightness/ 100 / bright_factor_old
+        self._attr_rgb_color = [int(value * bright_factor_new) for value in self._attr_rgb_color]
         if (self.device_type == "176" or self.device_type == "255"):
             mqtt.publish(self.hass, topic, f"{self._attr_rgb_color[0]:02x}{self._attr_rgb_color[1]:02x}{self._attr_rgb_color[2]:02x}00")
         else:
