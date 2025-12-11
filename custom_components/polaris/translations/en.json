@@ -43,6 +43,9 @@
       "backlight_switch": {
         "name": "Backlight"
       },
+      "backlight_bottom_switch": {
+        "name": "Bottom backlight"
+      },
       "ioniser_switch": {
         "name": "Ioniser"
       },
@@ -88,6 +91,9 @@
       "night_switch": {
         "name": "Night mode"
       },
+      "night_light_switch": {
+        "name": "Night light"
+      },
       "self_cleaning": {
         "name": "Self cleaning"
       },
@@ -99,6 +105,15 @@
       },
       "auto_heater_switch": {
         "name": "Auto heating"
+      },
+      "quiet_mode": {
+        "name": "Quiet mode"
+      },
+      "no_frost": {
+        "name": "No frost"
+      },
+      "anti_fingus_switch": {
+        "name": "Anti fingus"
       }
     },
     "water_heater": {
@@ -146,6 +161,9 @@
     "number": {
       "intensity": {
         "name": "Intensity"
+      },
+      "evaporation_rate": {
+        "name": "Evaporation rate"
       },
       "set_temperature": {
         "name": "Set temperature"

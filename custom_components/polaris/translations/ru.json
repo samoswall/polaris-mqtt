@@ -43,6 +43,9 @@
       "backlight_switch": {
         "name": "Подсветка"
       },
+      "backlight_bottom_switch": {
+        "name": "Нижняя подсветка"
+      },
       "ioniser_switch": {
         "name": "Ионизация"
       },
@@ -88,6 +91,9 @@
       "night_switch": {
         "name": "Ночной режим"
       },
+      "night_light_switch": {
+        "name": "Ночная подсветка"
+      },
       "self_cleaning": {
         "name": "Самоочистка"
       },
@@ -102,6 +108,9 @@
       },
       "quiet_mode": {
         "name": "Тихий режим"
+      },
+      "no_frost": {
+        "name": "Антизамерзание"
       },
       "anti_fingus_switch": {
         "name": "Профилактика грибка"
@@ -152,6 +161,9 @@
     "number": {
       "intensity": {
         "name": "Интенсивность"
+      },
+      "evaporation_rate": {
+        "name": "Скорость испарения"
       },
       "set_temperature": {
         "name": "Установка температуры"
