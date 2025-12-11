@@ -105,12 +105,15 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
         @callback
         def message_received_rgb(message):
             rgb = color_util.rgb_hex_to_rgb_list(message.payload)
+            level = int(max(rgb)/255*100)
+            self._attr_brightness = level
             if (self.device_type == "176" or self.device_type == "255"):
-                self._attr_rgb_color = [rgb[0], rgb[1], rgb[2]]
+                rgb_color = [rgb[0], rgb[1], rgb[2]]
             else:
-                self._attr_rgb_color = rgb
-            bright = int(max(rgb)/255*100)
-            self._attr_brightness = bright
+                rgb_color = rgb
+            bright_factor_old = max(rgb)/255
+            bright_factor_new = level / 100 / bright_factor_old
+            self._attr_rgb_color = [int(value / bright_factor_new) for value in rgb_color]
             self.async_write_ha_state()
         @callback
         def message_received_state(message):

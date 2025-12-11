@@ -26,6 +26,7 @@ from .const import (
     SENSORS_ALL_DEVICES,
     SENSORS_WEIGHT,
     SENSORS_HUMIDIFIER,
+    SENSORS_RUSCLIMATE_HUMIDIFIER,
     SENSORS_COOKER,
     SENSORS_COFFEEMAKER,
     SENSORS_COFFEEMAKER_ROG,
@@ -122,7 +123,22 @@ async def async_setup_entry(
             )
     # Humidifier
     if (devicetype in POLARIS_HUMIDDIFIER_TYPE):
-        # Create sensors for all devices 
+      if devicetype == "881":
+        SENSORS_RUSCLIMATE_HUMIDIFIER_CP = copy.deepcopy(SENSORS_RUSCLIMATE_HUMIDIFIER)
+        for description in SENSORS_RUSCLIMATE_HUMIDIFIER_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
+      else:
+      # Create sensors for all devices 
         SENSORS_ALL_DEVICES_CP = copy.deepcopy(SENSORS_ALL_DEVICES)
         for description in SENSORS_ALL_DEVICES_CP:
             description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
@@ -298,7 +314,7 @@ async def async_setup_entry(
     if (devicetype in POLARIS_BOILER_TYPE):
         SENSORS_WATER_BOILER_CP = copy.deepcopy(SENSORS_WATER_BOILER)
         for description in SENSORS_WATER_BOILER_CP:
-            if (devicetype != "833" or description.translation_key != "anode_retain"):
+            if (devicetype not in {"833","802"} or description.translation_key != "anode_retain"):
                 description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
                 description.device_prefix_topic = device_prefix_topic
                 sensorList.append(

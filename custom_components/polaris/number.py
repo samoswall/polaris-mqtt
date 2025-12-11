@@ -26,6 +26,7 @@ from .const import (
     DEVICETYPE,
     POLARIS_DEVICE,
     NUMBER_HUMIDIFIER,
+    NUMBER_RUSCLIMATE_HUMIDIFIER,
     NUMBER_COOKER,
     NUMBERS_COFFEEMAKER,
     NUMBERS_COFFEEMAKER_ROG,
@@ -60,7 +61,10 @@ async def async_setup_entry(
     
     if (device_type in POLARIS_HUMIDDIFIER_TYPE):
     # Create humidifier  
-        NUMBER_HUMIDIFIER_LC = copy.deepcopy(NUMBER_HUMIDIFIER)
+        if device_type == "881":
+            NUMBER_HUMIDIFIER_LC = copy.deepcopy(NUMBER_RUSCLIMATE_HUMIDIFIER)
+        else:
+            NUMBER_HUMIDIFIER_LC = copy.deepcopy(NUMBER_HUMIDIFIER)
         for description in NUMBER_HUMIDIFIER_LC:
             description.mqttTopicCurrent = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrent}" 
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"

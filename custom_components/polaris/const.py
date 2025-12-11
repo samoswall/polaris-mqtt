@@ -380,10 +380,14 @@ POLARIS_DEVICE = {
     826: {"model": "Electrolux-EAP-2050D/2075D", "class": "air_cleaner"},
     876: {"model": "Electrolux-Royal-Flash/Centurio-IQ-Inverter", "class": "boiler"},
     833: {"model": "Electrolux-Centurio-IQ-3.0", "class": "boiler"},
+    802: {"model": "SmartInverter", "class": "boiler"},
+    844: {"model": "Royal-Thermo-Aqua-Inverter/Royal-Thermo-Aqua-Inox-Inverter", "class": "boiler"},
     806: {"model": "Electrolux-Air-Gate-Transformer-DI-3.0", "class": "heater"},
     846: {"model": "Electrolux-Air-Gate-Transformer-DI-4.0", "class": "heater"},
+    847: {"model": "Wi-Fi-Convection-Heater", "class": "heater"},
     820: {"model": "Ballu-Platinum-Evol-DC/Olympio-Legend", "class": "air-conditioner"},
     813: {"model": "Electrolux-Smartline/Ballu-Eco-Smart/Ice-Peak", "class": "air-conditioner"},
+    881: {"model": "UHB-960-ET", "class": "humidifier"},
 }
 
 POLARIS_KETTLE_TYPE = ["2","6","8","29","36","37","38","51","52","53","54","56","57","58","59","60","61","62","63","67","82","83","84","85","86","97","105","106","117","121","139","165","175","176","177","189","194","196","205","209","253","254","255","260","271","308"]
@@ -392,9 +396,9 @@ POLARIS_KETTLE_WITH_NIGHT_TYPE = ["36","37","86","97","106","117","164","175","1
 POLARIS_KETTLE_WITH_BACKLIGHT_TYPE = ["36","37","51","52","53","54","60","61","62","63","67","82","83","84","85","86","97","98","105","106","117","139","164","175","176","177","188","189","194","196","208","209","223","244","245","253","254","255","260","262","263","271","275","294","308"]
 POLARIS_KETTLE_WITH_TEA_TIME_MODE_TYPE = ["2","8","51","53","56","58","60","62","85","98","139","165","185","188","205","223","262","263","275","294"]
 POLARIS_KETTLE_WITH_KEEP_WITH_WARM_MODE_TYPE = ["205","262","294"]
-POLARIS_HUMIDDIFIER_TYPE = ["4","15","17","18","25","44","70","71","72","73","74","75","87","99","137","147","153","155","157","158"]
+POLARIS_HUMIDDIFIER_TYPE = ["4","15","17","18","25","44","70","71","72","73","74","75","87","99","137","147","153","155","157","158","881"]
 POLARIS_HUMIDDIFIER_WITH_IONISER_TYPE = ["4","15","17","18","44","70","72","73","74","137","147","153","155","157","158"]
-POLARIS_HUMIDDIFIER_WITH_WARM_STREAM_TYPE = ["4","15","17","18","44","70","72","74","147","157","158"]
+POLARIS_HUMIDDIFIER_WITH_WARM_STREAM_TYPE = ["4","15","17","18","44","70","72","74","147","157","158","881"]
 POLARIS_HUMIDDIFIER_LOW_FAN_TYPE = ["25","71","72","73","74","75","87","99","137","153","155","157","158"]
 POLARIS_HUMIDDIFIER_7_MODE_TYPE = ["17","18","44","70"]
 POLARIS_HUMIDDIFIER_5A_MODE_TYPE = ["4"]
@@ -402,6 +406,7 @@ POLARIS_HUMIDDIFIER_5B_MODE_TYPE = ["72","74","87","147","155"]
 POLARIS_HUMIDDIFIER_4_MODE_TYPE = ["15","71","73","75","99"]
 POLARIS_HUMIDDIFIER_3A_MODE_TYPE = ["25"]
 POLARIS_HUMIDDIFIER_3B_MODE_TYPE = ["153","157","158"]
+POLARIS_HUMIDDIFIER_2_MODE_TYPE = ["881"]
 POLARIS_HUMIDDIFIER_1_MODE_TYPE = ["137"]
 POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303"]
 POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303"]
@@ -411,9 +416,9 @@ POLARIS_CLIMATE_TYPE = ["69", "869", "859"]
 POLARIS_AIRCLEANER_TYPE = ["140", "151", "152", "172", "203", "204", "236", "238", "239", "250", "251"]
 POLARIS_AIRCLEANER_EAP_TYPE = ["826"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
-POLARIS_BOILER_TYPE = ["833", "876"]
+POLARIS_BOILER_TYPE = ["802","833","844","876"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
-POLARIS_HEATER_TYPE = ["846", "806"]
+POLARIS_HEATER_TYPE = ["806","844","846","847"]
 POLARIS_AIRCONDITIONER_TYPE = ["813", "820"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
@@ -423,6 +428,7 @@ HUMIDDIFIER_5B_AVAILABLE_MODES = {"auto": "1", "sleep": "4", "boost": "5", "home
 HUMIDDIFIER_4_AVAILABLE_MODES = {"auto": "1", "boost": "5", "home": "6", "eco": "7"}
 HUMIDDIFIER_3A_AVAILABLE_MODES = {"boost": "5", "home": "6", "eco": "7"}
 HUMIDDIFIER_3B_AVAILABLE_MODES = {"auto": "1", "boost": "5", "eco": "7"}
+HUMIDDIFIER_2_AVAILABLE_MODES = {"home": "1", "auto": "2"}
 HUMIDDIFIER_1_AVAILABLE_MODES = {"boost": "5"}
 
 KETTLE_ERROR = {
@@ -516,6 +522,59 @@ SENSORS_ALL_DEVICES = [
         state_class=SensorStateClass.MEASUREMENT,
         entity_registry_enabled_default=True,
         icon="mdi:thermometer",
+    ),
+    PolarisSensorEntityDescription(
+        key="firmware",
+        name="Firmware Version",
+        translation_key="firmware_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_registry_enabled_default=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="devtype",
+        name="Device Type",
+        translation_key="type_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="diag/rssi",
+        name="RSSI",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:wifi",
+    ),
+    PolarisSensorEntityDescription(
+        key="error/code",
+        name="error",
+        translation_key="error",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:alert",
+    ),
+]
+
+SENSORS_RUSCLIMATE_HUMIDIFIER = [
+    PolarisSensorEntityDescription(
+        key="sensor/humidity",
+        name="Humidity",
+        translation_key="humidity_sensor",
+        device_class=SensorDeviceClass.HUMIDITY,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=True,
+        icon="mdi:water-percent",
     ),
     PolarisSensorEntityDescription(
         key="firmware",
@@ -1264,6 +1323,43 @@ SWITCH_KETTLE_BACKLIGHT = [
     ),
 ]
 
+SWITCHES_RUSCLIMATE_HUMIDIFIER = [
+    PolarisSwitchEntityDescription(
+        key="power",
+        translation_key="power_switch",
+        name="Power",
+        mqttTopicCommand="control/mode",
+        mqttTopicCurrentValue="state/mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+        icon="mdi:power-standby",
+    ),
+    PolarisSwitchEntityDescription(
+        key="backlight",
+        translation_key="backlight_bottom_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Backlight bottom",
+        mqttTopicCommand="control/backlight",
+        mqttTopicCurrentValue="state/backlight",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+    ),
+    PolarisSwitchEntityDescription(
+        key="night",
+        translation_key="night_light_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Night light",
+        mqttTopicCommand="control/night",
+        mqttTopicCurrentValue="state/night",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:weather-night",
+    ),
+]
+
 SWITCH_HUMIDIFIER_BACKLIGHT = [
     PolarisSwitchEntityDescription(
         key="backlight",
@@ -1673,6 +1769,35 @@ SWITCHES_WATER_BOILER = [
     ),
 ]
 
+SWITCHES_WATER_BOILER_BACKLIGHT = [
+    PolarisSwitchEntityDescription(
+        key="backlight",
+        translation_key="backlight_bright",
+        entity_category=EntityCategory.CONFIG,
+        name="Backlight",
+        mqttTopicCommand="control/backlight",
+        mqttTopicCurrentValue="state/backlight",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+    ),
+]
+
+SWITCHES_WATER_BOILER_NO_FROST = [
+    PolarisSwitchEntityDescription(
+        key="no_frost",
+        translation_key="no_frost",
+        entity_category=EntityCategory.CONFIG,
+        name="No frost",
+        mqttTopicCommand="control/keep_warm",
+        mqttTopicCurrentValue="state/keep_warm",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:snowflake-off",
+    ),
+]
+
 SWITCHES_IRRIGATOR = [
     PolarisSwitchEntityDescription(
         key="smart_mode",
@@ -2050,7 +2175,7 @@ HUMIDIFIERS = [
         payload_on = "1",
         payload_off = "0",
         min_humidity = 30,
-        max_humidity = 75,
+        max_humidity = 80,
         device_class=HumidifierDeviceClass.HUMIDIFIER,
         icon="mdi:air-humidifier",
     )
@@ -2076,6 +2201,24 @@ NUMBER_HUMIDIFIER = [
         entity_registry_enabled_default=True,
         native_max_value=7,
         native_min_value=0,
+        native_step=1,
+        native_value=1,
+    )
+]
+
+NUMBER_RUSCLIMATE_HUMIDIFIER = [
+    PolarisNumberEntityDescription(
+        key="speed",
+        name="Evaporation rate",
+        translation_key="evaporation_rate",
+        mqttTopicCurrent = "state/speed",
+        mqttTopicCommand = "control/speed",
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_registry_enabled_default=True,
+        native_max_value=3,
+        native_min_value=1,
         native_step=1,
         native_value=1,
     )

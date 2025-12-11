@@ -66,7 +66,7 @@ async def async_setup_entry(
     device_prefix_topic = config.data["DEVPREFIXTOPIC"]
     buttonList = []
 
-    if (device_type in POLARIS_HUMIDDIFIER_TYPE):
+    if (device_type in POLARIS_HUMIDDIFIER_TYPE and device_type != "881"):
         BUTTON_HUMIDIFIER_LC = copy.deepcopy(BUTTON_HUMIDIFIER)
         for description in BUTTON_HUMIDIFIER_LC:
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"

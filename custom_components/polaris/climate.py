@@ -203,7 +203,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._attr_target_temperature_step = 1.0
         self._attr_hvac_modes = self.entity_description.hvac_modes
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
-        if device_type == "806":
+        if device_type in {"806","847"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
         if device_type == "820":
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}

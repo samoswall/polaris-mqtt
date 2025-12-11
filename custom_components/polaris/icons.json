@@ -79,6 +79,12 @@
           "off": "mdi:alarm-light-off"
         }
       },
+      "backlight_bottom_switch": {
+        "default": "mdi:lightbulb-on",
+        "state": {
+          "off": "mdi:lightbulb-on-50"
+        }
+      },
       "backlight_bright": {
         "default": "mdi:lightbulb-on",
         "state": {
