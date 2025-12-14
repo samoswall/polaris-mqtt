@@ -152,7 +152,13 @@
               "sleep": "Ночной",
               "boost": "Интенсивность",
               "home": "Ручной",
-              "eco": "Увлажнение"
+              "eco": "Увлажнение",
+              "fitnes": "Фитнес",
+              "yoga": "Йога",
+              "meditation": "Медитация",
+              "prana_hand": "Прана ручной",
+              "prana_auto": "Прана авто",
+              "aroma": "Арома"
             }
           }
         }
@@ -200,6 +206,12 @@
       },
       "temperature_difference_antifrost": {
         "name": "Разница температур в режиме Anti frost"
+      },
+      "bright_backlight": {
+        "name": "Яркость подсветки"
+      },
+      "power_cable": {
+        "name": "Мощность кабеля"
       }
     },
     "sensor": {
@@ -223,6 +235,9 @@
       },
       "quality": {
         "name": "Качество чистки"
+      },
+      "power_consume": {
+        "name": "Потребление энергии"
       },
       "error": {
         "name": "Ошибка",
@@ -437,6 +452,12 @@
     "light": {
       "night_light": {
         "name": "Ночник"
+      },
+      "night_light_up": {
+        "name": "Верхняя подсветка"
+      },
+      "night_light_down": {
+        "name": "Нижняя подсветка"
       }
     },
     "binary_sensor": {
@@ -466,6 +487,13 @@
         "state": {
           "on": "Установлен",
           "off": "Не установлен"
+        }
+      },
+      "heating_binary_sensor": {
+        "name": "Нагрев",
+        "state": {
+          "on": "Греет",
+          "off": "Не греет"
         }
       },
       "available_binary_sensor": {
@@ -590,6 +618,22 @@
             }
           }
         }
+      },
+      "thermostat": {
+        "name": "Термостат",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "eco": "Экономичный",
+              "comfort": "Комфорт",
+              "turbo": "Турбо",
+              "antifrost": "Антизамерзание",
+              "schedule": "Расписание",
+              "vacation": "Отпуск",
+              "manual": "Настройка"
+            }
+          }
+        }
       }
     }
   },
@@ -619,6 +663,7 @@
     "oven": "Духовка",
     "steamer": "Отпариватель",
     "toothbrush": "Зубная щетка",
-    "air_conditioner": "Кондиционер"
+    "air_conditioner": "Кондиционер",
+    "thermostat": "Термостат"
   }
 }

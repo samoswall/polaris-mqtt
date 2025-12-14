@@ -152,7 +152,13 @@
               "sleep": "Night",
               "boost": "Intensity",
               "home": "Custom",
-              "eco": "Humidity"
+              "eco": "Humidity",
+              "fitnes": "Fitnes",
+              "yoga": "Yoga",
+              "meditation": "Meditation",
+              "prana_hand": "Prana hand",
+              "prana_auto": "Prana auto",
+              "aroma": "Aroma"
             }
           }
         }
@@ -200,6 +206,12 @@
       },
       "temperature_difference_antifrost": {
         "name": "Temperature difference antifrost"
+      },
+      "bright_backlight": {
+        "name": "Bright backlight"
+      },
+      "power_cable": {
+        "name": "Power cable"
       }
     },
     "sensor": {
@@ -223,6 +235,9 @@
       },
       "quality": {
         "name": "Качество чистки"
+      },
+      "power_consume": {
+        "name": "Power consume"
       },
       "error": {
         "name": "Error",
@@ -437,6 +452,12 @@
     "light": {
       "night_light": {
         "name": "Night light"
+      },
+      "night_light_up": {
+        "name": "Top backlight"
+      },
+      "night_light_down": {
+        "name": "Bottom backlight"
       }
     },
     "binary_sensor": {
@@ -466,6 +487,13 @@
         "state": {
           "on": "Installed",
           "off": "Not installed"
+        }
+      },
+      "heating_binary_sensor": {
+        "name": "Heating",
+        "state": {
+          "on": "Heats",
+          "off": "Not heat"
         }
       },
       "available_binary_sensor": {
@@ -590,6 +618,22 @@
             }
           }
         }
+      },
+      "thermostat": {
+        "name": "Thermostat",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "eco": "Eco",
+              "comfort": "Comfort",
+              "turbo": "Turbo",
+              "antifrost": "Antifrost",
+              "schedule": "Schedule",
+              "vacation": "Vacation",
+              "manual": "Manual"
+            }
+          }
+        }
       }
     }
   },
@@ -619,6 +663,7 @@
     "oven": "Oven",
     "steamer": "Steamer",
     "toothbrush": "Toothbrush",
-    "air_conditioner": "Conditioner"
+    "air_conditioner": "Conditioner",
+    "thermostat": "Thermostat"
   }
 }
