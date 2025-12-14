@@ -15,7 +15,13 @@
               "comfort": "mdi:heart-pulse",
               "eco": "mdi:cloud-percent",
               "home": "mdi:gesture-tap",
-              "sleep": "mdi:power-sleep"
+              "sleep": "mdi:power-sleep",
+              "fitnes": "mdi:walk",
+              "yoga": "mdi:yoga",
+              "meditation": "mdi:meditation",
+              "prana_hand": "mdi:human-handsdown",
+              "prana_auto": "mdi:human-handsup",
+              "aroma": "mdi:scent"
             }
           }
         }
@@ -246,6 +252,19 @@
               "middle": "mdi:fan-speed-2",
               "high": "mdi:fan-speed-3",
               "max": "mdi:fan-plus"
+            }
+          }
+        }
+      },
+      "thermostat": {
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "turbo": "mdi:rocket-launch",
+              "antifrost": "mdi:snowflake-off",
+              "schedule": "mdi:calendar-blank",
+              "vacation": "mdi:plane-car",
+              "manual": "mdi:cog"
             }
           }
         }

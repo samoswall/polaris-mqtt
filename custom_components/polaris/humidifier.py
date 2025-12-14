@@ -41,6 +41,7 @@ from .const import (
     POLARIS_HUMIDDIFIER_3B_MODE_TYPE,
     POLARIS_HUMIDDIFIER_2_MODE_TYPE,
     POLARIS_HUMIDDIFIER_1_MODE_TYPE,
+    POLARIS_HUMIDDIFIER_11_MODE_TYPE,
     HUMIDDIFIER_5A_AVAILABLE_MODES,
     HUMIDDIFIER_5B_AVAILABLE_MODES,
     HUMIDDIFIER_4_AVAILABLE_MODES,
@@ -48,6 +49,7 @@ from .const import (
     HUMIDDIFIER_3B_AVAILABLE_MODES,
     HUMIDDIFIER_2_AVAILABLE_MODES,
     HUMIDDIFIER_1_AVAILABLE_MODES,
+    HUMIDDIFIER_11_AVAILABLE_MODES,
 )
 
 SUPPORT_FLAGS = HumidifierEntityFeature(1)
@@ -132,6 +134,8 @@ class PolarisHumidifier(PolarisBaseEntity, HumidifierEntity):
             self.my_operation_list = HUMIDDIFIER_2_AVAILABLE_MODES
         elif device_type in POLARIS_HUMIDDIFIER_1_MODE_TYPE:
             self.my_operation_list = HUMIDDIFIER_1_AVAILABLE_MODES
+        elif device_type in POLARIS_HUMIDDIFIER_11_MODE_TYPE:
+            self.my_operation_list = HUMIDDIFIER_11_AVAILABLE_MODES
         self._attr_available_modes = list(self.my_operation_list.keys())
         self._attr_mode = self._attr_available_modes[0]
         self.payload_on=description.payload_on

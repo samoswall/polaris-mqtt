@@ -57,6 +57,8 @@ from homeassistant.const import (
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     UnitOfTime,
     UnitOfVolume,
+    UnitOfEnergy,
+    UnitOfPower,
     Platform,
 )
 import homeassistant.helpers.config_validation as cv
@@ -387,7 +389,10 @@ POLARIS_DEVICE = {
     847: {"model": "Wi-Fi-Convection-Heater", "class": "heater"},
     820: {"model": "Ballu-Platinum-Evol-DC/Olympio-Legend", "class": "air-conditioner"},
     813: {"model": "Electrolux-Smartline/Ballu-Eco-Smart/Ice-Peak", "class": "air-conditioner"},
+    882: {"model": "Goldstar-GSAC/GSACI", "class": "air-conditioner"},
     881: {"model": "UHB-960-ET", "class": "humidifier"},
+    835: {"model": "Electrolux-YOGAhealthline-2.0", "class": "humidifier"},
+    878: {"model": "Electrolux/Royal-Thermo", "class": "thermostat"},
 }
 
 POLARIS_KETTLE_TYPE = ["2","6","8","29","36","37","38","51","52","53","54","56","57","58","59","60","61","62","63","67","82","83","84","85","86","97","105","106","117","121","139","165","175","176","177","189","194","196","205","209","253","254","255","260","271","308"]
@@ -396,9 +401,9 @@ POLARIS_KETTLE_WITH_NIGHT_TYPE = ["36","37","86","97","106","117","164","175","1
 POLARIS_KETTLE_WITH_BACKLIGHT_TYPE = ["36","37","51","52","53","54","60","61","62","63","67","82","83","84","85","86","97","98","105","106","117","139","164","175","176","177","188","189","194","196","208","209","223","244","245","253","254","255","260","262","263","271","275","294","308"]
 POLARIS_KETTLE_WITH_TEA_TIME_MODE_TYPE = ["2","8","51","53","56","58","60","62","85","98","139","165","185","188","205","223","262","263","275","294"]
 POLARIS_KETTLE_WITH_KEEP_WITH_WARM_MODE_TYPE = ["205","262","294"]
-POLARIS_HUMIDDIFIER_TYPE = ["4","15","17","18","25","44","70","71","72","73","74","75","87","99","137","147","153","155","157","158","881"]
-POLARIS_HUMIDDIFIER_WITH_IONISER_TYPE = ["4","15","17","18","44","70","72","73","74","137","147","153","155","157","158"]
-POLARIS_HUMIDDIFIER_WITH_WARM_STREAM_TYPE = ["4","15","17","18","44","70","72","74","147","157","158","881"]
+POLARIS_HUMIDDIFIER_TYPE = ["4","15","17","18","25","44","70","71","72","73","74","75","87","99","137","147","153","155","157","158","835","881"]
+POLARIS_HUMIDDIFIER_WITH_IONISER_TYPE = ["4","15","17","18","44","70","72","73","74","137","147","153","155","157","158","835"]
+POLARIS_HUMIDDIFIER_WITH_WARM_STREAM_TYPE = ["4","15","17","18","44","70","72","74","147","157","158","835","881"]
 POLARIS_HUMIDDIFIER_LOW_FAN_TYPE = ["25","71","72","73","74","75","87","99","137","153","155","157","158"]
 POLARIS_HUMIDDIFIER_7_MODE_TYPE = ["17","18","44","70"]
 POLARIS_HUMIDDIFIER_5A_MODE_TYPE = ["4"]
@@ -408,6 +413,7 @@ POLARIS_HUMIDDIFIER_3A_MODE_TYPE = ["25"]
 POLARIS_HUMIDDIFIER_3B_MODE_TYPE = ["153","157","158"]
 POLARIS_HUMIDDIFIER_2_MODE_TYPE = ["881"]
 POLARIS_HUMIDDIFIER_1_MODE_TYPE = ["137"]
+POLARIS_HUMIDDIFIER_11_MODE_TYPE = ["835"]
 POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303"]
 POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303"]
 POLARIS_COFFEEMAKER_TYPE = ["103", "166", "200","261","265","276","277","278","280","305"]
@@ -418,8 +424,9 @@ POLARIS_AIRCLEANER_EAP_TYPE = ["826"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
 POLARIS_BOILER_TYPE = ["802","833","844","876"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
-POLARIS_HEATER_TYPE = ["806","844","846","847"]
-POLARIS_AIRCONDITIONER_TYPE = ["813", "820"]
+POLARIS_HEATER_TYPE = ["806","846","847"]
+POLARIS_AIRCONDITIONER_TYPE = ["813","820","882"]
+POLARIS_THERMOSTAT_TYPE = ["878"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
 KETTLE_WITH_KEEP_WITH_WARM_MODES = {"off": "0", "performance": "1", "high_demand": "2", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
@@ -430,6 +437,7 @@ HUMIDDIFIER_3A_AVAILABLE_MODES = {"boost": "5", "home": "6", "eco": "7"}
 HUMIDDIFIER_3B_AVAILABLE_MODES = {"auto": "1", "boost": "5", "eco": "7"}
 HUMIDDIFIER_2_AVAILABLE_MODES = {"home": "1", "auto": "2"}
 HUMIDDIFIER_1_AVAILABLE_MODES = {"boost": "5"}
+HUMIDDIFIER_11_AVAILABLE_MODES = {"home": "1", "auto": "2", "sleep": "3", "baby": "4", "comfort": "5", "fitnes": "6", "yoga": "7", "meditation": "8", "prana_hand": "9", "prana_auto": "10", "aroma": "11"}
 
 KETTLE_ERROR = {
 "00": "no_error",
@@ -1260,6 +1268,18 @@ SENSORS_AIRCONDITIONER = [
     ),
 ]
 
+SENSORS_THERMOSTAT = [
+    PolarisSensorEntityDescription(
+        key="power_consume",
+        name="Power consume",
+        translation_key="power_consume",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_registry_enabled_default=True,
+        icon="mdi:meter-electric-outline",
+    ),
+]
 
 @dataclass
 class PolarisSwitchEntityDescription(SwitchEntityDescription):
@@ -1337,7 +1357,7 @@ SWITCHES_RUSCLIMATE_HUMIDIFIER = [
     ),
     PolarisSwitchEntityDescription(
         key="backlight",
-        translation_key="backlight_bottom_switch",
+        translation_key="backlight_switch",
         entity_category=EntityCategory.CONFIG,
         name="Backlight bottom",
         mqttTopicCommand="control/backlight",
@@ -1348,7 +1368,7 @@ SWITCHES_RUSCLIMATE_HUMIDIFIER = [
     ),
     PolarisSwitchEntityDescription(
         key="night",
-        translation_key="night_light_switch",
+        translation_key="night_switch",
         entity_category=EntityCategory.CONFIG,
         name="Night light",
         mqttTopicCommand="control/night",
@@ -1402,6 +1422,21 @@ SWITCH_HUMIDIFIER_WARM_STREAM = [
         payload_on="true",
         payload_off="false",
         icon="mdi:heat-wave",
+    ),
+]
+
+SWITCH_HUMIDIFIER_ULTRAVIOLET = [
+    PolarisSwitchEntityDescription(
+        key="ultraviolet",
+        translation_key="ultraviolet_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Ultraviolet",
+        mqttTopicCommand="control/uv",
+        mqttTopicCurrentValue="state/uv",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:white-balance-sunny",
     ),
 ]
 
@@ -2085,6 +2120,114 @@ SWITCHES_AIRCONDITIONER_820 = [
     ),
 ]
 
+SWITCHES_AIRCONDITIONER_882 = [
+    PolarisSwitchEntityDescription(
+        key="backlight",
+        translation_key="backlight_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Backlight",
+        mqttTopicCommand="control/backlight",
+        mqttTopicCurrentValue="state/backlight",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+    ),
+    PolarisSwitchEntityDescription(
+        key="turbo",
+        translation_key="turbo_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Turbo mode",
+        mqttTopicCommand="control/turbo",
+        mqttTopicCurrentValue="state/turbo",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:rocket-launch",
+    ),
+     PolarisSwitchEntityDescription(
+        key="night",
+        translation_key="night_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Night mode",
+        mqttTopicCommand="control/night",
+        mqttTopicCurrentValue="state/night",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:weather-night",
+    ),
+    PolarisSwitchEntityDescription(
+        key="smart_mode",
+        translation_key="smart_mode",
+        entity_category=EntityCategory.CONFIG,
+        name="smart_mode",
+        mqttTopicCommand="control/smart_mode",
+        mqttTopicCurrentValue="state/smart_mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:thermometer-auto",
+    ),
+    PolarisSwitchEntityDescription(
+        key="volume",
+        translation_key="sound_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Volume",
+        mqttTopicCommand="control/volume",
+        mqttTopicCurrentValue="state/volume",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+    ),
+]
+
+SWITCHES_THERMOSTAT = [
+    PolarisSwitchEntityDescription(
+        key="power",
+        translation_key="power_switch",
+        name="Power",
+        mqttTopicCommand="control/mode",
+        mqttTopicCurrentValue="state/mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+        icon="mdi:power-standby",
+    ),
+    PolarisSwitchEntityDescription(
+        key="display_off_heater",
+        translation_key="display_off_heater",
+        entity_category=EntityCategory.CONFIG,
+        name="Backlight auto off",
+        mqttTopicCommand="control/backlight",
+        mqttTopicCurrentValue="state/backlight",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="1",
+        payload_off="0",
+    ),
+    PolarisSwitchEntityDescription(
+        key="child_lock",
+        translation_key="child_lock_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Child lock",
+        mqttTopicCommand="control/child_lock",
+        mqttTopicCurrentValue="state/child_lock",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="damper_heater",
+        translation_key="damper_heater",
+        entity_category=EntityCategory.CONFIG,
+        name="Detect open window",
+        mqttTopicCommand="control/damper",
+        mqttTopicCurrentValue="state/damper",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+]
+
 @dataclass
 class PolarisWaterHeaterEntityDescription(WaterHeaterEntityDescription): # breaks_in_ha_version="2026.1"
 
@@ -2481,6 +2624,42 @@ NUMBERS_HEATER = [
     ),
 ]
 
+NUMBERS_THERMOSTAT = [
+    PolarisNumberEntityDescription(
+        key="bright_backlight",
+        name="Bright backlight",
+        translation_key="bright_backlight",
+        mqttTopicCurrent = "state/program_data/0",
+        mqttTopicCommand = "control/program_data/0",
+        entity_category=EntityCategory.CONFIG,
+        device_class=NumberDeviceClass.POWER_FACTOR,
+        native_unit_of_measurement=PERCENTAGE,
+        entity_registry_enabled_default=True,
+        native_max_value=100,
+        native_min_value=20,
+        native_step=10,
+        native_value=100,
+        mode="slider",
+        icon="mdi:brightness-percent",
+    ),
+    PolarisNumberEntityDescription(
+        key="power_cable",
+        name="Power cable",
+        translation_key="power_cable",
+        mqttTopicCurrent = "state/program_data/9",
+        mqttTopicCommand = "control/program_data/9",
+        entity_category=EntityCategory.CONFIG,
+        device_class=NumberDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        entity_registry_enabled_default=True,
+        native_max_value=3600,
+        native_min_value=50,
+        native_step=25,
+        native_value=50,
+        mode="box",
+    ),
+]
+
 @dataclass
 class PolarisSelectEntityDescription(SelectEntityDescription):
 
@@ -2779,6 +2958,33 @@ LIGHTS = [
     )
 ]
 
+LIGHTS_DOUBLE = [
+    PolarisLightEntityDescription(
+        key="night_up",
+        name="night_up",
+        translation_key="night_light_up",
+        mqttTopicCurrentColor="state/backlight",
+        mqttTopicCommandColor="control/backlight",
+        mqttTopicCurrentState="state/backlight",
+        mqttTopicCommandState="control/backlight",
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+    ),
+    PolarisLightEntityDescription(
+        key="night_down",
+        name="night_down",
+        translation_key="night_light_down",
+        mqttTopicCurrentColor="state/backlight",
+        mqttTopicCommandColor="control/backlight",
+        mqttTopicCurrentState="state/backlight",
+        mqttTopicCommandState="control/backlight",
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+    )
+]
+
 @dataclass
 class PolarisBinarySensorEntityDescription(BinarySensorEntityDescription):
 
@@ -2825,6 +3031,18 @@ BINARYSENSOR_CAPPUCCINATOR = [
         mqttTopicStatus="state/tank",
         device_class=None,
         entity_registry_enabled_default=True,
+    )
+]
+
+BINARYSENSOR_THERMOSTAT = [
+    PolarisBinarySensorEntityDescription(
+        key="heating",
+        name="Heating",
+        translation_key="heating_binary_sensor",
+        mqttTopicStatus="state/program_data/10",
+        device_class=BinarySensorDeviceClass.HEAT,
+        entity_registry_enabled_default=True,
+        icon="mdi:heat-wave",
     )
 ]
 
@@ -3224,6 +3442,35 @@ CLIMATES_AIRCONDITIONER = [
         payload_off = "0",
         min_temp = 16,
         max_temp = 30,
+        temp_step = 1,
+        device_class = None,
+    )
+]
+
+CLIMATES_THERMOSTAT = [
+    PolarisClimateEntityDescription(
+        name = "Thermostat",
+        key = "thermostat",
+        translation_key = "thermostat",
+        preset_mode = "comfort",
+        preset_modes = {"eco": "1", "comfort": "2", "turbo": "3", "antifrost": "4", "schedule": "5", "vacation": "6", "manual": "7"},
+        hvac_modes = [HVACMode.OFF, HVACMode.HEAT],
+        supported_features = (
+            ClimateEntityFeature.TARGET_TEMPERATURE
+            | ClimateEntityFeature.PRESET_MODE
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TURN_ON
+        ),
+        mqttTopicStateTemperature = "state/temperature",
+        mqttTopicCommandTemperature = "control/temperature",
+        mqttTopicCurrentTemperature = "state/sensor/temperature",
+        mqttTopicCommandPower = "control/mode",
+        mqttTopicCurrentPresetMode = "state/mode",
+        mqttTopicCommandPresetMode = "control/mode",
+        payload_on = "1",
+        payload_off = "0",
+        min_temp = 5,
+        max_temp = 45,
         temp_step = 1,
         device_class = None,
     )

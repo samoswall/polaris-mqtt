@@ -32,6 +32,7 @@ from .const import (
     DEVICETYPE,
     POLARIS_DEVICE,
     LIGHTS,
+    LIGHTS_DOUBLE,
     PolarisLightEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -56,6 +57,24 @@ async def async_setup_entry(
         # Create water heater for kettle devices
         LIGHTS_LC = copy.deepcopy(LIGHTS)
         for description in LIGHTS_LC:
+            description.mqttTopicCurrentColor = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentColor}"
+            description.mqttTopicCommandColor = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandColor}"
+            description.mqttTopicCurrentState = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentState}"
+            description.mqttTopicCommandState = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandState}"
+            description.device_prefix_topic = device_prefix_topic
+            lightList.append(
+                PolarisLight(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if device_type == "835":
+        # Create humidifier double lights
+        LIGHTS_DOUBLE_LC = copy.deepcopy(LIGHTS_DOUBLE)
+        for description in LIGHTS_DOUBLE_LC:
             description.mqttTopicCurrentColor = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentColor}"
             description.mqttTopicCommandColor = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandColor}"
             description.mqttTopicCurrentState = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentState}"
@@ -100,43 +119,85 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
         self._attr_brightness = 100
         self._attr_is_on = False
         self._attr_available = False
+        self._double_color = [[255, 255, 255],[255, 255, 255]]
+        self._double_state = ["0","0"]
 
     async def async_added_to_hass(self):
-        @callback
-        def message_received_rgb(message):
-            rgb = color_util.rgb_hex_to_rgb_list(message.payload)
-            level = int(max(rgb)/255*100)
-            self._attr_brightness = level
-            if (self.device_type == "176" or self.device_type == "255"):
-                rgb_color = [rgb[0], rgb[1], rgb[2]]
-            else:
+        if self.device_type == "835":
+            @callback
+            def message_received_double_state(message):
+                if message.payload[1] == "0" and self.entity_description.key == "night_up":
+                    self._attr_is_on = False
+#                    self._double_state[0] = "0"
+                elif message.payload[3] == "0" and self.entity_description.key == "night_down":
+                    self._attr_is_on = False
+#                    self._double_state[1] = "0"
+                elif message.payload[1] in {"1","2","3"} and self.entity_description.key == "night_up":
+                    self._attr_is_on = True
+                elif message.payload[3] in {"1","2","3"} and self.entity_description.key == "night_down":
+                    self._attr_is_on = True
+                else:
+                    self._attr_is_on = None
+                self._double_state[0] = message.payload[1]
+                self._double_state[1] = message.payload[3]
+                rgb_up = color_util.rgb_hex_to_rgb_list(message.payload[4:10])
+                rgb_down = color_util.rgb_hex_to_rgb_list(message.payload[10:])
+                self._double_color = [rgb_up, rgb_down]
+                if self.entity_description.key == "night_up":
+                    rgb = rgb_up
+                else:
+                    rgb = rgb_down
+                level = int(max(rgb)/255*100)
+                self._attr_brightness = level
                 rgb_color = rgb
-            bright_factor_old = max(rgb)/255
-            bright_factor_new = level / 100 / bright_factor_old
-            self._attr_rgb_color = [int(value / bright_factor_new) for value in rgb_color]
-            self.async_write_ha_state()
-        @callback
-        def message_received_state(message):
-            if str(message.payload).lower() in ("1", "true"):
-                self._attr_is_on = True
-            elif str(message.payload).lower() in ("0", "false"):
-                self._attr_is_on = False
-            else:
-                self._attr_is_on = None
-            self.async_write_ha_state()
-
-        await mqtt.async_subscribe(
-            self.hass,
-            self.entity_description.mqttTopicCurrentColor,
-            message_received_rgb,
-            1,
-        )
-        await mqtt.async_subscribe(
-            self.hass,
-            self.entity_description.mqttTopicCurrentState,
-            message_received_state,
-            1,
-        )
+                bright_factor_old = max(rgb)/255
+                bright_factor_new = level / 100 / bright_factor_old
+                self._attr_rgb_color = [int(value / bright_factor_new) for value in rgb_color]
+                self.async_write_ha_state()
+        
+            await mqtt.async_subscribe(
+                self.hass,
+                self.entity_description.mqttTopicCurrentState,
+                message_received_double_state,
+                1,
+            )
+        else:
+            @callback
+            def message_received_rgb(message):
+                rgb = color_util.rgb_hex_to_rgb_list(message.payload)
+                level = int(max(rgb)/255*100)
+                self._attr_brightness = level
+                if (self.device_type == "176" or self.device_type == "255"):
+                    rgb_color = [rgb[0], rgb[1], rgb[2]]
+                else:
+                    rgb_color = rgb
+                bright_factor_old = max(rgb)/255
+                bright_factor_new = level / 100 / bright_factor_old
+                self._attr_rgb_color = [int(value / bright_factor_new) for value in rgb_color]
+                self.async_write_ha_state()
+            @callback
+            def message_received_state(message):
+                if str(message.payload).lower() in ("1", "true"):
+                    self._attr_is_on = True
+                elif str(message.payload).lower() in ("0", "false"):
+                    self._attr_is_on = False
+                else:
+                    self._attr_is_on = None
+                self.async_write_ha_state()
+        
+            await mqtt.async_subscribe(
+                self.hass,
+                self.entity_description.mqttTopicCurrentColor,
+                message_received_rgb,
+                1,
+            )
+            await mqtt.async_subscribe(
+                self.hass,
+                self.entity_description.mqttTopicCurrentState,
+                message_received_state,
+                1,
+            )
+            
         @callback
         async def entity_availability(message):
             if self.entity_description.name != "available":
@@ -162,15 +223,28 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
         self._attr_rgb_color = [int(value * bright_factor_new) for value in self._attr_rgb_color]
         if (self.device_type == "176" or self.device_type == "255"):
             mqtt.publish(self.hass, topic, f"{self._attr_rgb_color[0]:02x}{self._attr_rgb_color[1]:02x}{self._attr_rgb_color[2]:02x}00")
+        elif self.device_type == "835":
+            if self.entity_description.key == "night_up":
+                mqtt.publish(self.hass, topic, f"030{self._double_state[1]}{color_util.color_rgb_to_hex(self._attr_rgb_color[0], self._attr_rgb_color[1],self._attr_rgb_color[2])}{self._double_color[1][0]:02x}{self._double_color[1][1]:02x}{self._double_color[1][2]:02x}")
+            if self.entity_description.key == "night_down":
+                mqtt.publish(self.hass, topic, f"0{self._double_state[0]}03{self._double_color[0][0]:02x}{self._double_color[0][1]:02x}{self._double_color[0][2]:02x}{color_util.color_rgb_to_hex(self._attr_rgb_color[0], self._attr_rgb_color[1],self._attr_rgb_color[2])}")
         else:
             mqtt.publish(self.hass, topic, color_util.color_rgb_to_hex(self._attr_rgb_color[0], self._attr_rgb_color[1],self._attr_rgb_color[2]))
-        topic = self.entity_description.mqttTopicCommandState
-        mqtt.publish(self.hass, topic, "true")
+        if self.device_type != "835":
+            topic = self.entity_description.mqttTopicCommandState
+            mqtt.publish(self.hass, topic, "true")
         self._attr_is_on = True
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         topic = self.entity_description.mqttTopicCommandState
-        mqtt.publish(self.hass, topic, "false")
+        if self.device_type == "835":
+            if self.entity_description.key == "night_up":
+                mess = f"000{self._double_state[1]}{self._double_color[0][0]:02x}{self._double_color[0][1]:02x}{self._double_color[0][2]:02x}{self._double_color[1][0]:02x}{self._double_color[1][1]:02x}{self._double_color[1][2]:02x}"
+            if self.entity_description.key == "night_down":
+                mess = f"0{self._double_state[0]}00{self._double_color[0][0]:02x}{self._double_color[0][1]:02x}{self._double_color[0][2]:02x}{self._double_color[1][0]:02x}{self._double_color[1][1]:02x}{self._double_color[1][2]:02x}"
+            mqtt.publish(self.hass, topic, mess)
+        else:
+            mqtt.publish(self.hass, topic, "false")
         self._attr_is_on = False
 
     @property

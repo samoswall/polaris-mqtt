@@ -39,6 +39,7 @@ from .const import (
     SENSORS_IRRIGATOR,
     SENSORS_HEATER,
     SENSORS_AIRCONDITIONER,
+    SENSORS_THERMOSTAT,
     PolarisSensorEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -54,6 +55,7 @@ from .const import (
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_HEATER_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
+    POLARIS_THERMOSTAT_TYPE,
     KETTLE_ERROR,
     HUMIDDIFIER_ERROR,
     COOKER_ERROR,
@@ -154,6 +156,7 @@ async def async_setup_entry(
             )
         SENSORS_HUMIDIFIER_CP = copy.deepcopy(SENSORS_HUMIDIFIER)
         for description in SENSORS_HUMIDIFIER_CP:
+          if (devicetype != "835" or description.translation_key != "clean_retain"):
             description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
             description.device_prefix_topic = device_prefix_topic
             sensorList.append(
@@ -357,6 +360,33 @@ async def async_setup_entry(
     if (devicetype in POLARIS_AIRCONDITIONER_TYPE):
         SENSORS_AIRCONDITIONER_CP = copy.deepcopy(SENSORS_AIRCONDITIONER)
         for description in SENSORS_AIRCONDITIONER_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
+    if (devicetype in POLARIS_THERMOSTAT_TYPE):
+        SENSORS_ALL_DEVICES_CP = copy.deepcopy(SENSORS_ALL_DEVICES)
+        for description in SENSORS_ALL_DEVICES_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
+        SENSORS_THERMOSTAT_CP = copy.deepcopy(SENSORS_THERMOSTAT)
+        for description in SENSORS_THERMOSTAT_CP:
             description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
             description.device_prefix_topic = device_prefix_topic
             sensorList.append(

@@ -30,6 +30,7 @@ from .const import (
     SWITCH_HUMIDIFIER_BACKLIGHT,
     SWITCH_HUMIDIFIER_IONISER,
     SWITCH_HUMIDIFIER_WARM_STREAM,
+    SWITCH_HUMIDIFIER_ULTRAVIOLET,
     SWITCHES_RUSCLIMATE_HUMIDIFIER,
     SWITCHES_COOKER,
     SWITCHES_COFFEEMAKER,
@@ -46,6 +47,8 @@ from .const import (
     SWITCHES_HEATER,
     SWITCHES_AIRCONDITIONER,
     SWITCHES_AIRCONDITIONER_820,
+    SWITCHES_AIRCONDITIONER_882,
+    SWITCHES_THERMOSTAT,
     PolarisSwitchEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -64,6 +67,7 @@ from .const import (
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_HEATER_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
+    POLARIS_THERMOSTAT_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -131,6 +135,7 @@ async def async_setup_entry(
         # Create switches for all devices
         SWITCHES_ALL_DEVICES_LC = copy.deepcopy(SWITCHES_ALL_DEVICES)
         for description in SWITCHES_ALL_DEVICES_LC:
+          if (device_type != "835" or description.translation_key != "child_lock_switch"):
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
             description.device_prefix_topic = device_prefix_topic
@@ -145,6 +150,7 @@ async def async_setup_entry(
             )
         SWITCH_HUMIDIFIER_BACKLIGHT_LC = copy.deepcopy(SWITCH_HUMIDIFIER_BACKLIGHT)
         for description in SWITCH_HUMIDIFIER_BACKLIGHT_LC:
+          if (device_type != "835" or description.translation_key != "backlight_switch"):
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
             description.device_prefix_topic = device_prefix_topic
@@ -177,6 +183,22 @@ async def async_setup_entry(
         # Create switch stream warm for humidifiers
         SWITCH_HUMIDIFIER_WARM_STREAM_LC = copy.deepcopy(SWITCH_HUMIDIFIER_WARM_STREAM)
         for description in SWITCH_HUMIDIFIER_WARM_STREAM_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in {"835","157"}):
+        # Create switch stream warm for humidifiers
+        SWITCH_HUMIDIFIER_ULTRAVIOLET_LC = copy.deepcopy(SWITCH_HUMIDIFIER_ULTRAVIOLET)
+        for description in SWITCH_HUMIDIFIER_ULTRAVIOLET_LC:
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
             description.device_prefix_topic = device_prefix_topic
@@ -441,6 +463,36 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
+    if (device_type == "882"):
+        SWITCHES_AIRCONDITIONER_882_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER_882)
+        for description in SWITCHES_AIRCONDITIONER_882_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type in POLARIS_THERMOSTAT_TYPE):
+        SWITCHES_THERMOSTAT_LC = copy.deepcopy(SWITCHES_THERMOSTAT)
+        for description in SWITCHES_THERMOSTAT_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     async_add_entities(switchList, update_before_add=True)
 
 class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
@@ -477,8 +529,11 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         if device_type == "826":
             self._EAP_data0 = "0000"
         if device_type in POLARIS_AIRCONDITIONER_TYPE:
-            self._swing_message = "00000000"
-            self._aircond_data0 = "0000"
+            if device_type == "882":
+                self._swing_message = "000000000000"
+            else:
+                self._swing_message = "00000000"
+                self._aircond_data0 = "0000"
             if self.entity_description.key == "turbo":
                 self._attr_available = False
             if self.entity_description.key == "self_cleaning":

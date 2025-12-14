@@ -42,6 +42,7 @@ from .const import (
     BINARYSENSOR_WATER_TANK,
     BINARYSENSOR_CAPPUCCINATOR,
     BINARYSENSOR_AVAILABLE,
+    BINARYSENSOR_THERMOSTAT,
     PolarisBinarySensorEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -52,10 +53,13 @@ from .const import (
     POLARIS_COFFEEMAKER_ROG_TYPE,
     POLARIS_CLIMATE_TYPE,
     POLARIS_AIRCLEANER_TYPE,
+    POLARIS_AIRCLEANER_EAP_TYPE,
     POLARIS_BOILER_TYPE,
     POLARIS_VACUUM_TYPE,
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_HEATER_TYPE,
+    POLARIS_AIRCONDITIONER_TYPE,
+    POLARIS_THERMOSTAT_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -101,7 +105,7 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
-    if (device_type in POLARIS_HUMIDDIFIER_TYPE and device_type != "881"):
+    if (device_type in POLARIS_HUMIDDIFIER_TYPE and device_type not in {"835","881"}):
             BINARYSENSOR_WATER_TANK_LC = copy.deepcopy(BINARYSENSOR_WATER_TANK)
             for description in BINARYSENSOR_WATER_TANK_LC:
                 description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
@@ -129,18 +133,35 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
+    if (device_type in POLARIS_THERMOSTAT_TYPE):
+            BINARYSENSOR_THERMOSTAT_LC = copy.deepcopy(BINARYSENSOR_THERMOSTAT)
+            for description in BINARYSENSOR_THERMOSTAT_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
     if (device_type in POLARIS_KETTLE_TYPE or
         device_type in POLARIS_KETTLE_WITH_WEIGHT_TYPE or
         device_type in POLARIS_HUMIDDIFIER_TYPE or
-        device_type in POLARIS_COOKER_WITH_LID_TYPE or
+        device_type in POLARIS_COOKER_TYPE or
         device_type in POLARIS_COFFEEMAKER_ROG_TYPE or
         device_type in POLARIS_COFFEEMAKER_TYPE or
         device_type in POLARIS_CLIMATE_TYPE or
         device_type in POLARIS_AIRCLEANER_TYPE or
+        device_type in POLARIS_AIRCLEANER_EAP_TYPE or
         device_type in POLARIS_BOILER_TYPE or
         device_type in POLARIS_VACUUM_TYPE or
         device_type in POLARIS_IRRIGATOR_TYPE or
-        device_type in POLARIS_HEATER_TYPE):
+        device_type in POLARIS_HEATER_TYPE or
+        device_type in POLARIS_AIRCONDITIONER_TYPE or
+        device_type in POLARIS_THERMOSTAT_TYPE):
             BINARYSENSOR_AVAILABLE_LC = copy.deepcopy(BINARYSENSOR_AVAILABLE)
             for description in BINARYSENSOR_AVAILABLE_LC:
                 description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"

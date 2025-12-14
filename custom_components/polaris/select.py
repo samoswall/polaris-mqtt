@@ -187,7 +187,7 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type != "820"):
+    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type == "813"):
         SELECT_AIRCONDITIONER_SWING_HORIZONTAL_LC = copy.deepcopy(SELECT_AIRCONDITIONER_SWING_HORIZONTAL)
         for description in SELECT_AIRCONDITIONER_SWING_HORIZONTAL_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
@@ -202,7 +202,7 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type != "820"):
+    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type == "813"):
         SELECT_AIRCONDITIONER_SWING_VERTICAL_LC = copy.deepcopy(SELECT_AIRCONDITIONER_SWING_VERTICAL)
         for description in SELECT_AIRCONDITIONER_SWING_VERTICAL_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
