@@ -365,7 +365,15 @@
           "milk_porridge": "Молочная каша",
           "soup": "Суп",
           "meat": "Холодец",
-          "cottage_cheese": "Творог"
+          "cottage_cheese": "Творог",
+          "french_fries": "Картофель фри",
+          "chicken": "Курица",
+          "steak": "Стейк",
+          "vegetables": "Овощи",
+          "pie": "Пирог",
+          "fish": "Рыба",
+          "dehydrate": "Сухофрукты",
+          "nuggets": "Наггетсы"
         }
       },
       "select_mode_cofeemaker": {
@@ -645,7 +653,7 @@
     "coffeemaker": "Кофемашина",
     "air_cleaner": "Очиститель воздуха",
     "irrigator": "Ирригатор",
-    "air_fryer": "Воздухоочиститель",
+    "air_fryer": "Аэрогриль",
     "boiler": "Бойлер",
     "heater": "Обогреватель",
     "cleaner": "Робот пылесос",
