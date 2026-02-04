@@ -214,7 +214,7 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self._attr_available = False
         self._attr_has_entity_name = True
         self._attr_native_value = self.entity_description.native_value
@@ -223,6 +223,9 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
                 self._attr_native_value = STATE_UNAVAILABLE
         if self.device_type in POLARIS_HUMIDDIFIER_LOW_FAN_TYPE:
             self._attr_native_max_value = 3
+        if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer":
+            self._attr_native_max_value = 220
+            self._attr_native_min_value = 35
         if self.device_type in POLARIS_THERMOSTAT_TYPE:
             self._data_zero = "00000000000000000000000000000000000000"
 

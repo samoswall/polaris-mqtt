@@ -107,7 +107,7 @@ class PolarisWaterHeater(PolarisBaseEntity, WaterHeaterEntity):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self.payload_on = description.payload_on
         self.payload_off = description.payload_off
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS

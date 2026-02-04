@@ -148,7 +148,7 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self._attr_has_entity_name = True
         
         self._attr_fan_speed="min"
@@ -234,7 +234,7 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         if self._attr_state != "cleaning":
             self._attr_state = "cleaning"
             self.schedule_update_ha_state()
-            state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_select_mode_vacuum").state
+            state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_mode_vacuum").state
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, json.loads(json.dumps(SELECT_VACUUM[0].options[state_mode])))
 
     def stop(self, **kwargs: Any) -> None:
@@ -253,7 +253,7 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         """Perform a spot clean-up."""
         self._attr_state = "cleaning"
         self.schedule_update_ha_state()
-        select_room = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_select_room").state
+        select_room = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_room").state
 #        _LOGGER.debug("room in select %s ", select_room)
 #        _LOGGER.debug("room in select %s ", self._rooms_js[select_room]["coordinate"])
 #        _LOGGER.debug("int16_to_bytes %s",self.int16_array_to_bytes(self._rooms_js[select_room]["coordinate"]))

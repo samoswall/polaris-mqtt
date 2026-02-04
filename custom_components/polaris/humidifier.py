@@ -114,7 +114,7 @@ class PolarisHumidifier(PolarisBaseEntity, HumidifierEntity):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self._attr_is_on = True
         self._attr_max_humidity = description.max_humidity
         self._attr_min_humidity = description.min_humidity

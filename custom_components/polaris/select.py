@@ -8,7 +8,7 @@ from typing import Iterable
 import copy
 import datetime
 import os
-
+from pathlib import Path
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt.models import ReceiveMessage
 
@@ -49,11 +49,19 @@ from .const import (
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_AIRCLEANER_EAP_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
+    AIRFRYER_1_MODES
 )
 
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
+
+async def _async_read_file(hass):
+    path = Path(CUSTOM_SELECT_FILE_PATH)
+    if not path.exists():
+        return None
+    text = await hass.async_add_executor_job(path.read_text, "utf-8")
+    return json.loads(text)
 
 async def async_setup_entry(
     hass: HomeAssistant, config: ConfigEntry, async_add_entities: AddEntitiesCallback,
@@ -64,6 +72,8 @@ async def async_setup_entry(
     device_type = config.data[DEVICETYPE]
     device_prefix_topic = config.data["DEVPREFIXTOPIC"]
     selectList = []
+    
+    custom_data_select = await _async_read_file(hass)
 
     if (device_type in POLARIS_KETTLE_TYPE) or (device_type in POLARIS_KETTLE_WITH_WEIGHT_TYPE):
         SELECT_KETTLE_LC = copy.deepcopy(SELECT_KETTLE)
@@ -78,7 +88,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_COOKER_TYPE):
@@ -94,7 +105,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_COFFEEMAKER_TYPE):
@@ -109,7 +121,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_COFFEEMAKER_ROG_TYPE):
@@ -124,7 +137,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_CLIMATE_TYPE):
@@ -139,7 +153,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_VACUUM_TYPE):
@@ -154,7 +169,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_IRRIGATOR_TYPE):
@@ -169,7 +185,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_AIRCLEANER_EAP_TYPE):
@@ -184,7 +201,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type == "813"):
@@ -199,7 +217,8 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type == "813"):
@@ -214,10 +233,12 @@ async def async_setup_entry(
                     device_friendly_name=device_id,
                     mqtt_root=mqtt_root,
                     device_type=device_type,
-                    device_id=device_id
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
                 )
             )
     async_add_entities(selectList, update_before_add=True)
+
 
 
 class PolarisSelect(PolarisBaseEntity, SelectEntity):
@@ -230,6 +251,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         mqtt_root: str,
         device_id: str | None=None,
         device_type: str | None=None,
+        custom_data_select: str | None=None
     ) -> None:
         super().__init__(
             device_friendly_name=device_friendly_name,
@@ -237,20 +259,25 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             device_type=device_type,
             device_id=device_id,
         )
+        self._custom_data_select = custom_data_select
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self._attr_has_entity_name = True
         
-        
-        if POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle" or POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker" or POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker" or POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner":
+        if (device_type in ("290","291")):
+            self.entity_description.options = AIRFRYER_1_MODES
+        if (POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle" or 
+            POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker" or 
+            POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker" or 
+            POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner" or 
+            POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer"):
             self._select_options = json.loads(json.dumps(SELECT_COFFEEMAKER[0].options))
         if device_type == "826":
             self._EAP_data0 = "0000"
         if device_type == "813":
             self._conditioner_data0 = "0000"
 
-        self._custom_data_select = self._read_file()
         if self._custom_data_select is not None:
             if POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle" and "SELECT_KETTLE_options" in self._custom_data_select:
 #                self.entity_description.options = json.loads(json.dumps(self.entity_description.options))
@@ -260,6 +287,11 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             if POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker" and "SELECT_COOKER_options" in self._custom_data_select:
 #                self.entity_description.options = json.loads(json.dumps(self.entity_description.options))
                 for key, value in self._custom_data_select["SELECT_COOKER_options"].items():
+                    self.entity_description.options[key] = json.dumps([value])
+#                _LOGGER.debug("cooker %s", self.entity_description.options)
+            if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer" and "SELECT_AIRFRYER_options" in self._custom_data_select:
+#                self.entity_description.options = json.loads(json.dumps(self.entity_description.options))
+                for key, value in self._custom_data_select["SELECT_AIRFRYER_options"].items():
                     self.entity_description.options[key] = json.dumps([value])
 #                _LOGGER.debug("cooker %s", self.entity_description.options)
             if POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker":
@@ -282,19 +314,6 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         self._attr_current_option = self._attr_options[0]
         self._attr_available = False
 
-    def _read_file(self):
-        file_path = CUSTOM_SELECT_FILE_PATH
-        if os.path.exists(file_path):
-            with open(file_path, 'r', encoding='utf-8') as file:
-                content = json.loads(file.read())
-        else:
-            content = None
-        return content
-
-#    @property
-#    def available(self):
-#        return self._attr_current_option is not None
-
     def key_from_option(self, option: str):
         try:
             return next(
@@ -310,11 +329,21 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker":
             cook_time = json.loads(self.entity_description.options[option])
             service_data = {}
-            service_data["entity_id"] = f"time.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_cooking_time"
+            service_data["entity_id"] = f"time.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_cooking_time"
             service_data["time"] = str(datetime.timedelta(seconds=cook_time[0]["time"]))
             await self.hass.services.async_call("time", "set_value", service_data)
             service_data = {}
-            service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_set_temperature"
+            service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_set_temperature"
+            service_data["value"] = cook_time[0]["temperature"]
+            await self.hass.services.async_call("number", "set_value", service_data)
+        if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer":
+            cook_time = json.loads(self.entity_description.options[option])
+            service_data = {}
+            service_data["entity_id"] = f"time.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_cooking_time"
+            service_data["time"] = str(datetime.timedelta(seconds=cook_time[0]["time"]))
+            await self.hass.services.async_call("time", "set_value", service_data)
+            service_data = {}
+            service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_set_temperature"
             service_data["value"] = cook_time[0]["temperature"]
             await self.hass.services.async_call("number", "set_value", service_data)
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle":
@@ -325,7 +354,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 coffee_mode = json.loads(self.entity_description.options[option])
                 
                 service_data = {}
-                service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_tank"
+                service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_tank"
                 if coffee_mode[0]["tank"] != 0:
                    service_data["value"] = str(coffee_mode[0]["tank"])
                 else:
@@ -333,7 +362,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 await self.hass.services.async_call("number", "set_value", service_data)
                 
                 service_data = {}
-                service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_amount"
+                service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_amount"
                 if coffee_mode[0]["amount"] != 0:
                     service_data["value"] = str(coffee_mode[0]["amount"])
                 else:
@@ -341,7 +370,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 await self.hass.services.async_call("number", "set_value", service_data)
                 
                 service_data = {}
-                service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_temperature"
+                service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_temperature"
                 if coffee_mode[0]["temperature"] != 0:
                     service_data["value"] = str(coffee_mode[0]["temperature"])
                 else:
@@ -355,7 +384,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                         mode = val
                     elif val != 0:
                         service_data = {}
-                        service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_{key}"
+                        service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_{key}"
                         service_data["value"] = str(val)
                         await self.hass.services.async_call("number", "set_value", service_data)
                     else:
@@ -364,7 +393,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                         else:
                             val = "55.777"
                         service_data = {}
-                        service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_{key}"
+                        service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_{key}"
                         service_data["value"] = val
                         await self.hass.services.async_call("number", "set_value", service_data)
         if self.device_type in POLARIS_CLIMATE_TYPE:
@@ -398,6 +427,9 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         if (self.device_type == "826" and self._EAP_data0[:2] == "02"):
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self._EAP_data0[:3] + str(self.entity_description.options[option]))
 
+
+
+
     async def async_added_to_hass(self):
         @callback
         def message_received_sel(message):
@@ -405,7 +437,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             if payload in ("0", "[]"):
                 self._attr_current_option = self._attr_options[0]
                 self.async_write_ha_state()
-            elif POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker":
+            elif POLARIS_DEVICE[int(self.device_type)]['class'] in ("cooker", "air_fryer"):
                 sel_mode = json.loads(payload)[0]["mode"]
           #      if int(sel_mode)>0:
           #          self.switch.set_available(True)
@@ -445,8 +477,6 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         @callback
         def EAP_data_message_received(message):
             self._EAP_data0 = message.payload
-#            _LOGGER.debug("EAP data0 message select %s", self._EAP_data0)
-
 
         if self.device_type == "826":
             await mqtt.async_subscribe(

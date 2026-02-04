@@ -384,9 +384,10 @@ POLARIS_DEVICE = {
     833: {"model": "Electrolux-Centurio-IQ-3.0", "class": "boiler"},
     802: {"model": "SmartInverter", "class": "boiler"},
     844: {"model": "Royal-Thermo-Aqua-Inverter/Royal-Thermo-Aqua-Inox-Inverter", "class": "boiler"},
-    806: {"model": "Electrolux-Air-Gate-Transformer-DI-3.0", "class": "heater"},
-    846: {"model": "Electrolux-Air-Gate-Transformer-DI-4.0", "class": "heater"},
+    806: {"model": "Transformer-DI-3.0", "class": "heater"},
+    846: {"model": "Transformer-DI-4.0", "class": "heater"},
     847: {"model": "Wi-Fi-Convection-Heater", "class": "heater"},
+    849: {"model": "Transformer-4.0", "class": "heater"},
     820: {"model": "Ballu-Platinum-Evol-DC/Olympio-Legend", "class": "air-conditioner"},
     813: {"model": "Electrolux-Smartline/Ballu-Eco-Smart/Ice-Peak", "class": "air-conditioner"},
     882: {"model": "Goldstar-GSAC/GSACI", "class": "air-conditioner"},
@@ -414,8 +415,8 @@ POLARIS_HUMIDDIFIER_3B_MODE_TYPE = ["153","157","158"]
 POLARIS_HUMIDDIFIER_2_MODE_TYPE = ["881"]
 POLARIS_HUMIDDIFIER_1_MODE_TYPE = ["137"]
 POLARIS_HUMIDDIFIER_11_MODE_TYPE = ["835"]
-POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303"]
-POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303"]
+POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303","290","291"]
+POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303","290","291"]
 POLARIS_COFFEEMAKER_TYPE = ["103", "166", "200","261","265","276","277","278","280","305"]
 POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247", "274", "279"] 
 POLARIS_CLIMATE_TYPE = ["69", "869", "859"]
@@ -424,7 +425,7 @@ POLARIS_AIRCLEANER_EAP_TYPE = ["826"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
 POLARIS_BOILER_TYPE = ["802","833","844","876"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
-POLARIS_HEATER_TYPE = ["806","846","847"]
+POLARIS_HEATER_TYPE = ["806","846","847","849"]
 POLARIS_AIRCONDITIONER_TYPE = ["813","820","882"]
 POLARIS_THERMOSTAT_TYPE = ["878"]
 
@@ -438,6 +439,17 @@ HUMIDDIFIER_3B_AVAILABLE_MODES = {"auto": "1", "boost": "5", "eco": "7"}
 HUMIDDIFIER_2_AVAILABLE_MODES = {"home": "1", "auto": "2"}
 HUMIDDIFIER_1_AVAILABLE_MODES = {"boost": "5"}
 HUMIDDIFIER_11_AVAILABLE_MODES = {"home": "1", "auto": "2", "sleep": "3", "baby": "4", "comfort": "5", "fitnes": "6", "yoga": "7", "meditation": "8", "prana_hand": "9", "prana_auto": "10", "aroma": "11"}
+AIRFRYER_1_MODES = {
+            "my_recipe_plus": "[{\"mode\":1, \"time\":300, \"temperature\":100}]",
+            "french_fries": "[{\"mode\":2, \"time\":1320, \"temperature\":190}]",
+            "chicken": "[{\"mode\":3, \"time\":1800, \"temperature\":190}]",
+            "steak": "[{\"mode\":4, \"time\":600, \"temperature\":200}]",
+            "vegetables": "[{\"mode\":5, \"time\":1200, \"temperature\":180}]",
+            "pie": "[{\"mode\":6, \"time\":1500, \"temperature\":170}]",
+            "fish": "[{\"mode\":9, \"time\":900, \"temperature\":180}]",
+            "dehydrate": "[{\"mode\":12, \"time\":18000, \"temperature\":80}]",
+            "nuggets": "[{\"mode\":13, \"time\":600, \"temperature\":190}]",
+        }
 
 KETTLE_ERROR = {
 "00": "no_error",
@@ -2229,7 +2241,7 @@ SWITCHES_THERMOSTAT = [
 ]
 
 @dataclass
-class PolarisWaterHeaterEntityDescription(WaterHeaterEntityDescription): # breaks_in_ha_version="2026.1"
+class PolarisWaterHeaterEntityDescription(WaterHeaterEntityDescription):                                                              # breaks_in_ha_version="2026.1"
 
     mqttTopicCurrentMode: str | None = None
     mqttTopicCommandMode: str | None = None

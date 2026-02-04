@@ -61,7 +61,7 @@ from .const import (
     COOKER_ERROR,
     COFFEEMAKER_ERROR,
     AIRCLEANER_ERROR,
-    VACUUM_ERROR,
+    VACUUM_ERROR
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -273,19 +273,47 @@ async def async_setup_entry(
                 )
             )
     if (devicetype in POLARIS_AIRCLEANER_TYPE):
-        SENSORS_AIRCLEANER_CP = copy.deepcopy(SENSORS_AIRCLEANER)
-        for description in SENSORS_AIRCLEANER_CP:
-            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
-            description.device_prefix_topic = device_prefix_topic
-            sensorList.append(
-                PolarisSensor(
-                    description=description,
-                    device_friendly_name=deviceID,
-                    mqtt_root=mqttRoot,
-                    device_type=devicetype,
-                    device_id=deviceID,
+        if (devicetype in ("140","172")):  # PAW-0804
+            SENSORS_COOKER_CP = copy.deepcopy(SENSORS_COOKER) # оставшееся время
+            for description in SENSORS_COOKER_CP:
+                description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+                description.device_prefix_topic = device_prefix_topic
+                sensorList.append(
+                    PolarisSensor(
+                        description=description,
+                        device_friendly_name=deviceID,
+                        mqtt_root=mqttRoot,
+                        device_type=devicetype,
+                        device_id=deviceID,
+                    )
                 )
-            )
+            SENSORS_RUSCLIMATE_HUMIDIFIER_CP = copy.deepcopy(SENSORS_RUSCLIMATE_HUMIDIFIER)
+            for description in SENSORS_RUSCLIMATE_HUMIDIFIER_CP:
+                description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+                description.device_prefix_topic = device_prefix_topic
+                sensorList.append(
+                    PolarisSensor(
+                        description=description,
+                        device_friendly_name=deviceID,
+                        mqtt_root=mqttRoot,
+                        device_type=devicetype,
+                        device_id=deviceID,
+                    )
+                )
+        else:
+            SENSORS_AIRCLEANER_CP = copy.deepcopy(SENSORS_AIRCLEANER)
+            for description in SENSORS_AIRCLEANER_CP:
+                description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+                description.device_prefix_topic = device_prefix_topic
+                sensorList.append(
+                    PolarisSensor(
+                        description=description,
+                        device_friendly_name=deviceID,
+                        mqtt_root=mqttRoot,
+                        device_type=devicetype,
+                        device_id=deviceID,
+                    )
+                )
     if (devicetype in POLARIS_AIRCLEANER_EAP_TYPE):
         SENSORS_AIRCLEANER_EAP_CP = copy.deepcopy(SENSORS_AIRCLEANER_EAP)
         for description in SENSORS_AIRCLEANER_EAP_CP:
@@ -422,7 +450,7 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.name.replace(' ', '_').lower()}"
         self._attr_has_entity_name = True
         self._attr_available = False
 

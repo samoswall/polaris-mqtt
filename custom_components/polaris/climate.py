@@ -216,7 +216,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self.payload_on=description.payload_on
         self.payload_off=description.payload_off
         self._attr_has_entity_name = True
@@ -224,6 +224,10 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._attr_precision = 1.0
         self._attr_target_temperature_step = 1.0
         self._attr_hvac_modes = self.entity_description.hvac_modes
+        if device_type in {"140","172"}:
+            self.entity_description.preset_modes = {"hands": "1", "auto": "2"}
+            self.entity_description.fan_modes = {"low": "1", "middle": "2", "high": "3"}
+            self.entity_description.fan_mode = "low"
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         if device_type in {"806","847"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}

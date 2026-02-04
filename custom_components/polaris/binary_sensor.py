@@ -199,7 +199,7 @@ class PolarisBinarySensor(PolarisBaseEntity, BinarySensorEntity, ConfigEntry):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self._attr_has_entity_name = True
         self._attr_is_on = False
         self.device_entities = []
@@ -213,7 +213,7 @@ class PolarisBinarySensor(PolarisBaseEntity, BinarySensorEntity, ConfigEntry):
                 if int(message.payload) == 255:
                     self._attr_is_on = False
                     service_data = {}
-                    service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_tank"
+                    service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_tank"
                     service_data["value"] = 7.777
                     await self.hass.services.async_call("number", "set_value", service_data)
                 else:

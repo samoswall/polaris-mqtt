@@ -46,6 +46,7 @@ async def async_setup_entry(
     if (device_type in POLARIS_COOKER_TYPE):
         TIME_COOKER_LC = copy.deepcopy(TIME_COOKER)
         for description in TIME_COOKER_LC:
+          if (device_type not in ("290","291") or description.translation_key != "delay_start"):
             description.mqttTopicCurrentTime = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentTime}"
             description.mqttTopicCommandTime = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandTime}"
             description.device_prefix_topic = device_prefix_topic
@@ -81,7 +82,7 @@ class PolarisTime(PolarisBaseEntity, TimeEntity):
         )
         self.entity_description = description
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
-        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class']}_{POLARIS_DEVICE[int(device_type)]['model']}_{description.name}"
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self._attr_available = False
         self._attr_has_entity_name = True
         self._attr_native_value = time(0, self.entity_description.default_time, 0)
