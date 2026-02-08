@@ -325,7 +325,7 @@
           "turns_off": "Выключается"
         }
       },
-      "сurrent_power": {
+      "current_power": {
         "name": "Текущая мощность"
       },
       "outdoor_unit_temperature": {
