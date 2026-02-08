@@ -330,6 +330,9 @@
       },
       "outdoor_unit_temperature": {
         "name": "Температура внешнего блока"
+      },
+      "pm2_5_sensor": {
+        "name": "PM2.5"
       }
     },
     "select": {
@@ -667,7 +670,7 @@
     "iron": "Утюг",
     "kitchen_machine": "Кухонная машина",
     "meat_grinder": "Мясорубка",
-    "other": "Умная крышка",
+    "other": "Умное устройство",
     "oven": "Духовка",
     "steamer": "Отпариватель",
     "toothbrush": "Зубная щетка",

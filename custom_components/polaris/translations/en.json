@@ -330,6 +330,9 @@
       },
       "outdoor_unit_temperature": {
         "name": "Temperature outdoor unit"
+      },
+      "pm2_5_sensor": {
+        "name": "PM2.5"
       }
     },
     "select": {
