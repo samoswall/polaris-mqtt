@@ -229,7 +229,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             self.entity_description.fan_modes = {"low": "1", "middle": "2", "high": "3"}
             self.entity_description.fan_mode = "low"
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
-        if device_type in {"806","847"}:
+        if device_type in {"806","847","849","814"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
         if device_type == "820":
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}

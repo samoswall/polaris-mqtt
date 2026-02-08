@@ -8,6 +8,7 @@ from typing import Iterable, Final, Any
 import copy
 import datetime
 import os
+from pathlib import Path
 import voluptuous as vol
 import struct
 
@@ -50,6 +51,14 @@ SELECT_ROOMS = "select_rooms"
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
 
+async def _async_read_file(hass):
+    path = Path(CUSTOM_SELECT_FILE_PATH)
+    if not path.exists():
+        return None
+    text = await hass.async_add_executor_job(path.read_text, "utf-8")
+    return json.loads(text)
+
+
 async def async_setup_entry(
     hass: HomeAssistant, config: ConfigEntry, async_add_entities: AddEntitiesCallback,
 ) -> None:
@@ -63,13 +72,15 @@ async def async_setup_entry(
     
 #    if rooms_js:
 #    available_rooms = list(rooms_js.keys())
+
+    custom_data_rooms = await _async_read_file(hass)
     
-    file_path = CUSTOM_SELECT_FILE_PATH
-    if os.path.exists(file_path):
-        with open(file_path, 'r', encoding='utf-8') as file:
-            custom_data_rooms = json.loads(file.read())
-    else:
-        custom_data_rooms = None
+#    file_path = CUSTOM_SELECT_FILE_PATH
+#    if os.path.exists(file_path):
+#        with open(file_path, 'r', encoding='utf-8') as file:
+#            custom_data_rooms = json.loads(file.read())
+#    else:
+#        custom_data_rooms = None
 
     if custom_data_rooms is not None and "SELECT_VACUUM_rooms" in custom_data_rooms:
         custom_data_rooms = json.loads(json.dumps(custom_data_rooms))

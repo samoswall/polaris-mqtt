@@ -97,11 +97,11 @@ CUSTOM_SELECT_FILE_PATH = "www/polaris/polaris_custom_select.js"
 
 POLARIS_DEVICE = {
     0:   {"model": "Unknown", "class": "all"},
-    37:  {"model": "PWK-7111CGLD-WIFI-(old)", "class": "kettle"},
+    37:  {"model": "PWK-7111CGLD-WIFI", "class": "kettle"},
     245: {"model": "PWK-0105", "class": "kettle"},
     205: {"model": "PWK-1538CC", "class": "kettle"},
     271: {"model": "PWK-1701CGLD", "class": "kettle"},
-    36:  {"model": "PWK-17107CGLD-WIFI-(old)", "class": "kettle"},
+    36:  {"model": "PWK-17107CGLD-WIFI", "class": "kettle"},
     29:  {"model": "PWK-1712CGLD", "class": "kettle"},
     38:  {"model": "PWK-1712CGLD", "class": "kettle"},
     54:  {"model": "PWK-1712CGLD", "class": "kettle"},
@@ -167,14 +167,14 @@ POLARIS_DEVICE = {
     158: {"model": "PUH-6060", "class": "humidifier"},
     25:  {"model": "PUH-6090", "class": "humidifier"},
     15:  {"model": "PUH-7406", "class": "humidifier"},
-    87:  {"model": "PUH-8080/PUH-4606", "class": "humidifier"},
+    87:  {"model": "PUH-8080_PUH-4606", "class": "humidifier"},
     155: {"model": "PUH-8802", "class": "humidifier"},
     74:  {"model": "PUH-9009", "class": "humidifier"},
-    4:   {"model": "PUH-9105/PUH-2709", "class": "humidifier"},
-    17:  {"model": "PUH-9105/PUH-2709", "class": "humidifier"},
-    18:  {"model": "PUH-9105/PUH-2709", "class": "humidifier"},
-    44:  {"model": "PUH-9105/PUH-2709", "class": "humidifier"},
-    70:  {"model": "PUH-9105/PUH-2709", "class": "humidifier"},
+    4:   {"model": "PUH-9105_PUH-2709", "class": "humidifier"},
+    17:  {"model": "PUH-9105_PUH-2709", "class": "humidifier"},
+    18:  {"model": "PUH-9105_PUH-2709", "class": "humidifier"},
+    44:  {"model": "PUH-9105_PUH-2709", "class": "humidifier"},
+    70:  {"model": "PUH-9105_PUH-2709", "class": "humidifier"},
     1:   {"model": "EVO-0225", "class": "cooker"},
     95:  {"model": "PMC-00000", "class": "cooker"},
     303: {"model": "PMC-0510", "class": "cooker"},
@@ -207,7 +207,7 @@ POLARIS_DEVICE = {
     162: {"model": "PMC-5063WIFI", "class": "cooker"},
     169: {"model": "PPC-1505-WiFI", "class": "cooker"},
     183: {"model": "PPC-1505-WiFI", "class": "cooker"},
-    235: {"model": "AM7310-(test)", "class": "coffeemaker"},
+    235: {"model": "AM7310", "class": "coffeemaker"},
     305: {"model": "PACM-2072", "class": "coffeemaker"},
     103: {"model": "PACM-2080AC", "class": "coffeemaker"},
     261: {"model": "PACM-2080AC", "class": "coffeemaker"},
@@ -225,17 +225,17 @@ POLARIS_DEVICE = {
     279: {"model": "PCM-1540WIFI", "class": "coffeemaker"},
     190: {"model": "PCM-1560", "class": "coffeemaker"},
     207: {"model": "PCM-2070CG", "class": "coffeemaker"},
-    172: {"model": "PAW-0804", "class": "air-cleaner"},
-    140: {"model": "PAW-0804(c3-test)", "class": "air-cleaner"},
-    151: {"model": "PPA-2025", "class": "air-cleaner"},
-    203: {"model": "PPA-2025", "class": "air-cleaner"},
-    250: {"model": "PPA-2025", "class": "air-cleaner"},
-    152: {"model": "PPA-4050", "class": "air-cleaner"},
-    204: {"model": "PPA-4050", "class": "air-cleaner"},
-    251: {"model": "PPA-4050", "class": "air-cleaner"},
-    236: {"model": "PPAT-02A", "class": "air-cleaner"},
-    238: {"model": "PPAT-80P", "class": "air-cleaner"},
-    239: {"model": "PPAT-90GDi", "class": "air-cleaner"},
+    172: {"model": "PAW-0804", "class": "air_cleaner"},
+    140: {"model": "PAW-0804", "class": "air_cleaner"},
+    151: {"model": "PPA-2025", "class": "air_cleaner"},
+    203: {"model": "PPA-2025", "class": "air_cleaner"},
+    250: {"model": "PPA-2025", "class": "air_cleaner"},
+    152: {"model": "PPA-4050", "class": "air_cleaner"},
+    204: {"model": "PPA-4050", "class": "air_cleaner"},
+    251: {"model": "PPA-4050", "class": "air_cleaner"},
+    236: {"model": "PPAT-02A", "class": "air_cleaner"},
+    238: {"model": "PPAT-80P", "class": "air_cleaner"},
+    239: {"model": "PPAT-90GDi", "class": "air_cleaner"},
     132: {"model": "PWF-2005", "class": "irrigator"},
     252: {"model": "PWF-2005", "class": "irrigator"},
     273: {"model": "PAF-4001WIFI", "class": "air_fryer"},
@@ -326,7 +326,7 @@ POLARIS_DEVICE = {
     220: {"model": "PVCR-G2-6001", "class": "cleaner"},
     100: {"model": "PVCR-Wave-15", "class": "cleaner"},
     93:  {"model": "PHB-1350-WIFI", "class": "blender"},
-    35:  {"model": "PHB-1503-WIFI-(old)", "class": "blender"},
+    35:  {"model": "PHB-1503-WIFI", "class": "blender"},
     34:  {"model": "PHB-1551-WIFI", "class": "blender"},
     282: {"model": "induction-hob", "class": "cooktop"},
     286: {"model": "XFC302I-B3SF", "class": "cooktop"},
@@ -379,21 +379,22 @@ POLARIS_DEVICE = {
     69:  {"model": "Ballu-OneAir-ASP-100", "class": "air_cleaner"}, # совместимость с <= v1.0.8
     869: {"model": "Ballu-OneAir-ASP-100", "class": "air_cleaner"},
     859: {"model": "Ballu-OneAir-ASP-200", "class": "air_cleaner"},
-    826: {"model": "Electrolux-EAP-2050D/2075D", "class": "air_cleaner"},
-    876: {"model": "Electrolux-Royal-Flash/Centurio-IQ-Inverter", "class": "boiler"},
-    833: {"model": "Electrolux-Centurio-IQ-3.0", "class": "boiler"},
+    826: {"model": "Electrolux-EAP-2050D_2075D", "class": "air_cleaner"},
+    876: {"model": "Electrolux-Royal-Flash_Centurio-IQ-Inverter", "class": "boiler"},
+    833: {"model": "Electrolux-Centurio-IQ-3", "class": "boiler"},
     802: {"model": "SmartInverter", "class": "boiler"},
-    844: {"model": "Royal-Thermo-Aqua-Inverter/Royal-Thermo-Aqua-Inox-Inverter", "class": "boiler"},
-    806: {"model": "Transformer-DI-3.0", "class": "heater"},
-    846: {"model": "Transformer-DI-4.0", "class": "heater"},
+    844: {"model": "Royal-Thermo-Aqua-Inverter_Royal-Thermo-Aqua-Inox-Inverter", "class": "boiler"},
+    806: {"model": "Transformer-DI-3", "class": "heater"},
+    846: {"model": "Transformer-DI-4", "class": "heater"},
     847: {"model": "Wi-Fi-Convection-Heater", "class": "heater"},
-    849: {"model": "Transformer-4.0", "class": "heater"},
-    820: {"model": "Ballu-Platinum-Evol-DC/Olympio-Legend", "class": "air-conditioner"},
-    813: {"model": "Electrolux-Smartline/Ballu-Eco-Smart/Ice-Peak", "class": "air-conditioner"},
-    882: {"model": "Goldstar-GSAC/GSACI", "class": "air-conditioner"},
+    849: {"model": "Transformer-4", "class": "heater"},
+    814: {"model": "Transformer-DI", "class": "heater"},
+    820: {"model": "Ballu-Platinum-Evol-DC_Olympio-Legend", "class": "air_conditioner"},
+    813: {"model": "Electrolux-Smartline_Ballu-Eco-Smart_Ice-Peak", "class": "air_conditioner"},
+    882: {"model": "Goldstar-GSAC_GSACI", "class": "air_conditioner"},
     881: {"model": "UHB-960-ET", "class": "humidifier"},
-    835: {"model": "Electrolux-YOGAhealthline-2.0", "class": "humidifier"},
-    878: {"model": "Electrolux/Royal-Thermo", "class": "thermostat"},
+    835: {"model": "Electrolux-YOGAhealthline-2", "class": "humidifier"},
+    878: {"model": "Electrolux_Royal-Thermo", "class": "thermostat"},
 }
 
 POLARIS_KETTLE_TYPE = ["2","6","8","29","36","37","38","51","52","53","54","56","57","58","59","60","61","62","63","67","82","83","84","85","86","97","105","106","117","121","139","165","175","176","177","189","194","196","205","209","253","254","255","260","271","308"]
@@ -425,7 +426,7 @@ POLARIS_AIRCLEANER_EAP_TYPE = ["826"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
 POLARIS_BOILER_TYPE = ["802","833","844","876"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
-POLARIS_HEATER_TYPE = ["806","846","847","849"]
+POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
 POLARIS_AIRCONDITIONER_TYPE = ["813","820","882"]
 POLARIS_THERMOSTAT_TYPE = ["878"]
 
@@ -824,7 +825,7 @@ SENSORS_CLIMATE = [
 SENSORS_CLIMATE_200 = [
     PolarisSensorEntityDescription(
         key="sensor/pm2",
-        name="PM2.5",
+        name="pm_2_5",
         translation_key="pm2_5_sensor",
         device_class=None,
         native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
@@ -879,7 +880,7 @@ SENSORS_CLIMATE_200 = [
 SENSORS_AIRCLEANER = [
     PolarisSensorEntityDescription(
         key="sensor/pm2",
-        name="PM2.5",
+        name="pm_2_5",
         translation_key="pm2_5_sensor",
         device_class=None,
         native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
@@ -953,7 +954,7 @@ SENSORS_AIRCLEANER = [
 SENSORS_AIRCLEANER_EAP = [
     PolarisSensorEntityDescription(
         key="sensor/pm2",
-        name="PM2.5",
+        name="pm_2_5",
         translation_key="pm2_5_sensor",
         device_class=None,
         native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
@@ -1351,7 +1352,20 @@ SWITCH_KETTLE_BACKLIGHT = [
         device_class=SwitchDeviceClass.SWITCH,
         payload_on="true",
         payload_off="false",
-#        icon="mdi:alarm-light",
+    ),
+]
+
+SWITCH_CHILD_LOCK = [
+    PolarisSwitchEntityDescription(
+        key="child_lock",
+        translation_key="child_lock_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Child lock",
+        mqttTopicCommand="control/child_lock",
+        mqttTopicCurrentValue="state/child_lock",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
     ),
 ]
 

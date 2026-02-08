@@ -126,7 +126,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
                                 options=[
                                     SelectOptionDict(
                                         value=dev_mac,
-                                        label=f"{POLARIS_DEVICE[int(dev_type) if int(dev_type) in POLARIS_DEVICE else 0]["model"]} (mac: {dev_mac})",
+                                        label=f"{await self.get_translated_type(POLARIS_DEVICE[int(dev_type)]["class"])} {POLARIS_DEVICE[int(dev_type) if int(dev_type) in POLARIS_DEVICE else 0]["model"].replace('_','/')} (mac: {dev_mac})",
                                     )
                                     for dev_mac, dev_type in self._device_found.items()
                                 ],

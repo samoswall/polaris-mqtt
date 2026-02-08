@@ -160,7 +160,7 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type in POLARIS_HEATER_TYPE): 
+    if ((device_type in POLARIS_HEATER_TYPE) and (device_type not in ("814","849"))):
     # Create Heater  
         NUMBERS_HEATER_LC = copy.deepcopy(NUMBERS_HEATER)
         for description in NUMBERS_HEATER_LC:

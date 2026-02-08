@@ -49,6 +49,7 @@ from .const import (
     SWITCHES_AIRCONDITIONER_820,
     SWITCHES_AIRCONDITIONER_882,
     SWITCHES_THERMOSTAT,
+    SWITCH_CHILD_LOCK,
     PolarisSwitchEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -464,7 +465,7 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type in POLARIS_HEATER_TYPE):
+    if ((device_type in POLARIS_HEATER_TYPE) and (device_type not in ("814","849"))):
         # Create switches for heater
         SWITCHES_HEATER_LC = copy.deepcopy(SWITCHES_HEATER)
         for description in SWITCHES_HEATER_LC:
@@ -481,6 +482,35 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
+    if (device_type in ("814","849")):
+        SWITCH_CHILD_LOCK_LC = copy.deepcopy(SWITCH_CHILD_LOCK)
+        for description in SWITCH_CHILD_LOCK_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+        SWITCH_KETTLE_BACKLIGHT_LC = copy.deepcopy(SWITCH_KETTLE_BACKLIGHT)
+        for description in SWITCH_KETTLE_BACKLIGHT_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     if (device_type == "820"):
         SWITCHES_AIRCONDITIONER_820_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER_820)
         for description in SWITCHES_AIRCONDITIONER_820_LC:
