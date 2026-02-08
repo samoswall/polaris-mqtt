@@ -520,7 +520,7 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                 payload_message = list_dubleint
             if self.entity_description.name == "quality":
                 payload_message = str( int(payload_message) / 100 )
-            if self.entity_description.name == "сurrent_power":
+            if self.entity_description.name == "current_power":
                 if self.device_type == "806":
                     payload_message = str( int(payload_message[:2],16) * 20 )
                 else:
