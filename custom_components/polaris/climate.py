@@ -305,6 +305,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         def message_received_preset_mode(message):
             payload = message.payload
             if int(payload) > 0:
+                if (self.device_type == "846" and int(payload) > 3): 
+                    return
                 self._attr_preset_mode = list(self.entity_description.preset_modes.keys())[list(self.entity_description.preset_modes.values()).index(payload)]
             if self.device_type == "826":
                 self._EAP_data0 = "0" + payload + self._EAP_data0[-2:]
@@ -494,4 +496,5 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             case "both": 
                 swmessage = "0101"
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage + self._swing_message[4:])
+
         self.async_write_ha_state()
