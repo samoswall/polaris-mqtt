@@ -1218,8 +1218,8 @@ SENSORS_HEATER = [
     ),
     PolarisSensorEntityDescription(
         key="program_data/0",
-        name="сurrent_power",
-        translation_key="сurrent_power",
+        name="current_power",
+        translation_key="current_power",
         device_class=None,
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
