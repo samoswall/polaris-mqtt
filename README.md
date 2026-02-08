@@ -14,13 +14,12 @@
 > Устройство Polaris должно быть подключено к вашему mqtt брокеру! <br>
 > Подключить к mqtt брокеру можно в приложении в настройках. Если такой настройки нет, значит у вас старая версия прошивки в устройстве.<br>
 > Новую версию прошивки можно запросить в техподдержке Polaris через приложение.<br>
-> Если по какой-то причине нет возможности обновить прошивку, то можно воспользоваться решением, опиcанным на 4pda, перенаправив трафик в роутере на дополнительный брокер mqtt.<br>
-> Выяснилось, что у некотых устройств установлены пробные (с этапа тестирования) версии прошивок, некоторые из них не доработаны и не публикуют тип устройства (топик polaris/XXXXXXXXXXXX/state/devtype где ХХХХХХХХХХХХ mac адрес вашего устройства).<br>
-> Без типа невозможно понять, что это за устройство. Варианты решения проблемы:<br>
-> Запросить новую прошивку (с публикацией devtype) или самостоятельно опубликовать в топик polaris/XXXXXXXXXXXX/state/devtype тип устройства - число (ID) с установленным статусом retain 
-> или начиная с версии 1.0.9 для неизвестного устройства (Unknown) выбрать его тип из таблицы ниже. <br>
-> Обратите внимание - устройства одинаковые, а функции могут быть разные (наличие/отсутствие веса или ночника). Если промахнулись с типом, то удалите топик devtype в брокере, удалите устройство в интеграции и добавьте его заново.<br>
-> Вот тут есть [мини инструкция](https://github.com/samoswall/hacs-polaris/issues/9#issuecomment-2707181427) добавления на примере чайника.
+> Если по какой-то причине нет возможности обновить прошивку или ее ещё не существует, или это устройство Русклимат (Hommyn), то можно вам необходимо перенаправить трафик в роутере на локальный брокер mqtt.<br>
+> Суть перенаправления трафика заключается в установке частного DNS (не глобального) с именем  <br>`mqtt.cloud.polaris-iot.com` и/или `mqtt.cloud.rusklimat.ru` на IP вашего локального mqtt брокера.<br>
+> Есть одна особенность:
+> - должен быть в брокере действующий сертификат для SSL подключения на 8883 порт
+> - должна быть включена анонимная авторизация на 8883 порту
+> Проще всего это реализуется с использованием брокера EMQX.
 
 ℹ️ **Добавлены**: <br>
 ✔️ Устройста Polaris (см. таблицу) <br>
@@ -72,7 +71,7 @@
 
   1. Необходимо создать файл `polaris_custom_select.js` в папке `www/polaris` (в корне конфигурации, папка www, в ней polaris) любым удобным способом и открыть его для редактирования (например с помощью дополнения File editor)
   2. Скопировать пример и вставить в файл `polaris_custom_select.js`
-  3. Пример: <br>
+  3. Максимальный пример: <br>
 ```yaml
 {
   "SELECT_KETTLE_options": {
@@ -87,6 +86,15 @@
   },
   "SELECT_COFFEEMAKER_ROG_options": {
     "Мой кофе": {"mode": 3, "amount": 65, "tank": 32, "temperature": 95}
+  },
+  "SELECT_AIRFRYER_options": {
+    "Мой рецепт 1": {"mode": 1, "time": 1200, "temperature": 115},
+    "Мой рецепт 2": {"mode": 2, "time": 1300, "temperature": 105}
+  },
+  "SELECT_VACUUM_rooms": {
+  	"Коридор": {"id": "01", "coordinate": [-72, 64, -71, -6, 16, -4, 15, 66]},
+    "Зал":     {"id": "02", "coordinate": [21, 26, 24, -155, 140, -153, 137, 28]},
+    "Кухня":   {"id": "03", "coordinate": [-71, -10, -68, -196, 22, -194, 19, -8]}
   }
 }
 ```
@@ -107,6 +115,12 @@
   },
   "SELECT_COFFEEMAKER_ROG_options": {
     Напитки для кофеварок рожкового типа
+  },
+  "SELECT_AIRFRYER_options": {
+    Рецепты для аэрогрилей
+  },
+  "SELECT_VACUUM_rooms": {
+  	Списки комнат с координатами
   }
 }
 ```
@@ -270,8 +284,8 @@
 |132|PWF-2005|irrigator|✔️|speed, timer, ioniser, smart_mode|![all](https://images.cdn.polaris-iot.com/5/bd/1a68b-9fb5-46e9-acbd-c086748b72bb/60.webp)
 |252|PWF-2005|irrigator|✔️|speed, timer, ioniser, smart_mode|![all](https://images.cdn.polaris-iot.com/5/bd/1a68b-9fb5-46e9-acbd-c086748b72bb/60.webp)
 |273|PAF-4001WIFI|air_fryer|❌|timer, child_lock, multi_step, temperature|![all](https://images.cdn.polaris-iot.com/c/e3/6185e-c768-4283-95d4-07fa5ffe7448/60.webp)
-|290|PAF-6003WIFI|air_fryer|❌|timer, backlight, child_lock, multi_step, temperature|![all](https://images.cdn.polaris-iot.com/1/c6/acb0e-5312-44e2-b155-5c3148f0a07d/60.webp)
-|291|PAF-8003WIFI|air_fryer|❌|timer, backlight, child_lock, multi_step, temperature|![all](https://images.cdn.polaris-iot.com/2/99/6942a-ce57-4824-888d-56ac8c6a15b5/60.webp)
+|290|PAF-6003WIFI|air_fryer|✔️|timer, backlight, child_lock, multi_step, temperature|![all](https://images.cdn.polaris-iot.com/1/c6/acb0e-5312-44e2-b155-5c3148f0a07d/60.webp)
+|291|PAF-8003WIFI|air_fryer|✔️|timer, backlight, child_lock, multi_step, temperature|![all](https://images.cdn.polaris-iot.com/2/99/6942a-ce57-4824-888d-56ac8c6a15b5/60.webp)
 |292|PAF-8005WIFI|air_fryer|❌|timer, backlight, child_lock, multi_step, temperature|![all](https://images.cdn.polaris-iot.com/f/29/7c5ae-57fa-4394-b9f0-8243ce56d852/60.webp)
 |31|ENIGMA-WI-FI|boiler|❌|speed, timer, keep_warm, child_lock, smart_mode, temperature|![all](https://images.cdn.polaris-iot.com/5/e6/60f0f-98be-44ea-bea4-42cc3a27d340/60.webp)
 |11|PWH-IDF06|boiler|❌|speed, timer, keep_warm, child_lock, smart_mode, temperature|![all](https://images.cdn.polaris-iot.com/5/e6/60f0f-98be-44ea-bea4-42cc3a27d340/60.webp)
@@ -479,15 +493,15 @@
 |806|Transformer DI 3.0|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |809|Transformer DI 3.0 S|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |811|Ballu Rapid|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/d5/3c5f6-2e58-4885-b83b-84542d2419cd/60.webp)
-|814|Transformer DI|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
+|814|Transformer DI|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |817|Wi-Fi Convection Heater|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |828|Transformer DI 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |831|Transformer 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |842|Transformer DI 3.0 XS|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
 |846|Transformer DI 4.0|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/d/9e/3c438-8eeb-49f6-827b-41f93b081088/60.webp)
 |847|Wi-Fi Convection Heater|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/8c/a707d-12f9-4f91-8781-3e410dbcd0be/60.webp)
-|849|Transformer 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
-|871|Transformer DI 4.0|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/9e/3c438-8eeb-49f6-827b-41f93b081088/60.webp)
+|849|Transformer 4.0|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/5/9b/4b0d8-9d7a-4d07-bb46-6880703cb814/60.webp)
+|871|Transformer DI 4.0|heater|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/d/9e/3c438-8eeb-49f6-827b-41f93b081088/60.webp)
 |889|Aurus|heater|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/2d/b8971-21ce-4228-a8d0-d5d0b186f456/60.webp)
 |804|Electrolux EHU-3910D/EHU-3915D|humidifier|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/be/6c6d6-8aa0-479a-bd5d-3490e5f937e1/60.webp)
 |835|Electrolux YOGAhealthline 2.0.|humidifier|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/c/be/6c6d6-8aa0-479a-bd5d-3490e5f937e1/60.webp)
@@ -531,27 +545,3 @@
 
 </details>
 
-<details>
-  <summary>Инструкция по добавлению устройства РУСКЛИМАТ в интеграцию Polaris</summary>
-
-<br>
-
-   >  **Не актуально для интеграции начиная с версии 1.0.9 (Устройства находятся автоматически при подключении их к MQTT брокеру)**
-
-1. В MQTT Explorer выбираем топик с mac адресом своего устройства (справа в разделе Publish появится полный путь топика)
-
-![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_1.png)
-
-2. Заменяем в полном пути топика rusclimate на polaris,<br> ___для устройств с ID > 800 заменяем ID добавив цифру 8 (должно получиться например polaris/876/aaabbb...и т.д.)___<br> вводим в окно сообщения свой mac адрес, ставим галочку Retain и нажимаем кнопку PUBLISH
-
-![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_2.png)
-
-Должно получиться: в топике polaris - топик c цифрой (тип вашего устройства) - топик aaabbbcccdddeeefff (токен вашего устройства) - топик state - топик mac (с mac адресом вашего устройства)
-
-![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_3.png)
-
-3. В интеграции Polaris добавляем устройство, оно уже нашлось (но в топике polaris по mac адресу). Заменяем название топика polaris на rusclimate
-
-![all](https://github.com/samoswall/polaris-mqtt/blob/main/rusclimate/rusclimate_4.png)
-
-</details>
