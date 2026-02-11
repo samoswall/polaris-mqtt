@@ -588,6 +588,11 @@
               "80_5_percent": "80 %",
               "100_5_percent": "100 %"
             }
+          },
+          "preset_mode": {
+            "state": {
+              "hands": "Hands"
+            }
           }
         }
       },
