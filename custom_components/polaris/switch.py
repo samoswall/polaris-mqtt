@@ -216,7 +216,7 @@ async def async_setup_entry(
         # Create switches for cooker
         SWITCHES_COOKER_LC = copy.deepcopy(SWITCHES_COOKER)
         for description in SWITCHES_COOKER_LC:
-          if (device_type not in ("290","291") or description.translation_key != "keepwarm_switch"):
+          if (device_type not in ("290","291","292") or description.translation_key != "keepwarm_switch"):
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
             description.device_prefix_topic = device_prefix_topic
@@ -229,7 +229,7 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-        if (device_type in ("290","291")):
+        if (device_type in ("290","291","292")):
             SWITCH_KETTLE_BACKLIGHT_LC = copy.deepcopy(SWITCH_KETTLE_BACKLIGHT)
             for description in SWITCH_KETTLE_BACKLIGHT_LC:
                 description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"

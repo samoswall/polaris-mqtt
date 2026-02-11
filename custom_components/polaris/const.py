@@ -416,8 +416,8 @@ POLARIS_HUMIDDIFIER_3B_MODE_TYPE = ["153","157","158"]
 POLARIS_HUMIDDIFIER_2_MODE_TYPE = ["881"]
 POLARIS_HUMIDDIFIER_1_MODE_TYPE = ["137"]
 POLARIS_HUMIDDIFIER_11_MODE_TYPE = ["835"]
-POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303","290","291"]
-POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303","290","291"]
+POLARIS_COOKER_TYPE = ["1","9","10","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303","290","291","292"]
+POLARIS_COOKER_WITH_LID_TYPE = ["9","39","40","41","47","48","55","77","78","79","80","89","95","114","138","162","169","183","192","206","210","215","240","266","267","268","270","301","302","303","290","291","292"]
 POLARIS_COFFEEMAKER_TYPE = ["103", "166", "200","261","265","276","277","278","280","305"]
 POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247", "274", "279"] 
 POLARIS_CLIMATE_TYPE = ["69", "869", "859"]
@@ -450,6 +450,21 @@ AIRFRYER_1_MODES = {
             "fish": "[{\"mode\":9, \"time\":900, \"temperature\":180}]",
             "dehydrate": "[{\"mode\":12, \"time\":18000, \"temperature\":80}]",
             "nuggets": "[{\"mode\":13, \"time\":600, \"temperature\":190}]",
+        }
+AIRFRYER_2_MODES = {
+            "my_recipe_plus": "[{\"mode\":1, \"time\":300, \"temperature\":100}]",
+            "french_fries": "[{\"mode\":2, \"time\":1320, \"temperature\":190}]",
+            "chicken": "[{\"mode\":3, \"time\":2700, \"temperature\":190}]",
+            "steak": "[{\"mode\":4, \"time\":600, \"temperature\":200}]",
+            "vegetables": "[{\"mode\":5, \"time\":1200, \"temperature\":180}]",
+            "pie": "[{\"mode\":6, \"time\":1500, \"temperature\":170}]",
+            "fish": "[{\"mode\":9, \"time\":900, \"temperature\":180}]",
+            "chicken_wings": "[{\"mode\":10, \"time\":1800, \"temperature\":190}]",
+            "pizza": "[{\"mode\":11, \"time\":720, \"temperature\":180}]",
+            "dehydrate": "[{\"mode\":12, \"time\":18000, \"temperature\":80}]",
+            "nuggets": "[{\"mode\":13, \"time\":600, \"temperature\":190}]",
+            "bacon": "[{\"mode\":14, \"time\":420, \"temperature\":180}]",
+            "shrimps": "[{\"mode\":15, \"time\":840, \"temperature\":190}]",
         }
 
 KETTLE_ERROR = {

@@ -50,7 +50,8 @@ from .const import (
     POLARIS_COFFEEMAKER_ROG_TYPE,
     POLARIS_CLIMATE_TYPE,
     POLARIS_AIRCLEANER_TYPE,
-    AIRFRYER_1_MODES
+    AIRFRYER_1_MODES,
+    AIRFRYER_2_MODES
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -225,7 +226,10 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker":
             self._select_options = json.loads(json.dumps(SELECT_COOKER[0].options))
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer":
-            self._select_options = json.loads(json.dumps(AIRFRYER_1_MODES))
+            if self.device_type == "292":
+                self._select_options = json.loads(json.dumps(AIRFRYER_2_MODES))
+            else:
+                self._select_options = json.loads(json.dumps(AIRFRYER_1_MODES))
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker":
             if int(self.device_type) == 45:
                 self._select_options = json.loads(json.dumps(SELECT_COFFEEMAKER_ROG[0].options))

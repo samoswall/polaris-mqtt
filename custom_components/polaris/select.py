@@ -49,7 +49,8 @@ from .const import (
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_AIRCLEANER_EAP_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
-    AIRFRYER_1_MODES
+    AIRFRYER_1_MODES,
+    AIRFRYER_2_MODES
 )
 
 
@@ -267,6 +268,8 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         
         if (device_type in ("290","291")):
             self.entity_description.options = AIRFRYER_1_MODES
+        if (device_type == "292"):
+            self.entity_description.options = AIRFRYER_2_MODES
         if (POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle" or 
             POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker" or 
             POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker" or 

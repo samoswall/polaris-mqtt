@@ -228,6 +228,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             self.entity_description.preset_modes = {"hands": "1", "auto": "2"}
             self.entity_description.fan_modes = {"low": "1", "middle": "2", "high": "3"}
             self.entity_description.fan_mode = "low"
+        if device_type == "846":
+            self.entity_description.preset_modes = {"comfort": "1", "eco": "2", "away": "3", "hands": "4"}
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         if device_type in {"806","847","849","814"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
@@ -305,8 +307,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         def message_received_preset_mode(message):
             payload = message.payload
             if int(payload) > 0:
-                if (self.device_type == "846" and int(payload) > 3): 
-                    return
+#                if (self.device_type == "846" and int(payload) > 3): 
+#                    return
                 self._attr_preset_mode = list(self.entity_description.preset_modes.keys())[list(self.entity_description.preset_modes.values()).index(payload)]
             if self.device_type == "826":
                 self._EAP_data0 = "0" + payload + self._EAP_data0[-2:]
@@ -472,6 +474,9 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Update preset_mode on."""
         self._attr_preset_mode = preset_mode
+        if (self.device_type == "846" and preset_mode == "hands"):
+            self._attr_fan_mode = "10_percent"
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandFanMode, self.entity_description.fan_modes[self._attr_fan_mode])
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandPresetMode, self.entity_description.preset_modes[preset_mode])
         if self.device_type == "826":
             if (preset_mode != "night" and int(self._EAP_data0[-2:]) > 1): 
@@ -496,5 +501,4 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             case "both": 
                 swmessage = "0101"
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage + self._swing_message[4:])
-
         self.async_write_ha_state()

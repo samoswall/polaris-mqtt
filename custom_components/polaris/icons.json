@@ -239,6 +239,11 @@
               "80_5_percent": "mdi:numeric-4-box",
               "100_5_percent": "mdi:numeric-5-box"
             }
+          },
+          "preset_mode": {
+            "state": {
+              "hands": "mdi:gesture-tap"
+            }
           }
         }
       },

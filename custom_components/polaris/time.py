@@ -46,7 +46,7 @@ async def async_setup_entry(
     if (device_type in POLARIS_COOKER_TYPE):
         TIME_COOKER_LC = copy.deepcopy(TIME_COOKER)
         for description in TIME_COOKER_LC:
-          if (device_type not in ("290","291") or description.translation_key != "delay_start"):
+          if (device_type not in ("290","291","292") or description.translation_key != "delay_start"):
             description.mqttTopicCurrentTime = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentTime}"
             description.mqttTopicCommandTime = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandTime}"
             description.device_prefix_topic = device_prefix_topic
