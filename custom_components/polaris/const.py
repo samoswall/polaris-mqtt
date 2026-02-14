@@ -14,7 +14,7 @@ from homeassistant.components.vacuum import (
     DOMAIN,
     ATTR_CLEANED_AREA,
     StateVacuumEntity,
-#    VacuumActivity,
+    VacuumActivity,
     VacuumEntityFeature,
 )
 from homeassistant.components.climate import (
@@ -1091,6 +1091,15 @@ SENSORS_VACUUM = [
         entity_category=EntityCategory.DIAGNOSTIC,
         icon="mdi:map-marker-radius",
     ),
+    PolarisSensorEntityDescription(
+        key="battery",
+        name="battery",
+        translation_key="battery",
+        device_class=SensorDeviceClass.BATTERY,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
 ]
 
 SENSORS_WATER_BOILER = [
@@ -1433,6 +1442,21 @@ SWITCH_HUMIDIFIER_BACKLIGHT = [
         payload_on="true",
         payload_off="false",
 #        icon="mdi:alarm-light",
+    ),
+]
+
+SWITCH_HUMIDIFIER_NIGHT = [
+    PolarisSwitchEntityDescription(
+        key="night",
+        translation_key="night_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Night light",
+        mqttTopicCommand="control/night",
+        mqttTopicCurrentValue="state/night",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:weather-night",
     ),
 ]
 
@@ -3086,6 +3110,7 @@ BINARYSENSOR_THERMOSTAT = [
         icon="mdi:heat-wave",
     )
 ]
+
 
 BINARYSENSOR_AVAILABLE = [
     PolarisBinarySensorEntityDescription(

@@ -28,6 +28,7 @@ from .const import (
     SWITCHES_ALL_DEVICES,
     SWITCH_KETTLE_BACKLIGHT,
     SWITCH_HUMIDIFIER_BACKLIGHT,
+    SWITCH_HUMIDIFIER_NIGHT,
     SWITCH_HUMIDIFIER_IONISER,
     SWITCH_HUMIDIFIER_WARM_STREAM,
     SWITCH_HUMIDIFIER_ULTRAVIOLET,
@@ -149,21 +150,37 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-        SWITCH_HUMIDIFIER_BACKLIGHT_LC = copy.deepcopy(SWITCH_HUMIDIFIER_BACKLIGHT)
-        for description in SWITCH_HUMIDIFIER_BACKLIGHT_LC:
-          if (device_type != "835" or description.translation_key != "backlight_switch"):
-            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
-            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
-            description.device_prefix_topic = device_prefix_topic
-            switchList.append(
-                PolarisSwitch(
-                    description=description,
-                    device_friendly_name=device_id,
-                    mqtt_root=mqtt_root,
-                    device_type=device_type,
-                    device_id=device_id
+        if (device_type == "158"):
+            SWITCH_HUMIDIFIER_NIGHT_LC = copy.deepcopy(SWITCH_HUMIDIFIER_NIGHT)
+            for description in SWITCH_HUMIDIFIER_NIGHT_LC:
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
                 )
-            )
+        else:
+            SWITCH_HUMIDIFIER_BACKLIGHT_LC = copy.deepcopy(SWITCH_HUMIDIFIER_BACKLIGHT)
+            for description in SWITCH_HUMIDIFIER_BACKLIGHT_LC:
+              if (device_type != "835" or description.translation_key != "backlight_switch"):
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
     if (device_type in POLARIS_HUMIDDIFIER_WITH_IONISER_TYPE):
         # Create switch ioniser for humidifiers
         SWITCH_HUMIDIFIER_IONISER_LC = copy.deepcopy(SWITCH_HUMIDIFIER_IONISER)
