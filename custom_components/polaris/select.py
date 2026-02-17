@@ -50,7 +50,52 @@ from .const import (
     POLARIS_AIRCLEANER_EAP_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
     AIRFRYER_1_MODES,
-    AIRFRYER_2_MODES
+    AIRFRYER_2_MODES,
+    POLARIS_VACUUM_01_MODE_TYPE,
+    POLARIS_VACUUM_02_MODE_TYPE,
+    POLARIS_VACUUM_03_MODE_TYPE,
+    POLARIS_VACUUM_04_MODE_TYPE,
+    POLARIS_VACUUM_05_MODE_TYPE,
+    POLARIS_VACUUM_06_MODE_TYPE,
+    POLARIS_VACUUM_07_MODE_TYPE,
+    POLARIS_VACUUM_08_MODE_TYPE,
+    POLARIS_VACUUM_09_MODE_TYPE,
+    POLARIS_VACUUM_10_MODE_TYPE,
+    POLARIS_VACUUM_11_MODE_TYPE,
+    POLARIS_VACUUM_12_MODE_TYPE,
+    POLARIS_VACUUM_13_MODE_TYPE,
+    POLARIS_VACUUM_14_MODE_TYPE,
+    POLARIS_VACUUM_15_MODE_TYPE,
+    POLARIS_VACUUM_16_MODE_TYPE,
+    POLARIS_VACUUM_17_MODE_TYPE,
+    POLARIS_VACUUM_18_MODE_TYPE,
+    VACUUM_01_MODE,
+    VACUUM_02_MODE,
+    VACUUM_03_MODE,
+    VACUUM_04_MODE,
+    VACUUM_05_MODE,
+    VACUUM_06_MODE,
+    VACUUM_07_MODE,
+    VACUUM_08_MODE,
+    VACUUM_09_MODE,
+    VACUUM_10_MODE,
+    VACUUM_11_MODE,
+    VACUUM_12_MODE,
+    VACUUM_13_MODE,
+    VACUUM_14_MODE,
+    VACUUM_15_MODE,
+    VACUUM_16_MODE,
+    VACUUM_17_MODE,
+    VACUUM_18_MODE,
+    POLARIS_VACUUM_NOT_WATER_TYPE,
+    POLARIS_VACUUM_01_WATER_TYPE,
+    POLARIS_VACUUM_02_WATER_TYPE,
+    POLARIS_VACUUM_03_WATER_TYPE,
+    POLARIS_VACUUM_04_WATER_TYPE,
+    VACUUM_01_WATER,
+    VACUUM_02_WATER,
+    VACUUM_03_WATER,
+    VACUUM_04_WATER
 )
 
 
@@ -159,21 +204,22 @@ async def async_setup_entry(
                 )
             )
     if (device_type in POLARIS_VACUUM_TYPE):
-        SELECT_VACUUM_LC = copy.deepcopy(SELECT_VACUUM)
-        for description in SELECT_VACUUM_LC:
-            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
-            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
-            description.device_prefix_topic = device_prefix_topic
-            selectList.append(
-                PolarisSelect(
-                    description=description,
-                    device_friendly_name=device_id,
-                    mqtt_root=mqtt_root,
-                    device_type=device_type,
-                    device_id=device_id,
-                    custom_data_select=custom_data_select
+        if (int(device_type) not in POLARIS_VACUUM_NOT_WATER_TYPE or description.translation_key != "vacuum_tank"):
+            SELECT_VACUUM_LC = copy.deepcopy(SELECT_VACUUM)
+            for description in SELECT_VACUUM_LC:
+                description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+                description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+                description.device_prefix_topic = device_prefix_topic
+                selectList.append(
+                    PolarisSelect(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id,
+                        custom_data_select=custom_data_select
+                    )
                 )
-            )
     if (device_type in POLARIS_IRRIGATOR_TYPE):
         SELECT_IRRIGATOR_LC = copy.deepcopy(SELECT_IRRIGATOR)
         for description in SELECT_IRRIGATOR_LC:
@@ -312,7 +358,54 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
 #                self.entity_description.options = json.loads(json.dumps(self.entity_description.options))
                 for key, value in self._custom_data_select["SELECT_VACUUM_rooms"].items():
                     self.entity_description.options[key] = json.dumps([value])
+        if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner" and self.entity_description.key == "select_mode_vacuum":
+            if int(self.device_type) in POLARIS_VACUUM_01_MODE_TYPE:
+                self.entity_description.options = VACUUM_01_MODE
+            if int(self.device_type) in POLARIS_VACUUM_02_MODE_TYPE:
+                self.entity_description.options = VACUUM_02_MODE
+            if int(self.device_type) in POLARIS_VACUUM_03_MODE_TYPE:
+                self.entity_description.options = VACUUM_03_MODE
+            if int(self.device_type) in POLARIS_VACUUM_04_MODE_TYPE:
+                self.entity_description.options = VACUUM_04_MODE
+            if int(self.device_type) in POLARIS_VACUUM_05_MODE_TYPE:
+                self.entity_description.options = VACUUM_05_MODE
+            if int(self.device_type) in POLARIS_VACUUM_06_MODE_TYPE:
+                self.entity_description.options = VACUUM_06_MODE
+            if int(self.device_type) in POLARIS_VACUUM_07_MODE_TYPE:
+                self.entity_description.options = VACUUM_07_MODE
+            if int(self.device_type) in POLARIS_VACUUM_08_MODE_TYPE:
+                self.entity_description.options = VACUUM_08_MODE
+            if int(self.device_type) in POLARIS_VACUUM_09_MODE_TYPE:
+                self.entity_description.options = VACUUM_09_MODE
+            if int(self.device_type) in POLARIS_VACUUM_10_MODE_TYPE:
+                self.entity_description.options = VACUUM_10_MODE
+            if int(self.device_type) in POLARIS_VACUUM_11_MODE_TYPE:
+                self.entity_description.options = VACUUM_11_MODE
+            if int(self.device_type) in POLARIS_VACUUM_12_MODE_TYPE:
+                self.entity_description.options = VACUUM_12_MODE
+            if int(self.device_type) in POLARIS_VACUUM_13_MODE_TYPE:
+                self.entity_description.options = VACUUM_13_MODE
+            if int(self.device_type) in POLARIS_VACUUM_14_MODE_TYPE:
+                self.entity_description.options = VACUUM_14_MODE
+            if int(self.device_type) in POLARIS_VACUUM_15_MODE_TYPE:
+                self.entity_description.options = VACUUM_15_MODE
+            if int(self.device_type) in POLARIS_VACUUM_16_MODE_TYPE:
+                self.entity_description.options = VACUUM_16_MODE
+            if int(self.device_type) in POLARIS_VACUUM_17_MODE_TYPE:
+                self.entity_description.options = VACUUM_17_MODE
+            if int(self.device_type) in POLARIS_VACUUM_18_MODE_TYPE:
+                self.entity_description.options = VACUUM_18_MODE
 
+        if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner" and self.entity_description.key == "vacuum_tank":
+            if int(self.device_type) in POLARIS_VACUUM_01_WATER_TYPE:
+                self.entity_description.options = VACUUM_01_WATER
+            if int(self.device_type) in POLARIS_VACUUM_02_WATER_TYPE:
+                self.entity_description.options = VACUUM_02_WATER
+            if int(self.device_type) in POLARIS_VACUUM_03_WATER_TYPE:
+                self.entity_description.options = VACUUM_03_WATER
+            if int(self.device_type) in POLARIS_VACUUM_04_WATER_TYPE:
+                self.entity_description.options = VACUUM_04_WATER
+        
         self._attr_options = list(self.entity_description.options.keys())
         self._attr_current_option = self._attr_options[0]
         self._attr_available = False
@@ -429,7 +522,9 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
         if (self.device_type == "826" and self._EAP_data0[:2] == "02"):
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self._EAP_data0[:3] + str(self.entity_description.options[option]))
-
+        if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner":
+            if int(self.device_type) not in POLARIS_VACUUM_NOT_WATER_TYPE:
+                mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, str(self.entity_description.options[option]))
 
 
 
@@ -475,6 +570,9 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_1[0] == "a" else self._preset_1[0])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
+            else:
+                self._attr_current_option = list(self.entity_description.options.keys())[list(self.entity_description.options.values()).index(payload)]
+                self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentMode, message_received_sel, 1)
         
         @callback

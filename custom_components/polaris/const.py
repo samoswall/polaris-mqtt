@@ -251,7 +251,6 @@ POLARIS_DEVICE = {
     16:  {"model": "PHV-1401", "class": "heater"},
     49:  {"model": "PMH-21XX", "class": "heater"},
     64:  {"model": "PMH-21XX", "class": "heater"},
-    246: {"model": "PRWC-3001", "class": "cleaner"},
     101: {"model": "PVCR-0726-Aqua", "class": "cleaner"},
     108: {"model": "PVCR-0726-GYRO", "class": "cleaner"},
     21:  {"model": "PVCR-0735", "class": "cleaner"},
@@ -325,6 +324,7 @@ POLARIS_DEVICE = {
     219: {"model": "PVCR-G2-5001", "class": "cleaner"},
     220: {"model": "PVCR-G2-6001", "class": "cleaner"},
     100: {"model": "PVCR-Wave-15", "class": "cleaner"},
+    246: {"model": "PRWC-3001", "class": "window_cleaner"},
     93:  {"model": "PHB-1350-WIFI", "class": "blender"},
     35:  {"model": "PHB-1503-WIFI", "class": "blender"},
     34:  {"model": "PHB-1551-WIFI", "class": "blender"},
@@ -423,7 +423,7 @@ POLARIS_COFFEEMAKER_ROG_TYPE = ["45", "190", "207", "222", "235", "247", "274", 
 POLARIS_CLIMATE_TYPE = ["69", "869", "859"]
 POLARIS_AIRCLEANER_TYPE = ["140", "151", "152", "172", "203", "204", "236", "238", "239", "250", "251"]
 POLARIS_AIRCLEANER_EAP_TYPE = ["826"]
-POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","246"]
+POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","256","257","264","269","307"]
 POLARIS_BOILER_TYPE = ["802","833","844","876"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
@@ -466,6 +466,79 @@ AIRFRYER_2_MODES = {
             "bacon": "[{\"mode\":14, \"time\":420, \"temperature\":180}]",
             "shrimps": "[{\"mode\":15, \"time\":840, \"temperature\":190}]",
         }
+
+POLARIS_VACUUM_01_MODE_TYPE = [7, 22, 23, 24, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112]
+POLARIS_VACUUM_02_MODE_TYPE = [12]
+POLARIS_VACUUM_03_MODE_TYPE = [19, 43]
+POLARIS_VACUUM_04_MODE_TYPE = [21, 68, 122, 130, 133, 134, 135, 163, 193]
+POLARIS_VACUUM_05_MODE_TYPE = [66, 113, 131, 142, 195, 197]
+POLARIS_VACUUM_06_MODE_TYPE = [76, 115]
+POLARIS_VACUUM_07_MODE_TYPE = [104, 126]
+POLARIS_VACUUM_08_MODE_TYPE = [119, 123, 124, 125]
+POLARIS_VACUUM_09_MODE_TYPE = [127]
+POLARIS_VACUUM_10_MODE_TYPE = [128]
+POLARIS_VACUUM_11_MODE_TYPE = [129]
+POLARIS_VACUUM_12_MODE_TYPE = [146, 148, 149, 150, 154, 201, 202, 213, 217, 218, 219, 220, 221]
+POLARIS_VACUUM_13_MODE_TYPE = [156, 160]
+POLARIS_VACUUM_14_MODE_TYPE = [178]
+POLARIS_VACUUM_15_MODE_TYPE = [181, 242, 307]
+POLARIS_VACUUM_16_MODE_TYPE = [186, 187, 256, 257]
+POLARIS_VACUUM_17_MODE_TYPE = [198, 264]
+POLARIS_VACUUM_18_MODE_TYPE = [199, 211, 212, 241, 269]
+
+VACUUM_01_MODE = {"off": "0","random": "1","auto": "2","wall": "3","spiral": "4","recharge": "5"}
+VACUUM_02_MODE = {"off": "0","wall": "1","spot": "2","auto": "3","recharge": "4","wet_cleaning": "5"}
+VACUUM_03_MODE = {"off": "0","auto": "3","edge": "4","spot": "5","recharge": "8"}
+VACUUM_04_MODE = {"off": "0","auto": "3","edge": "4","spot": "5","classic": "6","recharge": "8"}
+VACUUM_05_MODE = {"off": "0","auto": "3","edge": "4","spot": "5","recharge": "8","intensive_cleaning_area": "13","create_map": "22","mapmaking_and_cleaning": "23","scheduled_room_cleaning": "24"}
+VACUUM_06_MODE = {"off": "0","random": "1","auto": "2","wall": "3","spiral": "4","recharge": "5"}
+VACUUM_07_MODE = {"off": "0","auto": "1","recharge": "2","area_cleaning": "3"}
+VACUUM_08_MODE = {"off": "0","auto": "1","spot": "2","recharge": "3","area_cleaning": "4"}
+VACUUM_09_MODE = {"off": "0","random": "1","auto": "2","wall": "3","spiral": "4","recharge": "5","y_shaped_wet_cleaning": "6","double_cleaning": "7"}
+VACUUM_10_MODE = {"off": "0","auto": "1","recharge": "2","area_cleaning": "3","create_map": "4","cleaning_the_rag": "5","scheduled_room_cleaning": "6","spot": "7"}
+VACUUM_11_MODE = {"off": "0","auto": "2","wall": "3","spiral": "4","recharge": "5"}
+VACUUM_12_MODE = {"off": "0","auto": "1","spot": "2","recharge": "3","area_cleaning": "4","scheduled_room_cleaning": "5"}
+VACUUM_13_MODE = {"off": "0","auto": "1","recharge": "2","area_cleaning": "3","scheduled_room_cleaning": "6"}
+VACUUM_14_MODE = {"off": "0","auto": "1","spot": "2","recharge": "3","area_cleaning": "4","scheduled_room_cleaning": "5","mop_cleaning": "6","mop_drying": "7","self_cleaning": "8","create_map": "9","quick_cleaning": "10","thorough_cleaning": "11"}
+VACUUM_15_MODE = {"off": "0","auto": "1","spot": "2","recharge": "3","area_cleaning": "4","scheduled_room_cleaning": "5","create_map": "6","thorough_cleaning": "7","quick_cleaning": "8"}
+VACUUM_16_MODE = {"off": "0","edge": "4","spot": "5","auto": "6","recharge": "8","intensive_cleaning_area": "13","area_cleaning": "19","create_map": "22","mapmaking_and_cleaning": "23","scheduled_room_cleaning": "24","quick_cleaning": "25","thorough_cleaning": "26"}
+VACUUM_17_MODE = {"off": "0","auto": "1","sweep": "2","sweep_mop": "3","mop": "4","recharge": "5","create_map": "7","scheduled_room_cleaning": "8","mop_cleaning": "9","mop_drying": "10","wall": "11","cut_hair": "12"}
+VACUUM_18_MODE = {"off": "0","auto": "1","sweep": "2","sweep_mop": "3","mop": "4","recharge": "5","create_map": "7","scheduled_room_cleaning": "8"}
+
+POLARIS_VACUUM_01_SPEED_TYPE = [12, 19, 21, 43, 68, 163]
+POLARIS_VACUUM_02_SPEED_TYPE = [7, 22, 23, 24, 66, 76, 113, 115, 122, 130, 131, 133, 134, 135, 142, 193, 197]
+POLARIS_VACUUM_03_SPEED_TYPE = [195, 212]
+POLARIS_VACUUM_04_SPEED_TYPE = [186, 187, 256, 257, 264]
+POLARIS_VACUUM_05_SPEED_TYPE = [81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 127]
+POLARIS_VACUUM_06_SPEED_TYPE = [104, 119, 123, 124, 125, 126, 128, 129, 146, 148, 149, 150, 154, 156, 160, 178, 181, 198, 199, 201, 202, 211, 213, 217, 218, 219, 220, 221, 241, 242, 269, 307]
+
+VACUUM_01_SPEED = {"low": "0", "high": "1"}
+VACUUM_02_SPEED = {"low": "0", "medium": "1", "high": "2"}
+VACUUM_03_SPEED = {"low": "0", "medium": "1", "high": "2", "max": "3"}
+VACUUM_04_SPEED = {"min": "0", "low": "1", "medium": "2", "high": "3", "max": "4"}
+VACUUM_05_SPEED = {"low": "1", "medium": "2", "high": "3"}
+VACUUM_06_SPEED = {"low": "1", "medium": "2", "high": "3", "max": "4"}
+
+POLARIS_VACUUM_NOT_WATER_TYPE = [19, 23, 43]
+POLARIS_VACUUM_01_WATER_TYPE = [22, 24]
+POLARIS_VACUUM_02_WATER_TYPE = [7, 76, 115, 199, 211, 212, 241, 269]
+POLARIS_VACUUM_03_WATER_TYPE = [12, 21, 66, 68, 81, 88, 100, 101, 102, 104, 107, 108, 109, 110, 112, 113, 119, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 133, 134, 135, 142, 146, 148, 149, 150, 154, 156, 160, 163, 178, 181, 193, 197, 198, 201, 202, 213, 217, 218, 219, 220, 221, 242, 264, 307]
+POLARIS_VACUUM_04_WATER_TYPE = [186, 187, 195, 256, 257]
+
+VACUUM_01_WATER = {"low": "0", "high": "1"}
+VACUUM_02_WATER = {"low": "0", "medium": "1", "high": "2"}
+VACUUM_03_WATER = {"low": "1", "medium": "2", "high": "3"}
+VACUUM_04_WATER = {"low": "0", "medium": "1", "high": "2", "max": "3"}
+
+POLARIS_VACUUM_SWITCH_CHILD_LOCK = [7, 12, 22, 23, 24, 76, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 115, 127, 129, 241, 256, 257, 269]
+POLARIS_VACUUM_SWITCH_VOLUME = [12, 66, 104, 113, 119, 123, 124, 125, 126, 128, 129, 131, 142, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 197, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
+POLARIS_VACUUM_SWITCH_TURBO = [81, 88, 100, 101, 102, 104, 107, 108, 109, 110, 112, 119, 123, 124, 125, 126, 127, 128, 129, 142, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
+POLARIS_VACUUM_SWITCH_IONISER = [104, 126, 128, 156, 160, 178, 181, 186, 198, 199, 211, 212, 241, 242, 257, 264, 269, 307]
+POLARIS_VACUUM_SWITCH_STREAM_WARM = [178, 181, 186, 187, 199, 211, 241, 242, 256, 257, 269, 307]
+POLARIS_VACUUM_SWITCH_BACKLIGHT = [186, 187, 256, 257]
+
+POLARIS_VACUUM_EXPENDABLE_DUST = [7, 12, 19, 21, 22, 23, 24, 43, 66, 68, 76, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 113, 115, 122, 127, 130, 131, 133, 134, 135, 163, 193, 197]
+POLARIS_VACUUM_EXPENDABLE_MOP = [104, 119, 123, 124, 125, 126, 128, 129, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
 
 KETTLE_ERROR = {
 "00": "no_error",
@@ -525,21 +598,468 @@ AIRCLEANER_ERROR = {
 "02": "child_lock"
 }
 
-VACUUM_ERROR = {
-"00": "no_error",
-"01": "Cliff error",
-"02": "Check front collision plate",
-"04": "Check wheels",
-"08": "Check edge brushes",
-"10": "Change side brushes",
-"11": "Change the main brush",
-"12": "Change filter",
-"13": "Empty the dust bin",
-"16": "Check fan motor",
-"22": "The robot is not on the floor",
-"32": "Check roll brush",
-"64": "Low batttery"
+POLARIS_VACUUM_01_ERROR_CODE = [7, 22, 23, 24, 76, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 115, 127]
+POLARIS_VACUUM_02_ERROR_CODE = [12, 19, 21, 43, 66, 68, 113, 122, 130, 131, 133, 134, 135, 142, 163, 193, 195, 197]
+POLARIS_VACUUM_03_ERROR_CODE = [119, 123, 124, 125, 146, 148, 149, 150, 154, 201, 202, 213, 217, 218, 219, 220, 221]
+POLARIS_VACUUM_04_ERROR_CODE = [104, 126, 128, 156, 160]
+POLARIS_VACUUM_05_ERROR_CODE = [181, 242]
+POLARIS_VACUUM_06_ERROR_CODE = [178]
+POLARIS_VACUUM_07_ERROR_CODE = [198, 199, 211, 241, 264, 269]
+POLARIS_VACUUM_08_ERROR_CODE = [212]
+POLARIS_VACUUM_09_ERROR_CODE = [186, 187, 256, 257]
+POLARIS_VACUUM_10_ERROR_CODE = [129]
+POLARIS_VACUUM_11_ERROR_CODE = [307]
+
+
+VACUUM_01_ERROR = {
+  "0":"no_error",
+  "1":"v01_error_1",
+  "2":"v01_error_2",
+  "4":"v01_error_4",
+  "8":"v01_error_8",
+  "10":"v01_error_10",
+  "11":"v01_error_11",
+  "12":"v01_error_12",
+  "13":"v01_error_13",
+  "16":"v01_error_16",
+  "22":"v01_error_22",
+  "32":"v01_error_32",
+  "64":"v01_error_64",
+  "128":"v01_error_128"
 }
+VACUUM_02_ERROR = { 
+  "0":"no_error", 
+  "2":"v02_error_2",
+  "4":"v02_error_4",
+  "5":"v02_error_5",
+  "6":"v02_error_6",
+  "7":"v02_error_7",
+  "9":"v02_error_9",
+  "10":"v02_error_10",
+  "11":"v02_error_11",
+  "12":"v02_error_12",
+  "13":"v02_error_13",
+  "21":"v02_error_21",
+  "22":"v02_error_22",
+  "23":"v02_error_23",
+  "30":"v02_error_30",
+  "31":"v02_error_31",
+  "32":"v02_error_32",
+  "33":"v02_error_33",
+  "40":"v02_error_40"
+}
+VACUUM_03_ERROR = {
+  "0":"no_error",
+  "2":"v03_error_2",
+  "3":"v03_error_3",
+  "4":"v03_error_4",
+  "6":"v03_error_6",
+  "7":"v03_error_7",
+  "8":"v03_error_8",
+  "9":"v03_error_9",
+  "10":"v03_error_10",
+  "12":"v03_error_12",
+  "13":"v03_error_13",
+  "14":"v03_error_14",
+  "15":"v03_error_15",
+  "16":"v03_error_16",
+  "18":"v03_error_18",
+  "19":"v03_error_19",
+  "20":"v03_error_20",
+  "22":"v03_error_22",
+  "24":"v03_error_24",
+  "25":"v03_error_25",
+  "26":"v03_error_26",
+  "27":"v03_error_27",
+  "28":"v03_error_28",
+  "31":"v03_error_31",
+  "32":"v03_error_32",
+  "33":"v03_error_33",
+  "34":"v03_error_34",
+  "35":"v03_error_35",
+  "36":"v03_error_36",
+  "37":"v03_error_37",
+  "38":"v03_error_38",
+  "39":"v03_error_39",
+  "40":"v03_error_40",
+  "41":"v03_error_41",
+  "42":"v03_error_42",
+  "44":"v03_error_44",
+  "45":"v03_error_45",
+  "46":"v03_error_46",
+  "47":"v03_error_47",
+  "48":"v03_error_48",
+  "53":"v03_error_53"
+}
+VACUUM_04_ERROR = {
+  "0":"no_error",
+  "1":"v04_error_1",
+  "2":"v04_error_2",
+  "3":"v04_error_3",
+  "4":"v04_error_4",
+  "5":"v04_error_5",
+  "6":"v04_error_6",
+  "8":"v04_error_8",
+  "9":"v04_error_9",
+  "10":"v04_error_10",
+  "11":"v04_error_11",
+  "12":"v04_error_12",
+  "13":"v04_error_13",
+  "14":"v04_error_14",
+  "15":"v04_error_15",
+  "16":"v04_error_16",
+  "17":"v04_error_17",
+  "21":"v04_error_21",
+  "22":"v04_error_22",
+  "23":"v04_error_23",
+  "24":"v04_error_24",
+  "25":"v04_error_25",
+  "26":"v04_error_26",
+  "27":"v04_error_27",
+  "28":"v04_error_28",
+  "29":"v04_error_29",
+  "30":"v04_error_30",
+  "31":"v04_error_31",
+  "32":"v04_error_32",
+  "40":"v04_error_40",
+  "41":"v04_error_41",
+  "42":"v04_error_42",
+  "43":"v04_error_43",
+  "51":"v04_error_51",
+  "52":"v04_error_52",
+  "53":"v04_error_53",
+  "54":"v04_error_54",
+  "55":"v04_error_55",
+  "56":"v04_error_56",
+  "57":"v04_error_57",
+  "58":"v04_error_58",
+  "59":"v04_error_59",
+  "60":"v04_error_60",
+  "61":"v04_error_61",
+  "62":"v04_error_62",
+  "63":"v04_error_63",
+  "64":"v04_error_64",
+  "65":"v04_error_65",
+  "66":"v04_error_66",
+  "67":"v04_error_67"
+}
+VACUUM_05_ERROR = {
+  "0":"no_error",
+  "1":"v05_error_1",
+  "2":"v05_error_2",
+  "4":"v05_error_4",
+  "6":"v05_error_6",
+  "7":"v05_error_7",
+  "8":"v05_error_8",
+  "9":"v05_error_9",
+  "10":"v05_error_10",
+  "12":"v05_error_12",
+  "13":"v05_error_13",
+  "14":"v05_error_14",
+  "15":"v05_error_15",
+  "16":"v05_error_16",
+  "17":"v05_error_17",
+  "18":"v05_error_18",
+  "19":"v05_error_19",
+  "21":"v05_error_21",
+  "22":"v05_error_22",
+  "23":"v05_error_23",
+  "24":"v05_error_24",
+  "25":"v05_error_25",
+  "26":"v05_error_26",
+  "41":"v05_error_41",
+  "42":"v05_error_42",
+  "43":"v05_error_43",
+  "44":"v05_error_44",
+  "45":"v05_error_45",
+  "46":"v05_error_46",
+  "47":"v05_error_47",
+  "48":"v05_error_48",
+  "49":"v05_error_49",
+  "50":"v05_error_50",
+  "51":"v05_error_51",
+  "52":"v05_error_52",
+  "53":"v05_error_53",
+  "54":"v05_error_54",
+  "55":"v05_error_55",
+  "57":"v05_error_57",
+  "69":"v05_error_69",
+  "70":"v05_error_70"
+}
+VACUUM_06_ERROR = {
+  "0":"no_error",
+  "1":"v06_error_1",
+  "2":"v06_error_2",
+  "3":"v06_error_3",
+  "4":"v06_error_4",
+  "5":"v06_error_5",
+  "6":"v06_error_6",
+  "7":"v06_error_7",
+  "8":"v06_error_8",
+  "9":"v06_error_9",
+  "10":"v06_error_10",
+  "11":"v06_error_11",
+  "12":"v06_error_12",
+  "13":"v06_error_13",
+  "14":"v06_error_14",
+  "15":"v06_error_15",
+  "16":"v06_error_16",
+  "17":"v06_error_17",
+  "18":"v06_error_18",
+  "19":"v06_error_19",
+  "20":"v06_error_20",
+  "21":"v06_error_21",
+  "22":"v06_error_22",
+  "23":"v06_error_23",
+  "24":"v06_error_24",
+  "25":"v06_error_25",
+  "26":"v06_error_26",
+  "27":"v06_error_27",
+  "28":"v06_error_28",
+  "29":"v06_error_29",
+  "30":"v06_error_30",
+  "31":"v06_error_31",
+  "32":"v06_error_32",
+  "33":"v06_error_33",
+  "34":"v06_error_34",
+  "35":"v06_error_35",
+  "36":"v06_error_36",
+  "37":"v06_error_37",
+  "38":"v06_error_38",
+  "39":"v06_error_39",
+  "47":"v06_error_47",
+  "48":"v06_error_48",
+  "52":"v06_error_52",
+  "53":"v06_error_53",
+  "55":"v06_error_55",
+  "58":"v06_error_58",
+  "59":"v06_error_59",
+  "60":"v06_error_60",
+  "61":"v06_error_61",
+  "62":"v06_error_62",
+  "63":"v06_error_63",
+  "64":"v06_error_64",
+  "65":"v06_error_65",
+  "66":"v06_error_66",
+  "67":"v06_error_67",
+  "68":"v06_error_68",
+  "69":"v06_error_69",
+  "70":"v06_error_70",
+  "73":"v06_error_73",
+  "74":"v06_error_74",
+  "75":"v06_error_75",
+  "76":"v06_error_76",
+  "77":"v06_error_77",
+  "78":"v06_error_78",
+  "79":"v06_error_79",
+  "80":"v06_error_80",
+  "81":"v06_error_81",
+  "82":"v06_error_82",
+  "83":"v06_error_83",
+  "84":"v06_error_84",
+  "86":"v06_error_86",
+  "87":"v06_error_87",
+  "88":"v06_error_88",
+  "89":"v06_error_89",
+  "90":"v06_error_90",
+  "91":"v06_error_91",
+  "92":"v06_error_92",
+  "93":"v06_error_93",
+  "94":"v06_error_94",
+  "95":"v06_error_95",
+  "96":"v06_error_96",
+  "97":"v06_error_97",
+  "101":"v06_error_101",
+  "102":"v06_error_102",
+  "103":"v06_error_103",
+  "104":"v06_error_104",
+  "105":"v06_error_105",
+  "106":"v06_error_106",
+  "121":"v06_error_121",
+  "122":"v06_error_122",
+  "131":"v06_error_131"
+}  
+VACUUM_07_ERROR = {
+  "0":"no_error",
+  "1":"v07_error_1",
+  "2":"v07_error_2",
+  "3":"v07_error_3",
+  "4":"v07_error_4",
+  "5":"v07_error_5",
+  "6":"v07_error_6",
+  "7":"v07_error_7",
+  "8":"v07_error_8",
+  "9":"v07_error_9",
+  "10":"v07_error_10",
+  "11":"v07_error_11",
+  "12":"v07_error_12",
+  "13":"v07_error_13",
+  "14":"v07_error_14",
+  "15":"v07_error_15",
+  "16":"v07_error_16",
+  "17":"v07_error_17",
+  "18":"v07_error_18",
+  "19":"v07_error_19",
+  "20":"v07_error_20",
+  "21":"v07_error_21",
+  "22":"v07_error_22",
+  "23":"v07_error_23",
+  "24":"v07_error_24",
+  "25":"v07_error_25",
+  "26":"v07_error_26",
+  "27":"v07_error_27",
+  "28":"v07_error_28",
+  "29":"v07_error_29",
+  "30":"v07_error_30",
+  "31":"v07_error_31",
+  "32":"v07_error_32",
+  "33":"v07_error_33",
+  "34":"v07_error_34",
+  "35":"v07_error_35"
+}  
+VACUUM_08_ERROR = {
+  "0":"no_error",
+  "1":"v08_error_1",
+  "2":"v08_error_2",
+  "3":"v08_error_3",
+  "4":"v08_error_4",
+  "5":"v08_error_5",
+  "6":"v08_error_6",
+  "7":"v08_error_7",
+  "8":"v08_error_8",
+  "9":"v08_error_9",
+  "10":"v08_error_10",
+  "11":"v08_error_11",
+  "12":"v08_error_12",
+  "13":"v08_error_13",
+  "14":"v08_error_14",
+  "15":"v08_error_15",
+  "16":"v08_error_16",
+  "17":"v08_error_17",
+  "18":"v08_error_18",
+  "19":"v08_error_19",
+  "20":"v08_error_20",
+  "21":"v08_error_21",
+  "22":"v08_error_22",
+  "23":"v08_error_23",
+  "24":"v08_error_24",
+  "25":"v08_error_25",
+  "26":"v08_error_26",
+  "27":"v08_error_27",
+  "28":"v08_error_28",
+  "29":"v08_error_29",
+  "30":"v08_error_30",
+  "31":"v08_error_31",
+  "32":"v08_error_32",
+  "33":"v08_error_33",
+  "34":"v08_error_34",
+  "35":"v08_error_35",
+  "36":"v08_error_36",
+  "37":"v08_error_37",
+  "38":"v08_error_38",
+  "39":"v08_error_39",
+  "40":"v08_error_40",
+  "50":"v08_error_50"
+}  
+VACUUM_09_ERROR = {
+  "0":"no_error",
+  "1":"v09_error_1",
+  "4":"v09_error_4",
+  "5":"v09_error_5",
+  "9":"v09_error_9",
+  "10":"v09_error_10",
+  "11":"v09_error_11",
+  "12":"v09_error_12",
+  "13":"v09_error_13",
+  "16":"v09_error_16",
+  "20":"v09_error_20",
+  "21":"v09_error_21",
+  "23":"v09_error_23",
+  "30":"v09_error_30",
+  "31":"v09_error_31",
+  "32":"v09_error_32",
+  "33":"v09_error_33",
+  "100":"v09_error_100",
+  "200":"v09_error_200"
+} 
+VACUUM_10_ERROR = {
+  "0":"no_error",
+  "1":"v10_error_1",
+  "2":"v10_error_2",
+  "3":"v10_error_3",
+  "4":"v10_error_4",
+  "5":"v10_error_5",
+  "6":"v10_error_6",
+  "7":"v10_error_7",
+  "8":"v10_error_8",
+  "9":"v10_error_9",
+  "10":"v10_error_10",
+  "11":"v10_error_11",
+  "12":"v10_error_12",
+  "13":"v10_error_13",
+  "14":"v10_error_14",
+  "15":"v10_error_15",
+  "16":"v10_error_16",
+  "17":"v10_error_17",
+  "18":"v10_error_18",
+  "19":"v10_error_19",
+  "20":"v10_error_20",
+  "21":"v10_error_21",
+  "22":"v10_error_22",
+  "23":"v10_error_23",
+  "24":"v10_error_24",
+  "25":"v10_error_25",
+  "50":"v10_error_50",
+  "51":"v10_error_51",
+  "52":"v10_error_52",
+  "53":"v10_error_53",
+  "54":"v10_error_54",
+  "55":"v10_error_55",
+  "56":"v10_error_56"
+} 
+VACUUM_11_ERROR = {
+  "0":"no_error",
+  "2":"v11_error_2",
+  "3":"v11_error_3",
+  "4":"v11_error_4",
+  "5":"v11_error_5",
+  "7":"v11_error_7",
+  "8":"v11_error_8",
+  "9":"v11_error_9",
+  "10":"v11_error_10",
+  "11":"v11_error_11",
+  "12":"v11_error_12",
+  "13":"v11_error_13",
+  "14":"v11_error_14",
+  "15":"v11_error_15",
+  "18":"v11_error_18",
+  "19":"v11_error_19",
+  "20":"v11_error_20",
+  "21":"v11_error_21",
+  "40":"v11_error_40",
+  "41":"v11_error_41",
+  "42":"v11_error_42",
+  "43":"v11_error_43",
+  "45":"v11_error_45",
+  "47":"v11_error_47",
+  "52":"v11_error_52",
+  "55":"v11_error_55",
+  "59":"v11_error_59",
+  "61":"v11_error_61",
+  "62":"v11_error_62",
+  "63":"v11_error_63",
+  "64":"v11_error_64",
+  "65":"v11_error_65",
+  "81":"v11_error_81",
+  "82":"v11_error_82",
+  "83":"v11_error_83",
+  "84":"v11_error_84",
+  "85":"v11_error_85",
+  "88":"v11_error_88",
+  "91":"v11_error_91",
+  "94":"v11_error_94"
+}
+
 
 @dataclass
 class PolarisSensorEntityDescription(SensorEntityDescription):
@@ -1094,11 +1614,80 @@ SENSORS_VACUUM = [
     PolarisSensorEntityDescription(
         key="battery",
         name="battery",
-        translation_key="battery",
+        translation_key="vacuum_battery",
         device_class=SensorDeviceClass.BATTERY,
         native_unit_of_measurement=PERCENTAGE,
         state_class=None,
         entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    PolarisSensorEntityDescription(
+        key="battery_state",
+        name="battery_state",
+        translation_key="vacuum_battery_state",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:battery",
+    ),
+        PolarisSensorEntityDescription(
+        key="expendables",
+        name="side_brush",
+        translation_key="vacuum_side_brush",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:asterisk",
+    ),
+    PolarisSensorEntityDescription(
+        key="expendables",
+        name="main_brush",
+        translation_key="vacuum_main_brush",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:broom",
+    ),
+    PolarisSensorEntityDescription(
+        key="expendables",
+        name="filter",
+        translation_key="vacuum_filter",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:air-filter",
+    ),
+]
+SENSOR_VACUUM_EXPENDABLE_MOP = [
+        PolarisSensorEntityDescription(
+        key="expendables",
+        name="mop",
+        translation_key="vacuum_mop",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:liquid-spot",
+    ),
+]
+SENSOR_VACUUM_EXPENDABLE_DUST = [
+    PolarisSensorEntityDescription(
+        key="expendables",
+        name="dust_container",
+        translation_key="vacuum_dust_container",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:pail",
     ),
 ]
 
@@ -1792,7 +2381,6 @@ SWITCHES_VACUUM = [
         device_class=SwitchDeviceClass.SWITCH,
         payload_on="true",
         payload_off="false",
-#        icon="mdi:alarm-light",
     ),
     PolarisSwitchEntityDescription(
         key="ioniser",
@@ -1816,6 +2404,40 @@ SWITCHES_VACUUM = [
         device_class=SwitchDeviceClass.SWITCH,
         payload_on="true",
         payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="child_lock",
+        translation_key="child_lock_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Child lock",
+        mqttTopicCommand="control/child_lock",
+        mqttTopicCurrentValue="state/child_lock",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="backlight",
+        translation_key="backlight_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Backlight",
+        mqttTopicCommand="control/backlight",
+        mqttTopicCurrentValue="state/backlight",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="stream_warm",
+        translation_key="stream_warm_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Stream warm",
+        mqttTopicCommand="control/warm_stream",
+        mqttTopicCurrentValue="state/warm_stream",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:heat-wave",
     ),
 ]
 
@@ -2948,17 +3570,10 @@ SELECT_VACUUM = [
     PolarisSelectEntityDescription(
         key="select_mode_vacuum",
         name="select_mode_vacuum",
-        translation_key="select_mode",
+        translation_key="select_mode_vacuum",
         mqttTopicCurrentMode="state/mode",
         mqttTopicCommandMode="control/mode",
-        options={
-          "mode0": 0,
-          "mode1": 1,
-          "mode2": 2,
-          "mode3": 3,
-          "mode4": 4,
-          "mode5": 5,
-        },
+        options={"mode0": 0, "mode1": 1, "mode2": 2, "mode3": 3, "mode4": 4, "mode5": 5},
         entity_category=EntityCategory.CONFIG,
         device_class=None,
         icon="mdi:vacuum",
@@ -2971,11 +3586,23 @@ SELECT_VACUUM = [
         mqttTopicCurrentMode="control/room",
         mqttTopicCommandMode="control/room",
         options={
-          "All_rooms": {"id": "00", "coordinate": []}
+          "all_rooms": {"id": "00", "coordinate": []}
         },
         entity_category=EntityCategory.CONFIG,
         device_class=None,
-        icon="mdi:vacuum",
+        icon="mdi:broom",
+        entity_registry_enabled_default=True,
+    ),
+    PolarisSelectEntityDescription(
+        key="vacuum_tank",
+        name="vacuum_tank",
+        translation_key="vacuum_tank",
+        mqttTopicCurrentMode="state/tank",
+        mqttTopicCommandMode="control/tank",
+        options={"low": "0", "high": "1"},
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        icon="mdi:water",
         entity_registry_enabled_default=True,
     )
 ]
@@ -3549,8 +4176,8 @@ class PolarisVacuumEntityDescription(ClimateEntityDescription):
     fan_modes: str | None = None
     mqttTopicCommandMode: str | None = None
     mqttTopicCurrentMode: str | None = None
-    mqttTopicBatteryState: str | None = None
-    mqttTopicBatteryLevel: str | None = None
+    mqttTopicCommandTank: str | None = None
+    mqttTopicStateTank: str | None = None
     mqttTopicStateFanMode: str | None = None
     mqttTopicCommandFanMode: str | None = None
     mqttTopicCommandFindMe: str | None = None
@@ -3565,8 +4192,8 @@ VACUUM = [
         mqttTopicCurrentMode = "state/mode",
         mqttTopicStateFanMode = "state/suction",
         mqttTopicCommandFanMode = "control/suction",
-        mqttTopicBatteryLevel = "state/battery",
-        mqttTopicBatteryState = "state/battery_state",
+        mqttTopicCommandTank = "control/tank",
+        mqttTopicStateTank = "state/tank",
         mqttTopicCommandFindMe = "control/find_me",
         mqttTopicCommandGoArea = "control/go_area",
         device_class = None,

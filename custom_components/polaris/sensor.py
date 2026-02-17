@@ -40,6 +40,8 @@ from .const import (
     SENSORS_HEATER,
     SENSORS_AIRCONDITIONER,
     SENSORS_THERMOSTAT,
+    SENSOR_VACUUM_EXPENDABLE_MOP,
+    SENSOR_VACUUM_EXPENDABLE_DUST,
     PolarisSensorEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -51,6 +53,8 @@ from .const import (
     POLARIS_AIRCLEANER_TYPE,
     POLARIS_AIRCLEANER_EAP_TYPE,
     POLARIS_VACUUM_TYPE,
+    POLARIS_VACUUM_EXPENDABLE_DUST,
+    POLARIS_VACUUM_EXPENDABLE_MOP,
     POLARIS_BOILER_TYPE,
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_HEATER_TYPE,
@@ -61,7 +65,26 @@ from .const import (
     COOKER_ERROR,
     COFFEEMAKER_ERROR,
     AIRCLEANER_ERROR,
-    VACUUM_ERROR
+    POLARIS_VACUUM_01_ERROR_CODE,
+    POLARIS_VACUUM_02_ERROR_CODE,
+    POLARIS_VACUUM_03_ERROR_CODE,
+    POLARIS_VACUUM_04_ERROR_CODE,
+    POLARIS_VACUUM_05_ERROR_CODE,
+    POLARIS_VACUUM_06_ERROR_CODE,
+    POLARIS_VACUUM_07_ERROR_CODE,
+    POLARIS_VACUUM_08_ERROR_CODE,
+    POLARIS_VACUUM_09_ERROR_CODE,
+    POLARIS_VACUUM_10_ERROR_CODE,
+    VACUUM_01_ERROR,
+    VACUUM_02_ERROR,
+    VACUUM_03_ERROR,
+    VACUUM_04_ERROR,
+    VACUUM_05_ERROR,
+    VACUUM_06_ERROR,
+    VACUUM_07_ERROR,
+    VACUUM_08_ERROR,
+    VACUUM_09_ERROR,
+    VACUUM_10_ERROR
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -342,6 +365,34 @@ async def async_setup_entry(
                     device_id=deviceID,
                 )
             )
+    if (int(devicetype) in POLARIS_VACUUM_EXPENDABLE_DUST):
+        SENSOR_VACUUM_EXPENDABLE_DUST_CP = copy.deepcopy(SENSOR_VACUUM_EXPENDABLE_DUST)
+        for description in SENSOR_VACUUM_EXPENDABLE_DUST_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
+    if (int(devicetype) in POLARIS_VACUUM_EXPENDABLE_MOP):
+        SENSOR_VACUUM_EXPENDABLE_MOP_CP = copy.deepcopy(SENSOR_VACUUM_EXPENDABLE_MOP)
+        for description in SENSOR_VACUUM_EXPENDABLE_MOP_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
     if (devicetype in POLARIS_BOILER_TYPE):
         SENSORS_WATER_BOILER_CP = copy.deepcopy(SENSORS_WATER_BOILER)
         for description in SENSORS_WATER_BOILER_CP:
@@ -475,13 +526,6 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
         format_string = endian_prefix + 'h' * (len(byte_data) // 2) # 'h' - signed short (2 bytes - int16)
         return list(struct.unpack(format_string, byte_data))
 
-
-
-
-
-
-
-
     async def async_added_to_hass(self):
         @callback
         def message_received(message):
@@ -498,7 +542,26 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                 if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_cleaner":
                     payload_message = AIRCLEANER_ERROR[payload_message]
                 if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner":
-                    payload_message = VACUUM_ERROR[payload_message]
+                    if int(self.device_type) in POLARIS_VACUUM_01_ERROR_CODE:
+                        payload_message = VACUUM_01_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_02_ERROR_CODE:
+                        payload_message = VACUUM_02_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_03_ERROR_CODE:
+                        payload_message = VACUUM_03_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_04_ERROR_CODE:
+                        payload_message = VACUUM_04_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_05_ERROR_CODE:
+                        payload_message = VACUUM_05_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_06_ERROR_CODE:
+                        payload_message = VACUUM_06_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_07_ERROR_CODE:
+                        payload_message = VACUUM_07_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_08_ERROR_CODE:
+                        payload_message = VACUUM_08_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_09_ERROR_CODE:
+                        payload_message = VACUUM_09_ERROR[str(int(payload_message,16))]
+                    if int(self.device_type) in POLARIS_VACUUM_10_ERROR_CODE:
+                        payload_message = VACUUM_10_ERROR[str(int(payload_message,16))]
             if self.entity_description.name == "filter_retain":
                 payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[0]
             if self.entity_description.name == "pre_filter_retain":
@@ -525,7 +588,17 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                     payload_message = str( int(payload_message[:2],16) * 20 )
                 else:
                     payload_message = str( int(payload_message[:2],16) * 10 )
-            
+            if self.entity_description.name == "side_brush":
+                payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[0]
+            if self.entity_description.name == "main_brush":
+                payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[1]
+            if self.entity_description.name == "filter":
+                payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[2]
+            if self.entity_description.name == "mop":
+                payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[3]
+            if self.entity_description.name == "dust_container":
+                payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[3]
+                
             self._attr_native_value = payload_message
             self.async_write_ha_state()
 

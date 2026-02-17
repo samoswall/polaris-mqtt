@@ -19,7 +19,7 @@ from homeassistant.components.vacuum import (
     DOMAIN,
     ATTR_CLEANED_AREA,
     StateVacuumEntity,
-#    VacuumActivity,
+    VacuumActivity,
     VacuumEntityFeature,
 )
 from homeassistant.helpers.entity import DeviceInfo, EntityCategory
@@ -42,6 +42,54 @@ from .const import (
     POLARIS_VACUUM_TYPE,
     CUSTOM_SELECT_FILE_PATH,
     SELECT_VACUUM,
+    POLARIS_VACUUM_01_SPEED_TYPE,
+    POLARIS_VACUUM_02_SPEED_TYPE,
+    POLARIS_VACUUM_03_SPEED_TYPE,
+    POLARIS_VACUUM_04_SPEED_TYPE,
+    POLARIS_VACUUM_05_SPEED_TYPE,
+    POLARIS_VACUUM_06_SPEED_TYPE,
+    VACUUM_01_SPEED,
+    VACUUM_02_SPEED,
+    VACUUM_03_SPEED,
+    VACUUM_04_SPEED,
+    VACUUM_05_SPEED,
+    VACUUM_06_SPEED,
+    POLARIS_VACUUM_01_MODE_TYPE,
+    POLARIS_VACUUM_02_MODE_TYPE,
+    POLARIS_VACUUM_03_MODE_TYPE,
+    POLARIS_VACUUM_04_MODE_TYPE,
+    POLARIS_VACUUM_05_MODE_TYPE,
+    POLARIS_VACUUM_06_MODE_TYPE,
+    POLARIS_VACUUM_07_MODE_TYPE,
+    POLARIS_VACUUM_08_MODE_TYPE,
+    POLARIS_VACUUM_09_MODE_TYPE,
+    POLARIS_VACUUM_10_MODE_TYPE,
+    POLARIS_VACUUM_11_MODE_TYPE,
+    POLARIS_VACUUM_12_MODE_TYPE,
+    POLARIS_VACUUM_13_MODE_TYPE,
+    POLARIS_VACUUM_14_MODE_TYPE,
+    POLARIS_VACUUM_15_MODE_TYPE,
+    POLARIS_VACUUM_16_MODE_TYPE,
+    POLARIS_VACUUM_17_MODE_TYPE,
+    POLARIS_VACUUM_18_MODE_TYPE,
+    VACUUM_01_MODE,
+    VACUUM_02_MODE,
+    VACUUM_03_MODE,
+    VACUUM_04_MODE,
+    VACUUM_05_MODE,
+    VACUUM_06_MODE,
+    VACUUM_07_MODE,
+    VACUUM_08_MODE,
+    VACUUM_09_MODE,
+    VACUUM_10_MODE,
+    VACUUM_11_MODE,
+    VACUUM_12_MODE,
+    VACUUM_13_MODE,
+    VACUUM_14_MODE,
+    VACUUM_15_MODE,
+    VACUUM_16_MODE,
+    VACUUM_17_MODE,
+    VACUUM_18_MODE 
 )
 
 SERVICE_VACUUM_CLEANING_ROOM: Final = "vacuum_cleaning_room"
@@ -69,18 +117,7 @@ async def async_setup_entry(
     device_prefix_topic = config.data["DEVPREFIXTOPIC"]
     vacuumList = []
 
-    
-#    if rooms_js:
-#    available_rooms = list(rooms_js.keys())
-
     custom_data_rooms = await _async_read_file(hass)
-    
-#    file_path = CUSTOM_SELECT_FILE_PATH
-#    if os.path.exists(file_path):
-#        with open(file_path, 'r', encoding='utf-8') as file:
-#            custom_data_rooms = json.loads(file.read())
-#    else:
-#        custom_data_rooms = None
 
     if custom_data_rooms is not None and "SELECT_VACUUM_rooms" in custom_data_rooms:
         custom_data_rooms = json.loads(json.dumps(custom_data_rooms))
@@ -90,20 +127,13 @@ async def async_setup_entry(
         rooms_js = {"no_room": {"id": "00", "coordinates": []}}
     available_rooms = list(rooms_js.keys())
     
-    
-    
-#    _LOGGER.debug("available_rooms read %s", available_rooms)
-    
-    
-    
-    
     if (device_type in POLARIS_VACUUM_TYPE):
         VACUUM_LC = copy.deepcopy(VACUUM)
         for description in VACUUM_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
             description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
-            description.mqttTopicBatteryState = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicBatteryState}"
-            description.mqttTopicBatteryLevel = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicBatteryLevel}"
+            description.mqttTopicCommandTank = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandTank}"
+            description.mqttTopicStateTank = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateTank}"
             description.mqttTopicStateFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStateFanMode}"
             description.mqttTopicCommandFanMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandFanMode}"
             description.mqttTopicCommandFindMe = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandFindMe}"
@@ -138,8 +168,6 @@ async def async_setup_entry(
 class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 
     entity_description: PolarisVacuumEntityDescription
-#    _unrecorded_attributes = frozenset({ATTR_ROOMS})
-    
     
     def __init__(
         self,
@@ -161,12 +189,61 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
         self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self._attr_has_entity_name = True
-        
-        self._attr_fan_speed="min"
-        self._attr_fan_speed_list = ["min", "medium", "high", "max"]
+
+        if int(self.device_type) in POLARIS_VACUUM_01_MODE_TYPE:
+            self.my_mode_list = VACUUM_01_MODE
+        if int(self.device_type) in POLARIS_VACUUM_02_MODE_TYPE:
+            self.my_mode_list = VACUUM_02_MODE
+        if int(self.device_type) in POLARIS_VACUUM_03_MODE_TYPE:
+            self.my_mode_list = VACUUM_03_MODE
+        if int(self.device_type) in POLARIS_VACUUM_04_MODE_TYPE:
+            self.my_mode_list = VACUUM_04_MODE
+        if int(self.device_type) in POLARIS_VACUUM_05_MODE_TYPE:
+            self.my_mode_list = VACUUM_05_MODE
+        if int(self.device_type) in POLARIS_VACUUM_06_MODE_TYPE:
+            self.my_mode_list = VACUUM_06_MODE
+        if int(self.device_type) in POLARIS_VACUUM_07_MODE_TYPE:
+            self.my_mode_list = VACUUM_07_MODE
+        if int(self.device_type) in POLARIS_VACUUM_08_MODE_TYPE:
+            self.my_mode_list = VACUUM_08_MODE
+        if int(self.device_type) in POLARIS_VACUUM_09_MODE_TYPE:
+            self.my_mode_list = VACUUM_09_MODE
+        if int(self.device_type) in POLARIS_VACUUM_10_MODE_TYPE:
+            self.my_mode_list = VACUUM_10_MODE
+        if int(self.device_type) in POLARIS_VACUUM_11_MODE_TYPE:
+            self.my_mode_list = VACUUM_11_MODE
+        if int(self.device_type) in POLARIS_VACUUM_12_MODE_TYPE:
+            self.my_mode_list = VACUUM_12_MODE
+        if int(self.device_type) in POLARIS_VACUUM_13_MODE_TYPE:
+            self.my_mode_list = VACUUM_13_MODE
+        if int(self.device_type) in POLARIS_VACUUM_14_MODE_TYPE:
+            self.my_mode_list = VACUUM_14_MODE
+        if int(self.device_type) in POLARIS_VACUUM_15_MODE_TYPE:
+            self.my_mode_list = VACUUM_15_MODE
+        if int(self.device_type) in POLARIS_VACUUM_16_MODE_TYPE:
+            self.my_mode_list = VACUUM_16_MODE
+        if int(self.device_type) in POLARIS_VACUUM_17_MODE_TYPE:
+            self.my_mode_list = VACUUM_17_MODE
+        if int(self.device_type) in POLARIS_VACUUM_18_MODE_TYPE:
+            self.my_mode_list = VACUUM_18_MODE
+            
+        if int(self.device_type) in POLARIS_VACUUM_01_SPEED_TYPE:
+            self.my_fan_speed_list = VACUUM_01_SPEED
+        if int(self.device_type) in POLARIS_VACUUM_02_SPEED_TYPE:
+            self.my_fan_speed_list = VACUUM_02_SPEED
+        if int(self.device_type) in POLARIS_VACUUM_03_SPEED_TYPE:
+            self.my_fan_speed_list = VACUUM_03_SPEED
+        if int(self.device_type) in POLARIS_VACUUM_04_SPEED_TYPE:
+            self.my_fan_speed_list = VACUUM_04_SPEED
+        if int(self.device_type) in POLARIS_VACUUM_05_SPEED_TYPE:
+            self.my_fan_speed_list = VACUUM_05_SPEED
+        if int(self.device_type) in POLARIS_VACUUM_06_SPEED_TYPE:
+            self.my_fan_speed_list = VACUUM_06_SPEED   
+        self._attr_fan_speed_list = list(self.my_fan_speed_list.keys())
+        self._attr_fan_speed = self._attr_fan_speed_list[0]
         self._attr_supported_features = (
-              VacuumEntityFeature.BATTERY
-            | VacuumEntityFeature.RETURN_HOME
+              VacuumEntityFeature.RETURN_HOME
+#            | VacuumEntityFeature.BATTERY
             | VacuumEntityFeature.CLEAN_SPOT
             | VacuumEntityFeature.STOP
 #            | VacuumEntityFeature.PAUSE
@@ -175,24 +252,29 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
             | VacuumEntityFeature.STATE
             | VacuumEntityFeature.SEND_COMMAND
             | VacuumEntityFeature.FAN_SPEED
-            | VacuumEntityFeature.STATUS
+#            | VacuumEntityFeature.STATUS
             | VacuumEntityFeature.MAP
         )
-#        self._entity_component_unrecorded_attributes = frozenset({ATTR_FAN_SPEED_LIST})
 
-        self._attr_battery_icon="mdi:vacuum"
-        self._attr_battery_level=70
-        self._attr_state = "idle"
-        
-        
+#        self._attr_battery_icon="mdi:vacuum"
+#        self._attr_battery_level=70
+#        self._attr_state = "idle"
+
+#    CLEANING = "cleaning"
+#    DOCKED = "docked"
+#    IDLE = "idle"
+#    PAUSED = "paused"
+#    RETURNING = "returning"
+#    ERROR = "error"
+
+
+
+        self._attr_activity = VacuumActivity.DOCKED
         
         self._select_rooms = []
         self._available_rooms = available_rooms
         self._rooms_js = rooms_js
         
-        
-        
- 
     @property
     def select_rooms(self) -> list | None:
         """Return a list of rooms available to clean."""
@@ -242,27 +324,32 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         
     def start(self) -> None:
         """Start or resume the cleaning task."""
-        if self._attr_state != "cleaning":
-            self._attr_state = "cleaning"
+#        if self._attr_state != "cleaning":
+#            self._attr_state = "cleaning"
+        if self._attr_activity != VacuumActivity.CLEANING:
+            self._attr_activity = VacuumActivity.CLEANING
             self.schedule_update_ha_state()
             state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_mode_vacuum").state
-            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, json.loads(json.dumps(SELECT_VACUUM[0].options[state_mode])))
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.my_mode_list[state_mode])
 
     def stop(self, **kwargs: Any) -> None:
         """Stop the cleaning task, do not return to dock."""
-        self._attr_state = "idle"
+#        self._attr_state = "idle"
+        self._attr_activity = VacuumActivity.IDLE
         self.schedule_update_ha_state()
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, "0")
 
     def return_to_base(self, **kwargs: Any) -> None:
         """Return dock to charging base."""
-        self._attr_state = "returning"
+#        self._attr_state = "returning"
+        self._attr_activity = VacuumActivity.RETURNING
         self.schedule_update_ha_state()
-        mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, "5")
+        mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.my_mode_list["recharge"])
 
     def clean_spot(self, **kwargs: Any) -> None:
         """Perform a spot clean-up."""
-        self._attr_state = "cleaning"
+#        self._attr_state = "cleaning"
+        self._attr_activity = VacuumActivity.CLEANING
         self.schedule_update_ha_state()
         select_room = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_room").state
 #        _LOGGER.debug("room in select %s ", select_room)
@@ -280,16 +367,17 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         if fan_speed in self.fan_speed_list:
             self._attr_fan_speed = fan_speed
             self.schedule_update_ha_state()
-            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandFanMode, self._attr_fan_speed_list.index(fan_speed)+1)
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandFanMode, self.my_fan_speed_list[fan_speed])
 
     async def async_locate(self, **kwargs: Any) -> None:
         """Locate the vacuum's position."""
-        await self.hass.services.async_call(
-            "notify",
-            "persistent_notification",
-            service_data={"message": "I'm here!", "title": "Locate request"},
-        )
-        self._attr_state = "idle"
+#        await self.hass.services.async_call(
+#            "notify",
+#            "persistent_notification",
+#            service_data={"message": "I'm here!", "title": "Locate request"},
+#        )
+#        self._attr_state = "idle"
+        self._attr_activity = VacuumActivity.IDLE
         self.async_write_ha_state()
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandFindMe, "true")
 
@@ -301,7 +389,8 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         **kwargs: Any,
     ) -> None:
         """Send a command to the vacuum."""
-        self._attr_state = "idle"
+#        self._attr_state = "idle"
+        self._attr_activity = VacuumActivity.IDLE
         self.async_write_ha_state()
         
     
@@ -314,18 +403,25 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 
     
     async def async_added_to_hass(self):
-        @callback
-        def message_received_batt_state(message):
-            payload = message.payload
-            self._attr_state = payload
-        await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicBatteryState, message_received_batt_state, 1)
+#        @callback
+#        def message_received_batt_state(message):
+#            payload = message.payload
+#            self._attr_state = payload
+#        await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicBatteryState, message_received_batt_state, 1)
         
+#        @callback
+#        def message_received_batt_level(message):
+#            payload = message.payload
+#            self._attr_battery_level = int(payload)
+#            self.async_write_ha_state()
+#        await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicBatteryLevel, message_received_batt_level, 1)
+
         @callback
-        def message_received_batt_level(message):
+        def message_received_fan_speed(message):
             payload = message.payload
-            self._attr_battery_level = int(payload)
+            self._attr_fan_speed = list(self.my_fan_speed_list.keys())[list(self.my_fan_speed_list.values()).index(payload)]
             self.async_write_ha_state()
-        await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicBatteryLevel, message_received_batt_level, 1)
+        await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicStateFanMode, message_received_fan_speed, 1)
     
         @callback
         async def entity_availability(message):

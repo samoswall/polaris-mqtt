@@ -69,7 +69,13 @@ from .const import (
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_HEATER_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
-    POLARIS_THERMOSTAT_TYPE
+    POLARIS_THERMOSTAT_TYPE,
+    POLARIS_VACUUM_SWITCH_CHILD_LOCK,
+    POLARIS_VACUUM_SWITCH_VOLUME,
+    POLARIS_VACUUM_SWITCH_TURBO,
+    POLARIS_VACUUM_SWITCH_IONISER,
+    POLARIS_VACUUM_SWITCH_STREAM_WARM,
+    POLARIS_VACUUM_SWITCH_BACKLIGHT
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -405,18 +411,24 @@ async def async_setup_entry(
         # Create switches for vacuum
         SWITCHES_VACUUM_LC = copy.deepcopy(SWITCHES_VACUUM)
         for description in SWITCHES_VACUUM_LC:
-            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
-            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
-            description.device_prefix_topic = device_prefix_topic
-            switchList.append(
-                PolarisSwitch(
-                    description=description,
-                    device_friendly_name=device_id,
-                    mqtt_root=mqtt_root,
-                    device_type=device_type,
-                    device_id=device_id
+            if ( (int(device_type) in POLARIS_VACUUM_SWITCH_CHILD_LOCK and description.translation_key == "child_lock_switch")
+               | (int(device_type) in POLARIS_VACUUM_SWITCH_VOLUME and description.translation_key == "sound_switch")
+               | (int(device_type) in POLARIS_VACUUM_SWITCH_TURBO and description.translation_key == "turbo_switch")
+               | (int(device_type) in POLARIS_VACUUM_SWITCH_IONISER and description.translation_key == "emptying_dust_switch")
+               | (int(device_type) in POLARIS_VACUUM_SWITCH_STREAM_WARM and description.translation_key == "stream_warm_switch")
+               | (int(device_type) in POLARIS_VACUUM_SWITCH_BACKLIGHT and description.translation_key == "backlight_switch") ): 
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
                 )
-            )
     if (device_type in POLARIS_BOILER_TYPE):
         # Create switches for boiler
         SWITCHES_WATER_BOILER_LC = copy.deepcopy(SWITCHES_WATER_BOILER)
