@@ -601,7 +601,7 @@
           "v08_error_38": "Dust collection is happening too often. Please wait a few minutes and try again",
           "v08_error_39": "Dust bag full of dust",
           "v08_error_40": "New environment detected, restart cleaning",
-          "v08_error_50": "The dust bag is full. It is recommended that you replace it. ",
+          "v08_error_50": "The dust bag is full. It is recommended that you replace it.",
           "v09_error_1": "Front bumper stuck，please check",
           "v09_error_4": "Anti-drop sensor  blocked, please wipe",
           "v09_error_5": "Wheel lift detected",
