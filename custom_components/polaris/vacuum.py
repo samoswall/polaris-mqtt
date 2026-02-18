@@ -124,7 +124,7 @@ async def async_setup_entry(
         rooms_js = custom_data_rooms["SELECT_VACUUM_rooms"]
 #        _LOGGER.debug("rooms_js %s", rooms_js)
     else:
-        rooms_js = {"no_room": {"id": "00", "coordinates": []}}
+        rooms_js = {"all_rooms": {"id": "00", "coordinate": []}}
     available_rooms = list(rooms_js.keys())
     
     if (device_type in POLARIS_VACUUM_TYPE):
@@ -280,7 +280,7 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         """Return a list of rooms available to clean."""
         if self._select_rooms:
 #            _LOGGER.debug("select_rooms : %s", self._select_rooms)
-            return self._rooms
+            return self._select_rooms
         return []
  
     @property
@@ -327,30 +327,30 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 #        if self._attr_state != "cleaning":
 #            self._attr_state = "cleaning"
         if self._attr_activity != VacuumActivity.CLEANING:
-            self._attr_activity = VacuumActivity.CLEANING
-            self.schedule_update_ha_state()
+#            self._attr_activity = VacuumActivity.CLEANING
+#            self.schedule_update_ha_state()
             state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_mode_vacuum").state
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.my_mode_list[state_mode])
 
     def stop(self, **kwargs: Any) -> None:
         """Stop the cleaning task, do not return to dock."""
 #        self._attr_state = "idle"
-        self._attr_activity = VacuumActivity.IDLE
-        self.schedule_update_ha_state()
+#        self._attr_activity = VacuumActivity.IDLE
+#        self.schedule_update_ha_state()
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, "0")
 
     def return_to_base(self, **kwargs: Any) -> None:
         """Return dock to charging base."""
 #        self._attr_state = "returning"
-        self._attr_activity = VacuumActivity.RETURNING
-        self.schedule_update_ha_state()
+#        self._attr_activity = VacuumActivity.RETURNING
+#        self.schedule_update_ha_state()
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.my_mode_list["recharge"])
 
     def clean_spot(self, **kwargs: Any) -> None:
         """Perform a spot clean-up."""
 #        self._attr_state = "cleaning"
-        self._attr_activity = VacuumActivity.CLEANING
-        self.schedule_update_ha_state()
+#        self._attr_activity = VacuumActivity.CLEANING
+#        self.schedule_update_ha_state()
         select_room = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_room").state
 #        _LOGGER.debug("room in select %s ", select_room)
 #        _LOGGER.debug("room in select %s ", self._rooms_js[select_room]["coordinate"])
@@ -377,8 +377,8 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 #            service_data={"message": "I'm here!", "title": "Locate request"},
 #        )
 #        self._attr_state = "idle"
-        self._attr_activity = VacuumActivity.IDLE
-        self.async_write_ha_state()
+#        self._attr_activity = VacuumActivity.IDLE
+#        self.async_write_ha_state()
         mqtt.publish(self.hass, self.entity_description.mqttTopicCommandFindMe, "true")
 
 
@@ -392,14 +392,7 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 #        self._attr_state = "idle"
         self._attr_activity = VacuumActivity.IDLE
         self.async_write_ha_state()
-        
-    
-    
-#    def _save_log(self, message, topic) -> None:
-#        file_path = "vacuum_log.txt"
-#        with open(file_path, 'a+', encoding='utf-8') as file:
-#            file.write(f"{datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")} {topic} {message}\n")
-    
+        _LOGGER.debug(f"[{self.device_id}] Custom command: {command}")   
 
     
     async def async_added_to_hass(self):
@@ -417,11 +410,17 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 #        await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicBatteryLevel, message_received_batt_level, 1)
 
         @callback
-        def message_received_fan_speed(message):
+        async def message_received_fan_speed(message):
             payload = message.payload
             self._attr_fan_speed = list(self.my_fan_speed_list.keys())[list(self.my_fan_speed_list.values()).index(payload)]
             self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicStateFanMode, message_received_fan_speed, 1)
+
+        @callback
+        async def message_received_mode(message):
+            self._current_mode = message.payload
+            self._update_activity_from_mode_and_battery()
+        await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentMode, message_received_mode, 1)
     
         @callback
         async def entity_availability(message):
@@ -434,7 +433,77 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/connection", entity_availability, 1)
 
     
+    def _update_activity_from_mode_and_battery(self):
+        """Update vacuum activity based on mode and battery state."""
+        # Получаем состояние батареи из сенсора
+        battery_state = None
+        battery_entity_id = f"sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_battery_state"
+        battery_state_obj = self.hass.states.get(battery_entity_id)
+        if battery_state_obj:
+            battery_state = battery_state_obj.state
+        
+        # Определяем значения режимов из my_mode_list
+        off_value = self.my_mode_list.get("off", "0")
+        recharge_value = self.my_mode_list.get("recharge")
+        
+        # Собираем все значения режимов уборки (все кроме off и recharge)
+        cleaning_values = set(self.my_mode_list.values())
+        cleaning_values.discard(off_value)
+        if recharge_value:
+            cleaning_values.discard(recharge_value)
+        
+        _LOGGER.debug(f"[{self.entity_id}] === STATUS UPDATE ===")
+        _LOGGER.debug(f"[{self.entity_id}] Mode: {self._current_mode}")
+        _LOGGER.debug(f"[{self.entity_id}] Battery state: '{battery_state}'")
+        _LOGGER.debug(f"[{self.entity_id}] off_value={off_value}, recharge_value={recharge_value}")
+        _LOGGER.debug(f"[{self.entity_id}] cleaning_values={cleaning_values}")
+        
+        # ===== ОПРЕДЕЛЕНИЕ СТАТУСА =====
+        if self._current_mode == off_value:
+            # Пылесос выключен - определяем состояние по батарее
+            if battery_state == "charge-full":
+                # Полностью заряжен на базе -> IDLE (бездействие)
+                self._attr_activity = VacuumActivity.IDLE
+                _LOGGER.debug(f"[{self.entity_id}] -> IDLE (fully charged)")
+            elif battery_state in ["charging", "charging-dock", "charge-dock"]:
+                # Заряжается на базе -> DOCKED
+                self._attr_activity = VacuumActivity.DOCKED
+                _LOGGER.debug(f"[{self.entity_id}] -> DOCKED (charging)")
+            elif battery_state == "discharge":
+                # Разряжается (не на базе) -> IDLE (остановлен)
+                self._attr_activity = VacuumActivity.IDLE
+                _LOGGER.debug(f"[{self.entity_id}] -> IDLE (stopped, not on dock)")
+            else:
+                # Неизвестное состояние батареи -> IDLE
+                self._attr_activity = VacuumActivity.IDLE
+                _LOGGER.debug(f"[{self.entity_id}] -> IDLE (unknown battery state: {battery_state})")
+        elif recharge_value and self._current_mode == recharge_value:
+            # Возвращается на базу
+            self._attr_activity = VacuumActivity.RETURNING
+            _LOGGER.debug(f"[{self.entity_id}] -> RETURNING")
+        elif self._current_mode in cleaning_values:
+            # Любой режим уборки
+            self._attr_activity = VacuumActivity.CLEANING
+            _LOGGER.debug(f"[{self.entity_id}] -> CLEANING")
+        else:
+            # Неизвестный режим - определяем по батарее
+            _LOGGER.debug(f"[{self.entity_id}] Unknown mode {self._current_mode}, checking battery")
+            if battery_state == "charge-full":
+                self._attr_activity = VacuumActivity.IDLE
+            elif battery_state in ["charging", "charging-dock", "charge-dock"]:
+                self._attr_activity = VacuumActivity.DOCKED
+            elif battery_state == "discharge":
+                self._attr_activity = VacuumActivity.IDLE
+            else:
+                self._attr_activity = VacuumActivity.IDLE
+        self.async_write_ha_state()
+
     
+#    def _save_log(self, message, topic) -> None:
+#        file_path = "vacuum_log.txt"
+#        with open(file_path, 'a+', encoding='utf-8') as file:
+#            file.write(f"{datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")} {topic} {message}\n")
+     
     
         # @callback
         # def message_received_contour(message):

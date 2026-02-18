@@ -540,6 +540,10 @@ POLARIS_VACUUM_SWITCH_BACKLIGHT = [186, 187, 256, 257]
 POLARIS_VACUUM_EXPENDABLE_DUST = [7, 12, 19, 21, 22, 23, 24, 43, 66, 68, 76, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 113, 115, 122, 127, 130, 131, 133, 134, 135, 163, 193, 197]
 POLARIS_VACUUM_EXPENDABLE_MOP = [104, 119, 123, 124, 125, 126, 128, 129, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
 
+VACUUM_SWITCH_01_TURBO = [81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 127]
+VACUUM_SWITCH_02_TURBO = [104, 126]
+VACUUM_SWITCH_03_TURBO = [119, 123, 124, 125, 128, 129, 142, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
+
 KETTLE_ERROR = {
 "00": "no_error",
 "01": "low_water",
@@ -2381,6 +2385,7 @@ SWITCHES_VACUUM = [
         device_class=SwitchDeviceClass.SWITCH,
         payload_on="true",
         payload_off="false",
+        icon="mdi:texture",
     ),
     PolarisSwitchEntityDescription(
         key="ioniser",

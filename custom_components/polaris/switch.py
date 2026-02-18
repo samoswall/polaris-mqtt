@@ -75,7 +75,10 @@ from .const import (
     POLARIS_VACUUM_SWITCH_TURBO,
     POLARIS_VACUUM_SWITCH_IONISER,
     POLARIS_VACUUM_SWITCH_STREAM_WARM,
-    POLARIS_VACUUM_SWITCH_BACKLIGHT
+    POLARIS_VACUUM_SWITCH_BACKLIGHT,
+    VACUUM_SWITCH_01_TURBO,
+    VACUUM_SWITCH_02_TURBO,
+    VACUUM_SWITCH_03_TURBO
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -420,6 +423,12 @@ async def async_setup_entry(
                 description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
                 description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
                 description.device_prefix_topic = device_prefix_topic
+                if (int(device_type) in VACUUM_SWITCH_01_TURBO and description.translation_key == "turbo_switch"):
+                    description.translation_key = "wet_dry_switch"
+                if (int(device_type) in VACUUM_SWITCH_02_TURBO and description.translation_key == "turbo_switch"):
+                    description.translation_key = "carpet_booster_switch"
+                if (int(device_type) in VACUUM_SWITCH_03_TURBO and description.translation_key == "turbo_switch"):
+                    description.translation_key = "carpet_cleaning_switch"
                 switchList.append(
                     PolarisSwitch(
                         description=description,
