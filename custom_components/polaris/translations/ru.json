@@ -767,23 +767,45 @@
           "charge-full": "Заряжена",
           "discharge": "Разряжается",
           "charging": "Заряжается",
-          "charge-dock": "Заряжается"
+          "charge-dock": "Заряжается",
+          "charge-cable": "Заряжается"
         }
       },
       "vacuum_side_brush": {
-        "name": "Боковая щетка"  
+        "name": "Боковая щетка"
       },
       "vacuum_main_brush": {
-        "name": "Основная щетка"  
+        "name": "Основная щетка"
       },
       "vacuum_filter": {
-        "name": "Фильтр"  
+        "name": "Фильтр"
       },
       "vacuum_mop": {
-        "name": "Моющая насадка"  
+        "name": "Моющая насадка"
       },
       "vacuum_dust_container": {
-        "name": "Контейнер для пыли"  
+        "name": "Контейнер для пыли"
+      },
+      "last_clean_time": {
+        "name": "Время уборки"
+      },
+      "last_clean_area": {
+        "name": "Площадь уборки"
+      },
+      "total_clean_time": {
+        "name": "Общее время уборки"
+      },
+      "total_clean_area": {
+        "name": "Общая площадь уборки"
+      },
+      "clean_count": {
+        "name": "Число уборок"
+      },
+      "current_id_room": {
+        "name": "Идентификатор комнаты"
+      },
+      "go_area": {
+        "name": "Область уборки"
       }
     },
     "select": {
