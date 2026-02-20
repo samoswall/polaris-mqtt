@@ -419,7 +419,7 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         @callback
         async def message_received_mode(message):
             self._current_mode = message.payload
-            self._update_activity_from_mode_and_battery()
+            self._update_activity()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentMode, message_received_mode, 1)
     
         @callback
@@ -433,15 +433,19 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/connection", entity_availability, 1)
 
     
-    def _update_activity_from_mode_and_battery(self):
-        """Update vacuum activity based on mode and battery state."""
-        # Получаем состояние батареи из сенсора
-        battery_state = None
+    def _update_activity(self):
+        """Update vacuum activity based on mode and battery staten and error."""
+        # Получаем состояние батареи и ошибки из сенсора
+        battery_state = error_state = None
         battery_entity_id = f"sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_battery_state"
         battery_state_obj = self.hass.states.get(battery_entity_id)
         if battery_state_obj:
             battery_state = battery_state_obj.state
-        
+        error_entity_id = f"sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_error"
+        error_state_obj = self.hass.states.get(error_entity_id)
+        if error_state_obj:
+            error_state = error_state_obj.state
+
         # Определяем значения режимов из my_mode_list
         off_value = self.my_mode_list.get("off", "0")
         recharge_value = self.my_mode_list.get("recharge")
@@ -451,46 +455,45 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         cleaning_values.discard(off_value)
         if recharge_value:
             cleaning_values.discard(recharge_value)
-        
-        _LOGGER.debug(f"[{self.entity_id}] === STATUS UPDATE ===")
-        _LOGGER.debug(f"[{self.entity_id}] Mode: {self._current_mode}")
-        _LOGGER.debug(f"[{self.entity_id}] Battery state: '{battery_state}'")
-        _LOGGER.debug(f"[{self.entity_id}] off_value={off_value}, recharge_value={recharge_value}")
-        _LOGGER.debug(f"[{self.entity_id}] cleaning_values={cleaning_values}")
-        
+
+#        _LOGGER.debug(f"[{self.entity_id}] === STATUS UPDATE ===")
+#        _LOGGER.debug(f"[{self.entity_id}] Current mode: {self._current_mode}")
+#        _LOGGER.debug(f"[{self.entity_id}] Battery state: '{battery_state}'")
+#        _LOGGER.debug(f"[{self.entity_id}] off value={off_value}, recharge_value={recharge_value}")
+#        _LOGGER.debug(f"[{self.entity_id}] cleaning values={cleaning_values}")
+#        _LOGGER.debug(f"[{self.entity_id}] error_state={error_state}")
+         
         # ===== ОПРЕДЕЛЕНИЕ СТАТУСА =====
-        if self._current_mode == off_value:
+        if error_state != "no_error":
+            self._attr_activity = VacuumActivity.ERROR
+            
+        elif self._current_mode == off_value:
             # Пылесос выключен - определяем состояние по батарее
             if battery_state == "charge-full":
                 # Полностью заряжен на базе -> IDLE (бездействие)
                 self._attr_activity = VacuumActivity.IDLE
-                _LOGGER.debug(f"[{self.entity_id}] -> IDLE (fully charged)")
-            elif battery_state in ["charging", "charging-dock", "charge-dock"]:
+            elif battery_state in ("charging", "charging-dock", "charge-dock", "charge-cable"):
                 # Заряжается на базе -> DOCKED
                 self._attr_activity = VacuumActivity.DOCKED
-                _LOGGER.debug(f"[{self.entity_id}] -> DOCKED (charging)")
             elif battery_state == "discharge":
                 # Разряжается (не на базе) -> IDLE (остановлен)
                 self._attr_activity = VacuumActivity.IDLE
-                _LOGGER.debug(f"[{self.entity_id}] -> IDLE (stopped, not on dock)")
             else:
                 # Неизвестное состояние батареи -> IDLE
                 self._attr_activity = VacuumActivity.IDLE
                 _LOGGER.debug(f"[{self.entity_id}] -> IDLE (unknown battery state: {battery_state})")
-        elif recharge_value and self._current_mode == recharge_value:
+        elif self._current_mode == recharge_value:
             # Возвращается на базу
             self._attr_activity = VacuumActivity.RETURNING
-            _LOGGER.debug(f"[{self.entity_id}] -> RETURNING")
         elif self._current_mode in cleaning_values:
             # Любой режим уборки
             self._attr_activity = VacuumActivity.CLEANING
-            _LOGGER.debug(f"[{self.entity_id}] -> CLEANING")
         else:
             # Неизвестный режим - определяем по батарее
             _LOGGER.debug(f"[{self.entity_id}] Unknown mode {self._current_mode}, checking battery")
             if battery_state == "charge-full":
                 self._attr_activity = VacuumActivity.IDLE
-            elif battery_state in ["charging", "charging-dock", "charge-dock"]:
+            elif battery_state in ("charging", "charging-dock", "charge-dock", "charge-cable"):
                 self._attr_activity = VacuumActivity.DOCKED
             elif battery_state == "discharge":
                 self._attr_activity = VacuumActivity.IDLE

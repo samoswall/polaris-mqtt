@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 
 import voluptuous as vol
 
-from homeassistant.components.image import Image, ImageEntityDescription                                                                        
+from homeassistant.components.image import Image, ImageEntityDescription
 from homeassistant.components.vacuum import (
     DOMAIN,
     ATTR_CLEANED_AREA,
@@ -46,7 +46,7 @@ from homeassistant.components.switch import (
     SwitchDeviceClass,
     SwitchEntityDescription,
 )
-from homeassistant.components.water_heater import WaterHeaterEntity, WaterHeaterEntityDescription                                    # removed in HA Core 2026.1
+from homeassistant.components.water_heater import WaterHeaterEntity, WaterHeaterEntityDescription
 from homeassistant.components.humidifier import HumidifierEntity, HumidifierEntityDescription, HumidifierDeviceClass
 from homeassistant.const import (
     PERCENTAGE,
@@ -59,6 +59,7 @@ from homeassistant.const import (
     UnitOfVolume,
     UnitOfEnergy,
     UnitOfPower,
+    UnitOfArea,
     Platform,
 )
 import homeassistant.helpers.config_validation as cv
@@ -467,24 +468,24 @@ AIRFRYER_2_MODES = {
             "shrimps": "[{\"mode\":15, \"time\":840, \"temperature\":190}]",
         }
 
-POLARIS_VACUUM_01_MODE_TYPE = [7, 22, 23, 24, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112]
+POLARIS_VACUUM_01_MODE_TYPE = [7,22,23,24,81,88,100,101,102,107,108,109,110,112]
 POLARIS_VACUUM_02_MODE_TYPE = [12]
-POLARIS_VACUUM_03_MODE_TYPE = [19, 43]
-POLARIS_VACUUM_04_MODE_TYPE = [21, 68, 122, 130, 133, 134, 135, 163, 193]
-POLARIS_VACUUM_05_MODE_TYPE = [66, 113, 131, 142, 195, 197]
-POLARIS_VACUUM_06_MODE_TYPE = [76, 115]
-POLARIS_VACUUM_07_MODE_TYPE = [104, 126]
-POLARIS_VACUUM_08_MODE_TYPE = [119, 123, 124, 125]
+POLARIS_VACUUM_03_MODE_TYPE = [19,43]
+POLARIS_VACUUM_04_MODE_TYPE = [21,68,122,130,133,134,135,163,193]
+POLARIS_VACUUM_05_MODE_TYPE = [66,113,131,142,195,197]
+POLARIS_VACUUM_06_MODE_TYPE = [76,115]
+POLARIS_VACUUM_07_MODE_TYPE = [104,126]
+POLARIS_VACUUM_08_MODE_TYPE = [119,123,124,125]
 POLARIS_VACUUM_09_MODE_TYPE = [127]
 POLARIS_VACUUM_10_MODE_TYPE = [128]
 POLARIS_VACUUM_11_MODE_TYPE = [129]
-POLARIS_VACUUM_12_MODE_TYPE = [146, 148, 149, 150, 154, 201, 202, 213, 217, 218, 219, 220, 221]
-POLARIS_VACUUM_13_MODE_TYPE = [156, 160]
+POLARIS_VACUUM_12_MODE_TYPE = [146,148,149,150,154,201,202,213,217,218,219,220,221]
+POLARIS_VACUUM_13_MODE_TYPE = [156,160]
 POLARIS_VACUUM_14_MODE_TYPE = [178]
-POLARIS_VACUUM_15_MODE_TYPE = [181, 242, 307]
-POLARIS_VACUUM_16_MODE_TYPE = [186, 187, 256, 257]
-POLARIS_VACUUM_17_MODE_TYPE = [198, 264]
-POLARIS_VACUUM_18_MODE_TYPE = [199, 211, 212, 241, 269]
+POLARIS_VACUUM_15_MODE_TYPE = [181,242,307]
+POLARIS_VACUUM_16_MODE_TYPE = [186,187,256,257]
+POLARIS_VACUUM_17_MODE_TYPE = [198,264]
+POLARIS_VACUUM_18_MODE_TYPE = [199,211,212,241,269]
 
 VACUUM_01_MODE = {"off": "0","random": "1","auto": "2","wall": "3","spiral": "4","recharge": "5"}
 VACUUM_02_MODE = {"off": "0","wall": "1","spot": "2","auto": "3","recharge": "4","wet_cleaning": "5"}
@@ -505,12 +506,12 @@ VACUUM_16_MODE = {"off": "0","edge": "4","spot": "5","auto": "6","recharge": "8"
 VACUUM_17_MODE = {"off": "0","auto": "1","sweep": "2","sweep_mop": "3","mop": "4","recharge": "5","create_map": "7","scheduled_room_cleaning": "8","mop_cleaning": "9","mop_drying": "10","wall": "11","cut_hair": "12"}
 VACUUM_18_MODE = {"off": "0","auto": "1","sweep": "2","sweep_mop": "3","mop": "4","recharge": "5","create_map": "7","scheduled_room_cleaning": "8"}
 
-POLARIS_VACUUM_01_SPEED_TYPE = [12, 19, 21, 43, 68, 163]
-POLARIS_VACUUM_02_SPEED_TYPE = [7, 22, 23, 24, 66, 76, 113, 115, 122, 130, 131, 133, 134, 135, 142, 193, 197]
-POLARIS_VACUUM_03_SPEED_TYPE = [195, 212]
-POLARIS_VACUUM_04_SPEED_TYPE = [186, 187, 256, 257, 264]
-POLARIS_VACUUM_05_SPEED_TYPE = [81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 127]
-POLARIS_VACUUM_06_SPEED_TYPE = [104, 119, 123, 124, 125, 126, 128, 129, 146, 148, 149, 150, 154, 156, 160, 178, 181, 198, 199, 201, 202, 211, 213, 217, 218, 219, 220, 221, 241, 242, 269, 307]
+POLARIS_VACUUM_01_SPEED_TYPE = [12,19,21,43,68,163]
+POLARIS_VACUUM_02_SPEED_TYPE = [7,22,23,24,66,76,113,115,122,130,131,133,134,135,142,193,197]
+POLARIS_VACUUM_03_SPEED_TYPE = [195,212]
+POLARIS_VACUUM_04_SPEED_TYPE = [186,187,256,257,264]
+POLARIS_VACUUM_05_SPEED_TYPE = [81,88,100,101,102,107,108,109,110,112,127]
+POLARIS_VACUUM_06_SPEED_TYPE = [104,119,123,124,125,126,128,129,146,148,149,150,154,156,160,178,181,198,199,201,202,211,213,217,218,219,220,221,241,242,269,307]
 
 VACUUM_01_SPEED = {"low": "0", "high": "1"}
 VACUUM_02_SPEED = {"low": "0", "medium": "1", "high": "2"}
@@ -519,30 +520,35 @@ VACUUM_04_SPEED = {"min": "0", "low": "1", "medium": "2", "high": "3", "max": "4
 VACUUM_05_SPEED = {"low": "1", "medium": "2", "high": "3"}
 VACUUM_06_SPEED = {"low": "1", "medium": "2", "high": "3", "max": "4"}
 
-POLARIS_VACUUM_NOT_WATER_TYPE = [19, 23, 43]
-POLARIS_VACUUM_01_WATER_TYPE = [22, 24]
-POLARIS_VACUUM_02_WATER_TYPE = [7, 76, 115, 199, 211, 212, 241, 269]
-POLARIS_VACUUM_03_WATER_TYPE = [12, 21, 66, 68, 81, 88, 100, 101, 102, 104, 107, 108, 109, 110, 112, 113, 119, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 133, 134, 135, 142, 146, 148, 149, 150, 154, 156, 160, 163, 178, 181, 193, 197, 198, 201, 202, 213, 217, 218, 219, 220, 221, 242, 264, 307]
-POLARIS_VACUUM_04_WATER_TYPE = [186, 187, 195, 256, 257]
+POLARIS_VACUUM_NOT_WATER_TYPE = [19,23,43]
+POLARIS_VACUUM_01_WATER_TYPE = [22,24]
+POLARIS_VACUUM_02_WATER_TYPE = [7,76,115,199,211,212,241,269]
+POLARIS_VACUUM_03_WATER_TYPE = [12,21,66,68,81,88,100,101,102,104,107,108,109,110,112,113,119,122,123,124,125,126,127,128,129,130,131,133,134,135,142,146,148,149,150,154,156,160,163,178,181,193,197,198,201,202,213,217,218,219,220,221,242,264,307]
+POLARIS_VACUUM_04_WATER_TYPE = [186,187,195,256,257]
 
 VACUUM_01_WATER = {"low": "0", "high": "1"}
 VACUUM_02_WATER = {"low": "0", "medium": "1", "high": "2"}
 VACUUM_03_WATER = {"low": "1", "medium": "2", "high": "3"}
 VACUUM_04_WATER = {"low": "0", "medium": "1", "high": "2", "max": "3"}
 
-POLARIS_VACUUM_SWITCH_CHILD_LOCK = [7, 12, 22, 23, 24, 76, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 115, 127, 129, 241, 256, 257, 269]
-POLARIS_VACUUM_SWITCH_VOLUME = [12, 66, 104, 113, 119, 123, 124, 125, 126, 128, 129, 131, 142, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 197, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
-POLARIS_VACUUM_SWITCH_TURBO = [81, 88, 100, 101, 102, 104, 107, 108, 109, 110, 112, 119, 123, 124, 125, 126, 127, 128, 129, 142, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
-POLARIS_VACUUM_SWITCH_IONISER = [104, 126, 128, 156, 160, 178, 181, 186, 198, 199, 211, 212, 241, 242, 257, 264, 269, 307]
-POLARIS_VACUUM_SWITCH_STREAM_WARM = [178, 181, 186, 187, 199, 211, 241, 242, 256, 257, 269, 307]
-POLARIS_VACUUM_SWITCH_BACKLIGHT = [186, 187, 256, 257]
+POLARIS_VACUUM_SWITCH_CHILD_LOCK = [7,12,22,23,24,76,81,88,100,101,102,107,108,109,110,112,115,127,129,241,256,257,269]
+POLARIS_VACUUM_SWITCH_VOLUME = [12,66,104,113,119,123,124,125,126,128,129,131,142,146,148,149,150,154,156,160,178,181,186,187,195,197,198,199,201,202,211,212,213,217,218,219,220,221,241,242,256,257,264,269,307]
+POLARIS_VACUUM_SWITCH_TURBO = [81,88,100,101,102,104,107,108,109,110,112,119,123,124,125,126,127,128,129,142,146,148,149,150,154,156,160,178,181,186,187,195,198,199,201,202,211,212,213,217,218,219,220,221,241,242,256,257,264,269,307]
+POLARIS_VACUUM_SWITCH_IONISER = [104,126,128,156,160,178,181,186,198,199,211,212,241,242,257,264,269,307]
+POLARIS_VACUUM_SWITCH_STREAM_WARM = [178,181,186,187,199,211,241,242,256,257,269,307]
+POLARIS_VACUUM_SWITCH_BACKLIGHT = [186,187,256,257]
 
-POLARIS_VACUUM_EXPENDABLE_DUST = [7, 12, 19, 21, 22, 23, 24, 43, 66, 68, 76, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 113, 115, 122, 127, 130, 131, 133, 134, 135, 163, 193, 197]
-POLARIS_VACUUM_EXPENDABLE_MOP = [104, 119, 123, 124, 125, 126, 128, 129, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
+POLARIS_VACUUM_EXPENDABLE_DUST = [7,12,19,21,22,23,24,43,66,68,76,81,88,100,101,102,107,108,109,110,112,113,115,122,127,130,131,133,134,135,163,193,197]
+POLARIS_VACUUM_EXPENDABLE_MOP = [104,119,123,124,125,126,128,129,146,148,149,150,154,156,160,178,181,186,187,195,198,199,201,202,211,212,213,217,218,219,220,221,241,242,256,257,264,269,307]
 
-VACUUM_SWITCH_01_TURBO = [81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 127]
-VACUUM_SWITCH_02_TURBO = [104, 126]
-VACUUM_SWITCH_03_TURBO = [119, 123, 124, 125, 128, 129, 142, 146, 148, 149, 150, 154, 156, 160, 178, 181, 186, 187, 195, 198, 199, 201, 202, 211, 212, 213, 217, 218, 219, 220, 221, 241, 242, 256, 257, 264, 269, 307]
+POLARIS_VACUUM_SENSORS_01_PROGR_DATA = [104,119,123,124,125,126,128,146,148,149,150,154,156,160,178,181,201,202,213,217,218,219,220,221,242,307]
+POLARIS_VACUUM_SENSORS_02_PROGR_DATA = [129,142,186,187,195,256,257]
+POLARIS_VACUUM_SENSORS_03_PROGR_DATA = [198,212,241,264,269]
+
+VACUUM_SWITCH_01_TURBO = [81,88,100,101,102,107,108,109,110,112,127]
+VACUUM_SWITCH_02_TURBO = [104,126]
+VACUUM_SWITCH_03_TURBO = [119,123,124,125,128,129,142,146,148,149,150,154,156,160,178,181,186,187,195,198,199,201,202,211,212,213,217,218,219,220,221,241,242,256,257,264,269,307]
+
 
 KETTLE_ERROR = {
 "00": "no_error",
@@ -602,15 +608,15 @@ AIRCLEANER_ERROR = {
 "02": "child_lock"
 }
 
-POLARIS_VACUUM_01_ERROR_CODE = [7, 22, 23, 24, 76, 81, 88, 100, 101, 102, 107, 108, 109, 110, 112, 115, 127]
-POLARIS_VACUUM_02_ERROR_CODE = [12, 19, 21, 43, 66, 68, 113, 122, 130, 131, 133, 134, 135, 142, 163, 193, 195, 197]
-POLARIS_VACUUM_03_ERROR_CODE = [119, 123, 124, 125, 146, 148, 149, 150, 154, 201, 202, 213, 217, 218, 219, 220, 221]
-POLARIS_VACUUM_04_ERROR_CODE = [104, 126, 128, 156, 160]
-POLARIS_VACUUM_05_ERROR_CODE = [181, 242]
+POLARIS_VACUUM_01_ERROR_CODE = [7,22,23,24,76,81,88,100,101,102,107,108,109,110,112,115,127]
+POLARIS_VACUUM_02_ERROR_CODE = [12,19,21,43,66,68,113,122,130,131,133,134,135,142,163,193,195,197]
+POLARIS_VACUUM_03_ERROR_CODE = [119,123,124,125,146,148,149,150,154,201,202,213,217,218,219,220,221]
+POLARIS_VACUUM_04_ERROR_CODE = [104,126,128,156,160]
+POLARIS_VACUUM_05_ERROR_CODE = [181,242]
 POLARIS_VACUUM_06_ERROR_CODE = [178]
-POLARIS_VACUUM_07_ERROR_CODE = [198, 199, 211, 241, 264, 269]
+POLARIS_VACUUM_07_ERROR_CODE = [198,199,211,241,264,269]
 POLARIS_VACUUM_08_ERROR_CODE = [212]
-POLARIS_VACUUM_09_ERROR_CODE = [186, 187, 256, 257]
+POLARIS_VACUUM_09_ERROR_CODE = [186,187,256,257]
 POLARIS_VACUUM_10_ERROR_CODE = [129]
 POLARIS_VACUUM_11_ERROR_CODE = [307]
 
@@ -1622,7 +1628,7 @@ SENSORS_VACUUM = [
         device_class=SensorDeviceClass.BATTERY,
         native_unit_of_measurement=PERCENTAGE,
         state_class=None,
-        entity_category=EntityCategory.DIAGNOSTIC,
+#        entity_category=EntityCategory.DIAGNOSTIC,
     ),
     PolarisSensorEntityDescription(
         key="battery_state",
@@ -1631,7 +1637,7 @@ SENSORS_VACUUM = [
         device_class=None,
         native_unit_of_measurement=None,
         state_class=None,
-        entity_category=EntityCategory.DIAGNOSTIC,
+#        entity_category=EntityCategory.DIAGNOSTIC,
         icon="mdi:battery",
     ),
         PolarisSensorEntityDescription(
@@ -1641,7 +1647,7 @@ SENSORS_VACUUM = [
         device_class=None,
         native_unit_of_measurement=UnitOfTime.HOURS,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_category=EntityCategory.DIAGNOSTIC,
+#        entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=True,
         icon="mdi:asterisk",
     ),
@@ -1652,7 +1658,7 @@ SENSORS_VACUUM = [
         device_class=None,
         native_unit_of_measurement=UnitOfTime.HOURS,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_category=EntityCategory.DIAGNOSTIC,
+#        entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=True,
         icon="mdi:broom",
     ),
@@ -1663,9 +1669,31 @@ SENSORS_VACUUM = [
         device_class=None,
         native_unit_of_measurement=UnitOfTime.HOURS,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_category=EntityCategory.DIAGNOSTIC,
+#        entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=True,
         icon="mdi:air-filter",
+    ),
+    PolarisSensorEntityDescription(
+        key="clean_time",
+        name="last_clean_time",
+        translation_key="last_clean_time",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        state_class=SensorStateClass.MEASUREMENT,
+#        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:timer",
+    ),
+    PolarisSensorEntityDescription(
+        key="clean_area",
+        name="last_clean_area",
+        translation_key="last_clean_area",
+        device_class=None,
+        native_unit_of_measurement=UnitOfArea.SQUARE_METERS,
+        state_class=SensorStateClass.MEASUREMENT,
+#        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:texture-box",
     ),
 ]
 SENSOR_VACUUM_EXPENDABLE_MOP = [
@@ -1676,7 +1704,7 @@ SENSOR_VACUUM_EXPENDABLE_MOP = [
         device_class=None,
         native_unit_of_measurement=UnitOfTime.HOURS,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_category=EntityCategory.DIAGNOSTIC,
+#        entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=True,
         icon="mdi:liquid-spot",
     ),
@@ -1689,9 +1717,44 @@ SENSOR_VACUUM_EXPENDABLE_DUST = [
         device_class=None,
         native_unit_of_measurement=UnitOfTime.HOURS,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_category=EntityCategory.DIAGNOSTIC,
+#        entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=True,
         icon="mdi:pail",
+    ),
+]
+SENSORS_VACUUM_TOTAL_CLEAN = [
+    PolarisSensorEntityDescription(
+        key="program_data/1",
+        name="total_clean_time",
+        translation_key="total_clean_time",
+        device_class=None,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.MEASUREMENT,
+#        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:timer",
+    ),
+    PolarisSensorEntityDescription(
+        key="program_data/1",
+        name="total_clean_area",
+        translation_key="total_clean_area",
+        device_class=None,
+        native_unit_of_measurement=UnitOfArea.SQUARE_METERS,
+        state_class=SensorStateClass.MEASUREMENT,
+#        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:texture-box",
+    ),
+    PolarisSensorEntityDescription(
+        key="program_data/1",
+        name="clean_count",
+        translation_key="clean_count",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+#        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=True,
+        icon="mdi:counter",
     ),
 ]
 

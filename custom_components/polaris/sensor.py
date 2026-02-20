@@ -55,6 +55,10 @@ from .const import (
     POLARIS_VACUUM_TYPE,
     POLARIS_VACUUM_EXPENDABLE_DUST,
     POLARIS_VACUUM_EXPENDABLE_MOP,
+    POLARIS_VACUUM_SENSORS_01_PROGR_DATA,
+    POLARIS_VACUUM_SENSORS_02_PROGR_DATA,
+    POLARIS_VACUUM_SENSORS_03_PROGR_DATA,
+    SENSORS_VACUUM_TOTAL_CLEAN,
     POLARIS_BOILER_TYPE,
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_HEATER_TYPE,
@@ -393,6 +397,25 @@ async def async_setup_entry(
                     device_id=deviceID,
                 )
             )
+    if (int(devicetype) in POLARIS_VACUUM_SENSORS_01_PROGR_DATA or int(devicetype) in POLARIS_VACUUM_SENSORS_02_PROGR_DATA or int(devicetype) in POLARIS_VACUUM_SENSORS_03_PROGR_DATA):
+        SENSORS_VACUUM_TOTAL_CLEAN_CP = copy.deepcopy(SENSORS_VACUUM_TOTAL_CLEAN)
+        for description in SENSORS_VACUUM_TOTAL_CLEAN_CP:
+            if int(devicetype) in POLARIS_VACUUM_SENSORS_02_PROGR_DATA:
+                description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key[:-1]}2")
+            elif int(devicetype) in POLARIS_VACUUM_SENSORS_03_PROGR_DATA:
+                description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key[:-1]}3")
+            else:
+                description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
     if (devicetype in POLARIS_BOILER_TYPE):
         SENSORS_WATER_BOILER_CP = copy.deepcopy(SENSORS_WATER_BOILER)
         for description in SENSORS_WATER_BOILER_CP:
@@ -598,7 +621,17 @@ class PolarisSensor(PolarisBaseEntity, SensorEntity):
                 payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[3]
             if self.entity_description.name == "dust_container":
                 payload_message = payload_message.replace("[","",1).replace("]","",1).split(",")[3]
-                
+            if self.entity_description.name == "last_clean_time":
+                payload_message = str(int(payload_message)/60)
+            if self.entity_description.name == "last_clean_area":
+                payload_message = str(int(payload_message)/10000)
+            if self.entity_description.name == "total_clean_time":
+                payload_message = str((int(payload_message[18:20], 16) *256 + int(payload_message[16:18], 16))/60)
+            if self.entity_description.name == "clean_count":
+                payload_message = str(int(payload_message[10:12],16) * 256 + int(payload_message[8:10],16))
+            if self.entity_description.name == "total_clean_area":
+                payload_message = str(int(payload_message[2:4], 16) * 256 + int(payload_message[:2], 16))
+
             self._attr_native_value = payload_message
             self.async_write_ha_state()
 

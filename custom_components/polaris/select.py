@@ -358,6 +358,17 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
 #                self.entity_description.options = json.loads(json.dumps(self.entity_description.options))
                 for key, value in self._custom_data_select["SELECT_VACUUM_rooms"].items():
                     self.entity_description.options[key] = json.dumps([value])
+
+        if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner" and self.entity_description.key == "vacuum_tank":
+            if int(self.device_type) in POLARIS_VACUUM_01_WATER_TYPE:
+                self.entity_description.options = VACUUM_01_WATER
+            if int(self.device_type) in POLARIS_VACUUM_02_WATER_TYPE:
+                self.entity_description.options = VACUUM_02_WATER
+            if int(self.device_type) in POLARIS_VACUUM_03_WATER_TYPE:
+                self.entity_description.options = VACUUM_03_WATER
+            if int(self.device_type) in POLARIS_VACUUM_04_WATER_TYPE:
+                self.entity_description.options = VACUUM_04_WATER
+
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner" and self.entity_description.key == "select_mode_vacuum":
             if int(self.device_type) in POLARIS_VACUUM_01_MODE_TYPE:
                 self.entity_description.options = VACUUM_01_MODE
@@ -395,19 +406,12 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 self.entity_description.options = VACUUM_17_MODE
             if int(self.device_type) in POLARIS_VACUUM_18_MODE_TYPE:
                 self.entity_description.options = VACUUM_18_MODE
-
-        if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner" and self.entity_description.key == "vacuum_tank":
-            if int(self.device_type) in POLARIS_VACUUM_01_WATER_TYPE:
-                self.entity_description.options = VACUUM_01_WATER
-            if int(self.device_type) in POLARIS_VACUUM_02_WATER_TYPE:
-                self.entity_description.options = VACUUM_02_WATER
-            if int(self.device_type) in POLARIS_VACUUM_03_WATER_TYPE:
-                self.entity_description.options = VACUUM_03_WATER
-            if int(self.device_type) in POLARIS_VACUUM_04_WATER_TYPE:
-                self.entity_description.options = VACUUM_04_WATER
-        
-        self._attr_options = list(self.entity_description.options.keys())
-        self._attr_current_option = self._attr_options[0]
+            self._attr_options = list(self.entity_description.options.keys())
+            self._attr_options.remove("off")
+            self._attr_current_option = "auto"
+        else:
+            self._attr_options = list(self.entity_description.options.keys())
+            self._attr_current_option = self._attr_options[0]
         self._attr_available = False
 
     def key_from_option(self, option: str):
@@ -570,6 +574,8 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_1[0] == "a" else self._preset_1[0])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
+            elif self.entity_description.key == "select_mode_vacuum":
+                return
             else:
                 self._attr_current_option = list(self.entity_description.options.keys())[list(self.entity_description.options.values()).index(payload)]
                 self.async_write_ha_state()
