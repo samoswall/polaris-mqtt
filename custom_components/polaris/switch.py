@@ -579,21 +579,22 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type == "882"):
+    if device_type in ("808", "882"):
         SWITCHES_AIRCONDITIONER_882_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER_882)
         for description in SWITCHES_AIRCONDITIONER_882_LC:
-            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
-            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
-            description.device_prefix_topic = device_prefix_topic
-            switchList.append(
-                PolarisSwitch(
-                    description=description,
-                    device_friendly_name=device_id,
-                    mqtt_root=mqtt_root,
-                    device_type=device_type,
-                    device_id=device_id
+            if (device_type != "808" or description.translation_key not in ("backlight_switch", "smart_mode", "sound_switch")):
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
                 )
-            )
     if (device_type in POLARIS_THERMOSTAT_TYPE):
         SWITCHES_THERMOSTAT_LC = copy.deepcopy(SWITCHES_THERMOSTAT)
         for description in SWITCHES_THERMOSTAT_LC:
