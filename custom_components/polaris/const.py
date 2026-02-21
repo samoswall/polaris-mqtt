@@ -390,6 +390,7 @@ POLARIS_DEVICE = {
     847: {"model": "Wi-Fi-Convection-Heater", "class": "heater"},
     849: {"model": "Transformer-4", "class": "heater"},
     814: {"model": "Transformer-DI", "class": "heater"},
+    808: {"model": "Electrolux-Atrium-DC_Zanussi-Siena-DC_Ballu-Lagoon", "class": "air_conditioner"},
     820: {"model": "Ballu-Platinum-Evol-DC_Olympio-Legend", "class": "air_conditioner"},
     813: {"model": "Electrolux-Smartline_Ballu-Eco-Smart_Ice-Peak", "class": "air_conditioner"},
     882: {"model": "Goldstar-GSAC_GSACI", "class": "air_conditioner"},
@@ -428,7 +429,7 @@ POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81
 POLARIS_BOILER_TYPE = ["802","833","844","876"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
-POLARIS_AIRCONDITIONER_TYPE = ["813","820","882"]
+POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808"]
 POLARIS_THERMOSTAT_TYPE = ["878"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}

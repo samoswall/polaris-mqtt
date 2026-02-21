@@ -274,6 +274,9 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         self._select_rooms = []
         self._available_rooms = available_rooms
         self._rooms_js = rooms_js
+        self._battery_state = "charge-full"
+        self._error_code = "00"
+        self._current_mode = "0"
         
     @property
     def select_rooms(self) -> list | None:
@@ -432,19 +435,30 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
                 self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/connection", entity_availability, 1)
 
-    
+        @callback
+        async def message_received_battery_state(message):
+            self._battery_state = message.payload
+            self._update_activity()
+        await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/battery_state", message_received_battery_state, 1)
+
+        @callback
+        async def message_received_error_code(message):
+            self._error_code = message.payload
+            self._update_activity()
+        await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/code", message_received_error_code, 1)
+
     def _update_activity(self):
         """Update vacuum activity based on mode and battery staten and error."""
         # Получаем состояние батареи и ошибки из сенсора
-        battery_state = error_state = None
-        battery_entity_id = f"sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_battery_state"
-        battery_state_obj = self.hass.states.get(battery_entity_id)
-        if battery_state_obj:
-            battery_state = battery_state_obj.state
-        error_entity_id = f"sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_error"
-        error_state_obj = self.hass.states.get(error_entity_id)
-        if error_state_obj:
-            error_state = error_state_obj.state
+#        battery_state = error_state = None
+#        battery_entity_id = f"sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_battery_state"
+#        battery_state_obj = self.hass.states.get(battery_entity_id)
+#        if battery_state_obj:
+#            battery_state = battery_state_obj.state
+#        error_entity_id = f"sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_error"
+#        error_state_obj = self.hass.states.get(error_entity_id)
+#        if error_state_obj:
+#            error_state = error_state_obj.state
 
         # Определяем значения режимов из my_mode_list
         off_value = self.my_mode_list.get("off", "0")
@@ -458,30 +472,30 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 
 #        _LOGGER.debug(f"[{self.entity_id}] === STATUS UPDATE ===")
 #        _LOGGER.debug(f"[{self.entity_id}] Current mode: {self._current_mode}")
-#        _LOGGER.debug(f"[{self.entity_id}] Battery state: '{battery_state}'")
+#        _LOGGER.debug(f"[{self.entity_id}] Battery state: '{self._battery_state}'")
 #        _LOGGER.debug(f"[{self.entity_id}] off value={off_value}, recharge_value={recharge_value}")
 #        _LOGGER.debug(f"[{self.entity_id}] cleaning values={cleaning_values}")
-#        _LOGGER.debug(f"[{self.entity_id}] error_state={error_state}")
+#        _LOGGER.debug(f"[{self.entity_id}] error_state={self._error_code}")
          
         # ===== ОПРЕДЕЛЕНИЕ СТАТУСА =====
-        if error_state != "no_error":
+        if self._error_code not in ("0", "00"):
             self._attr_activity = VacuumActivity.ERROR
             
         elif self._current_mode == off_value:
             # Пылесос выключен - определяем состояние по батарее
-            if battery_state == "charge-full":
-                # Полностью заряжен на базе -> IDLE (бездействие)
-                self._attr_activity = VacuumActivity.IDLE
-            elif battery_state in ("charging", "charging-dock", "charge-dock", "charge-cable"):
+#            if self._battery_state == "charge-full":
+#                # Полностью заряжен на базе -> IDLE (бездействие)
+#                self._attr_activity = VacuumActivity.IDLE
+            if self._battery_state in ("charging", "charging-dock", "charge-dock", "charge-cable", "charge-full"):
                 # Заряжается на базе -> DOCKED
                 self._attr_activity = VacuumActivity.DOCKED
-            elif battery_state == "discharge":
+            elif self._battery_state == "discharge":
                 # Разряжается (не на базе) -> IDLE (остановлен)
                 self._attr_activity = VacuumActivity.IDLE
             else:
                 # Неизвестное состояние батареи -> IDLE
                 self._attr_activity = VacuumActivity.IDLE
-                _LOGGER.debug(f"[{self.entity_id}] -> IDLE (unknown battery state: {battery_state})")
+                _LOGGER.debug(f"[{self.entity_id}] -> IDLE (unknown battery state: {self._battery_state})")
         elif self._current_mode == recharge_value:
             # Возвращается на базу
             self._attr_activity = VacuumActivity.RETURNING
@@ -491,11 +505,11 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         else:
             # Неизвестный режим - определяем по батарее
             _LOGGER.debug(f"[{self.entity_id}] Unknown mode {self._current_mode}, checking battery")
-            if battery_state == "charge-full":
-                self._attr_activity = VacuumActivity.IDLE
-            elif battery_state in ("charging", "charging-dock", "charge-dock", "charge-cable"):
+#            if self._battery_state == "charge-full":
+#                self._attr_activity = VacuumActivity.IDLE
+            if self._battery_state in ("charging", "charging-dock", "charge-dock", "charge-cable", "charge-full"):
                 self._attr_activity = VacuumActivity.DOCKED
-            elif battery_state == "discharge":
+            elif self._battery_state == "discharge":
                 self._attr_activity = VacuumActivity.IDLE
             else:
                 self._attr_activity = VacuumActivity.IDLE

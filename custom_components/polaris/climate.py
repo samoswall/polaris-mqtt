@@ -262,6 +262,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             self._EAP_data0 = "0000"
         if device_type == "882":
             self._swing_message = "000000000000"
+        if device_type == "808":
+            self._swing_message = "0000"
 
     async def async_added_to_hass(self):
         @callback
@@ -500,5 +502,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
                 swmessage = "0100"
             case "both": 
                 swmessage = "0101"
-        mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage + self._swing_message[4:])
+        if self.device_type == "808":
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage)
+        else:
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage + self._swing_message[4:])
         self.async_write_ha_state()
