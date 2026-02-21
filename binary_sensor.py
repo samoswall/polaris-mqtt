@@ -1,0 +1,324 @@
+"""The Polaris IQ Home component."""
+from __future__ import annotations
+
+import json
+import re
+import logging
+from typing import Iterable, List
+import copy
+from datetime import datetime
+
+from homeassistant.components import mqtt
+from homeassistant.components.mqtt.models import ReceiveMessage
+from homeassistant.components.binary_sensor import (
+    DOMAIN,
+    BinarySensorDeviceClass,
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
+)
+from homeassistant.helpers.entity import DeviceInfo, EntityCategory
+from homeassistant.util import slugify
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+# Device
+from homeassistant.helpers.device_registry import DeviceEntry, DeviceEntryDisabler
+from homeassistant.helpers import device_registry as dev_reg
+from homeassistant.helpers.entity import Entity
+from homeassistant.helpers import entity_registry as ent_reg
+from homeassistant.const import STATE_UNAVAILABLE
+
+from .common import PolarisBaseEntity
+
+# Import global values.
+from .const import (
+    MANUFACTURER,
+    MQTT_ROOT_TOPIC,
+    DEVICEID,
+    DEVICETYPE,
+    POLARIS_DEVICE,
+    BINARYSENSOR_KETTLE,
+    BINARYSENSOR_LID,
+    BINARYSENSOR_WATER_TANK,
+    BINARYSENSOR_CAPPUCCINATOR,
+    BINARYSENSOR_AVAILABLE,
+    BINARYSENSOR_THERMOSTAT,
+    PolarisBinarySensorEntityDescription,
+    POLARIS_KETTLE_TYPE,
+    POLARIS_KETTLE_WITH_WEIGHT_TYPE,
+    POLARIS_HUMIDDIFIER_TYPE,
+    POLARIS_COOKER_TYPE,
+    POLARIS_COOKER_WITH_LID_TYPE,
+    POLARIS_COFFEEMAKER_TYPE,
+    POLARIS_COFFEEMAKER_ROG_TYPE,
+    POLARIS_CLIMATE_TYPE,
+    POLARIS_AIRCLEANER_TYPE,
+    POLARIS_AIRCLEANER_EAP_TYPE,
+    POLARIS_BOILER_TYPE,
+    POLARIS_VACUUM_TYPE,
+    POLARIS_IRRIGATOR_TYPE,
+    POLARIS_HEATER_TYPE,
+    POLARIS_AIRCONDITIONER_TYPE,
+    POLARIS_THERMOSTAT_TYPE,
+)
+
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.DEBUG)
+
+
+async def async_setup_entry(
+    hass: HomeAssistant, config: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
+
+    integrationUniqueID = config.unique_id
+    mqtt_root = config.data[MQTT_ROOT_TOPIC]
+    device_id = config.data["DEVICEID"]
+    device_type = config.data[DEVICETYPE]
+    device_prefix_topic = config.data["DEVPREFIXTOPIC"]
+    binarysensorList = []
+    
+    if (device_type in POLARIS_KETTLE_WITH_WEIGHT_TYPE):
+            BINARYSENSOR_KETTLE_LC = copy.deepcopy(BINARYSENSOR_KETTLE)
+            for description in BINARYSENSOR_KETTLE_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+    if (device_type in POLARIS_COOKER_WITH_LID_TYPE):
+            BINARYSENSOR_LID_LC = copy.deepcopy(BINARYSENSOR_LID)
+            for description in BINARYSENSOR_LID_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+    if (device_type in POLARIS_HUMIDDIFIER_TYPE and device_type not in {"835","881"}):
+            BINARYSENSOR_WATER_TANK_LC = copy.deepcopy(BINARYSENSOR_WATER_TANK)
+            for description in BINARYSENSOR_WATER_TANK_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+    if (device_type in POLARIS_COFFEEMAKER_ROG_TYPE):
+            BINARYSENSOR_CAPPUCCINATOR_LC = copy.deepcopy(BINARYSENSOR_CAPPUCCINATOR)
+            for description in BINARYSENSOR_CAPPUCCINATOR_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+    if (device_type in POLARIS_THERMOSTAT_TYPE):
+            BINARYSENSOR_THERMOSTAT_LC = copy.deepcopy(BINARYSENSOR_THERMOSTAT)
+            for description in BINARYSENSOR_THERMOSTAT_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+    if (device_type in POLARIS_KETTLE_TYPE or
+        device_type in POLARIS_KETTLE_WITH_WEIGHT_TYPE or
+        device_type in POLARIS_HUMIDDIFIER_TYPE or
+        device_type in POLARIS_COOKER_TYPE or
+        device_type in POLARIS_COFFEEMAKER_ROG_TYPE or
+        device_type in POLARIS_COFFEEMAKER_TYPE or
+        device_type in POLARIS_CLIMATE_TYPE or
+        device_type in POLARIS_AIRCLEANER_TYPE or
+        device_type in POLARIS_AIRCLEANER_EAP_TYPE or
+        device_type in POLARIS_BOILER_TYPE or
+        device_type in POLARIS_VACUUM_TYPE or
+        device_type in POLARIS_IRRIGATOR_TYPE or
+        device_type in POLARIS_HEATER_TYPE or
+        device_type in POLARIS_AIRCONDITIONER_TYPE or
+        device_type in POLARIS_THERMOSTAT_TYPE):
+            BINARYSENSOR_AVAILABLE_LC = copy.deepcopy(BINARYSENSOR_AVAILABLE)
+            for description in BINARYSENSOR_AVAILABLE_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+    
+    async_add_entities(binarysensorList, update_before_add=True)
+
+
+class PolarisBinarySensor(PolarisBaseEntity, BinarySensorEntity, ConfigEntry):
+
+    entity_description: PolarisBinarySensorEntityDescription
+
+    def __init__(
+        self,
+        device_friendly_name: str,
+        description: PolarisBinarySensorEntityDescription,
+        mqtt_root: str,
+        device_id: str | None=None,
+        device_type: str | None=None,
+    ) -> None:
+        super().__init__(
+            device_friendly_name=device_friendly_name,
+            mqtt_root=mqtt_root,
+            device_type=device_type,
+            device_id=device_id,
+        )
+        self.entity_description = description
+        self._attr_unique_id = slugify(f"{device_id}_{description.name}")
+        self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
+        self._attr_has_entity_name = True
+        self._attr_is_on = False
+        self.device_entities = []
+        if self.entity_description.name != "available":
+            self._attr_available = False
+
+    async def async_added_to_hass(self):
+        @callback
+        async def message_received_base(message):
+            if int(self.device_type) == 45 and self.entity_description.key == "cappuccinator":
+                if int(message.payload) == 255:
+                    self._attr_is_on = False
+                    service_data = {}
+                    service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_tank"
+                    service_data["value"] = 7.777
+                    await self.hass.services.async_call("number", "set_value", service_data)
+                else:
+                    self._attr_is_on = True
+            elif str(message.payload).lower() in ("1", "true"):
+                if self.entity_description.name == "available":
+                    self._attr_is_on = False
+#                    await self.update_device_availability(False)
+#                    await self.get_device_entities(False)
+                else:
+                    self._attr_is_on = True
+            elif str(message.payload).lower() in ("0", "false"):
+                if self.entity_description.name == "available":
+                    self._attr_is_on = True
+#                    await self.update_device_availability(True)
+#                    await self.get_device_entities(True)
+                else:
+                    self._attr_is_on = False
+            self.async_write_ha_state()
+
+
+        await mqtt.async_subscribe(
+            self.hass,
+            self.entity_description.mqttTopicStatus,
+            message_received_base,
+            1,
+        )
+
+
+        @callback
+        async def entity_availability(message):
+            if self.entity_description.name != "available":
+                if str(message.payload).lower() in ("1", "true"):
+                    self._attr_available = False
+                else:
+                    self._attr_available = True
+                self.async_write_ha_state()
+        await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/connection", entity_availability, 1)
+        
+        
+        
+        
+    async def get_device_entities(self, available: bool):      # -> List[Entity]:
+        """Return a list of entities that belong to the same device as this binary sensor"""
+        entities = []
+        entity_registry = ent_reg.async_get(self.hass)
+        entity_entry = entity_registry.async_get(self.entity_id)
+        _LOGGER.debug("-------------------------------------------------")
+        _LOGGER.debug("entity_id 0 %s", self.entity_id)
+        if entity_entry:
+            _LOGGER.debug("entity_entry 0 %s", entity_entry)
+            dev_id = entity_entry.device_id
+            _LOGGER.debug("dev_id 0 %s", dev_id)
+            entity_ids = [
+                entry.entity_id for entry in entity_registry.entities.values()
+                if entry.device_id == dev_id
+                ]
+            _LOGGER.debug("entity_ids 0 %s", entity_ids)
+            for entity_id_av in entity_ids:
+                entity_av = self.hass.states.get(entity_id_av)
+                if entity_av:
+                    _LOGGER.debug("entity off: %s", entity_av)
+#                    entity_av.attributes["_attr_available"] = available
+                    self.hass.states.async_set(entity_id_av, entity_av.state, entity_av.attributes)
+
+#        return entities
+        
+        
+        
+        
+        
+        
+        
+        
+#    async def get_device_entities(self) -> List[Entity]:
+#        """Return a list of entities that belong to the same device as this binary sensor"""
+#        entities = []
+#        for entity in self.hass.entities:
+#            dev_find = f"{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}"
+#            if dev_find in entity.entity_id:
+#                entities.append(entity.entity_id)
+#        return entities
+
+
+
+
+#    async def update_device_availability(self, available: bool):
+#        """Обновляет статус устройства в Device Registry."""
+#        dev_registry = dev_reg.async_get(self.hass)
+#        device = dev_registry.async_get_device(self.device_info["identifiers"])
+        
+#        if device:
+#            for entry in self.hass.config_entries.async_entries():
+#                if entry.domain == "polaris" and entry.unique_id == f"{POLARIS_DEVICE[int(self.device_type)]['class']}-{POLARIS_DEVICE[int(self.device_type)]['model']}-{self.device_id}":
+#                    config_entries = entry
+#            if available:
+#                dev_registry.async_update_device(device.id, disabled_by = None)
+#                state = self.hass.states.get(self.entity_id)
+#                if state == None:
+#                    delta_time = 1000
+#                else:
+#                    self._new_time_available = datetime.now().timestamp()
+#                    delta_time = self._new_time_available - state.last_changed.timestamp()
+#                if delta_time > 5:
+#                    await self.hass.config_entries.async_reload(config_entries.entry_id)
+#            else:
+#                dev_registry.async_update_device(device.id, disabled_by = DeviceEntryDisabler.INTEGRATION)
+
