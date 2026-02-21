@@ -252,7 +252,7 @@ async def async_setup_entry(
                     custom_data_select=custom_data_select
                 )
             )
-    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type == "813"):
+    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type in ("813","815")):
         SELECT_AIRCONDITIONER_SWING_HORIZONTAL_LC = copy.deepcopy(SELECT_AIRCONDITIONER_SWING_HORIZONTAL)
         for description in SELECT_AIRCONDITIONER_SWING_HORIZONTAL_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
@@ -268,7 +268,7 @@ async def async_setup_entry(
                     custom_data_select=custom_data_select
                 )
             )
-    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type == "813"):
+    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type in ("813","815")):
         SELECT_AIRCONDITIONER_SWING_VERTICAL_LC = copy.deepcopy(SELECT_AIRCONDITIONER_SWING_VERTICAL)
         for description in SELECT_AIRCONDITIONER_SWING_VERTICAL_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
@@ -324,7 +324,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             self._select_options = json.loads(json.dumps(SELECT_COFFEEMAKER[0].options))
         if device_type == "826":
             self._EAP_data0 = "0000"
-        if device_type == "813":
+        if device_type in ("813","815"):
             self._conditioner_data0 = "0000"
 
         if self._custom_data_select is not None:
@@ -558,7 +558,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             elif int(self.device_type) == 69:
                 self._attr_current_option = self._attr_options[int(payload)]
                 self.async_write_ha_state()
-            elif int(self.device_type) == 813:
+            elif int(self.device_type) in (813,815):
                 self._attr_current_option = self._attr_options[int(payload)]
                 self.async_write_ha_state()
             elif POLARIS_DEVICE[int(self.device_type)]['class'] == "irrigator":
@@ -599,7 +599,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         def conditioner_data_message_received(message):
             self._conditioner_data0 = message.payload
 
-        if self.device_type == "813":
+        if self.device_type in ("813","815"):
             await mqtt.async_subscribe(
                 self.hass,
                 self.entity_description.mqttTopicCurrentMode[:-1]+"0",
