@@ -408,6 +408,7 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 self.entity_description.options = VACUUM_18_MODE
             self._attr_options = list(self.entity_description.options.keys())
             self._attr_options.remove("off")
+            self._attr_options.remove("recharge")
             self._attr_current_option = "auto"
         else:
             self._attr_options = list(self.entity_description.options.keys())
@@ -536,6 +537,8 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         @callback
         def message_received_sel(message):
             payload = message.payload
+#            if self.entity_description.key == "select_mode_vacuum":
+#                return
             if payload in ("0", "[]"):
                 self._attr_current_option = self._attr_options[0]
                 self.async_write_ha_state()
@@ -574,11 +577,10 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_1[0] == "a" else self._preset_1[0])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
-            elif self.entity_description.key == "select_mode_vacuum":
-                return
-            else:
-                self._attr_current_option = list(self.entity_description.options.keys())[list(self.entity_description.options.values()).index(payload)]
-                self.async_write_ha_state()
+#            else:
+#                _LOGGER.debug(f"Type {POLARIS_DEVICE[int(self.device_type)]['class']} Options {self.entity_description.options}")
+#                self._attr_current_option = list(self.entity_description.options.keys())[list(self.entity_description.options.values()).index(payload)]
+#                self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentMode, message_received_sel, 1)
         
         @callback
