@@ -114,6 +114,24 @@
       },
       "anti_fingus_switch": {
         "name": "Anti fingus"
+      },
+      "wet_dry_switch": {
+        "name": "Wet and dry cleaning"
+      },
+      "carpet_booster_switch": {
+        "name": "Carpet booster"
+      },
+      "carpet_cleaning_switch": {
+        "name": "Carpet cleaning"
+      },
+      "effect_3d": {
+        "name": "3D effect"
+      },
+      "winter_storage": {
+        "name": "Winter storage"
+      },
+      "night_light_mode": {
+        "name": "Night light"
       }
     },
     "water_heater": {
@@ -212,6 +230,15 @@
       },
       "power_cable": {
         "name": "Power cable"
+      },
+      "fan_turn": {
+        "name": "Turn"
+      },
+      "fan_tilt": {
+        "name": "Tilt"
+      },
+      "fan_auto_off": {
+        "name": "Auto off"
       }
     },
     "sensor": {
@@ -276,7 +303,7 @@
           "check_water_tank": "Сheck the water tank",
           "cappuccinator_false": "Cappuccinator false",
           "nothing_is_selected": "Nothing is selected",
-		  "v01_error_1": "Cliff error",
+          "v01_error_1": "Cliff error",
           "v01_error_2": "Check front collision plate",
           "v01_error_4": "Check wheels",
           "v01_error_8": "Check edge brushes",
@@ -748,6 +775,55 @@
       },
       "pm2_5_sensor": {
         "name": "PM2.5"
+      },
+      "vacuum_battery": {
+        "name": "Battery"
+      },
+      "vacuum_battery_state": {
+        "name": "Battery state",
+        "state": {
+          "charge-full": "Charge full",
+          "discharge": "Discharge",
+          "charging": "Charging",
+          "charge-dock": "Charge dock",
+          "charge-cable": "Charge cable"
+        }
+      },
+      "vacuum_side_brush": {
+        "name": "Side brush"
+      },
+      "vacuum_main_brush": {
+        "name": "Main brush"
+      },
+      "vacuum_filter": {
+        "name": "Filter"
+      },
+      "vacuum_mop": {
+        "name": "Mop"
+      },
+      "vacuum_dust_container": {
+        "name": "Dust container"
+      },
+      "last_clean_time": {
+        "name": "Last clean time"
+      },
+      "last_clean_area": {
+        "name": "Last clean area"
+      },
+      "total_clean_time": {
+        "name": "Total clean time"
+      },
+      "total_clean_area": {
+        "name": "Total clean area"
+      },
+      "clean_count": {
+        "name": "Clean count"
+      },
+      "current_id_room": {
+        "name": "ID room"
+      },
+      "go_area": {
+        "name": "Go area"
       }
     },
     "select": {
@@ -783,7 +859,15 @@
           "milk_porridge": "Milk porridge",
           "soup": "Soup",
           "meat": "Meat",
-          "cottage_cheese": "Cottage cheese"
+          "cottage_cheese": "Cottage cheese",
+          "french_fries": "French fries",
+          "chicken": "Chicken",
+          "steak": "Steak",
+          "vegetables": "Vegetables",
+          "pie": "Pie",
+          "fish": "Fish",
+          "dehydrate": "Dehydrate",
+          "nuggets": "Nuggets"
         }
       },
       "select_mode_cofeemaker": {
@@ -864,6 +948,77 @@
           "center": "Center",
           "center-right": "Center-right",
           "right": "Right"
+        }
+      },
+      "select_mode_vacuum": {
+        "name": "Mode",
+        "state": {
+          "off": "Off",
+          "random": "Random",
+          "auto": "Auto",
+          "wall": "Wall",
+          "spiral": "Spiral",
+          "recharge": "Recharge",
+          "spot": "Spot",
+          "wet_cleaning": "Wet cleaning",
+          "edge": "Edge",
+          "classic": "Classic",
+          "intensive_cleaning_area": "Intensive cleaning area",
+          "create_map": "Create map",
+          "mapmaking_and_cleaning": "Mapmaking and cleaning",
+          "scheduled_room_cleaning": "Scheduled room cleaning",
+          "area_cleaning": "Area cleaning",
+          "y_shaped_wet_cleaning": "Y-shaped wet cleaning",
+          "double_cleaning": "Double cleaning",
+          "cleaning_the_rag": "Cleaning the rag",
+          "mop_cleaning": "Mop cleaning",
+          "mop_drying": "Mop drying",
+          "self_cleaning": "Self cleaning",
+          "quick_cleaning": "Quick cleaning",
+          "thorough_cleaning": "Thorough cleaning",
+          "sweep": "Sweep",
+          "sweep_mop": "Sweep + mop",
+          "mop": "Mop",
+          "cut_hair": "Cut hair"
+        }  
+      },
+      "select_room": {
+        "name": "Select room",
+        "state": {
+          "all_rooms": "All rooms"
+        }
+      },
+      "vacuum_tank": {
+        "name": "Intensity of water supply",
+        "state": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High",
+          "max": "Max"
+        }
+      },
+      "select_fan_light": {
+        "name": "Light",
+        "state": {
+          "off": "Off",
+          "half": "Half",
+          "full": "Full"
+        }
+      }
+    },
+    "vacuum": {
+      "vacuum": {
+        "name": "Robot vacuum cleaner",
+        "state_attributes": {
+          "fan_speed": {
+            "state": {
+              "min": "Min",
+              "low": "Low",
+              "medium": "Medium",
+              "high": "High",
+              "max": "Max"
+            }
+          }
         }
       }
     },

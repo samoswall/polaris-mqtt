@@ -123,6 +123,15 @@
       },
       "carpet_cleaning_switch": {
         "name": "Уборка на коврах"
+      },
+      "effect_3d": {
+        "name": "3D эффект"
+      },
+      "winter_storage": {
+        "name": "Зимнее хранение"
+      },
+      "night_light_mode": {
+        "name": "Ночник"
       }
     },
     "water_heater": {
@@ -221,6 +230,15 @@
       },
       "power_cable": {
         "name": "Мощность кабеля"
+      },
+      "fan_turn": {
+        "name": "Поворот"
+      },
+      "fan_tilt": {
+        "name": "Наклон"
+      },
+      "fan_auto_off": {
+        "name": "Автоотключение"
       }
     },
     "sensor": {
@@ -932,70 +950,78 @@
           "right": "Вправо"
         }
       },
-	  "select_mode_vacuum": {
-		"name": "Режим работы",
+      "select_mode_vacuum": {
+        "name": "Режим работы",
         "state": {
-		  "off": "Выключен",
-		  "random": "Случайный маршрут",
-		  "auto": "Авто",
-		  "wall": "Вдоль стены",
-		  "spiral": "Спираль",
-		  "recharge": "Возврат на базу",
-		  "spot": "Точечная",
-		  "wet_cleaning": "Влажная уборка",
-		  "edge": "Периметр",
-		  "classic": "Классический",
-		  "intensive_cleaning_area": "Зона интенсивной уборки",
-		  "create_map": "Создать карту",
-		  "mapmaking_and_cleaning": "Создание карты и уборка",
-		  "scheduled_room_cleaning": "Уборка в комнате по расписанию",
-		  "area_cleaning": "Уборка в зоне",
-		  "y_shaped_wet_cleaning": "Y-образная влажная уборка",
-		  "double_cleaning": "Двойная уборка",
-		  "cleaning_the_rag": "Чистка тряпки",
-		  "mop_cleaning": "Чистка мопов",
-		  "mop_drying": "Просушка мопов",
-		  "self_cleaning": "Самоочистка",
-		  "quick_cleaning": "Быстрая уборка",
-		  "thorough_cleaning": "Тщательная уборка",
-		  "sweep": "Сухая уборка",
-		  "sweep_mop": "Сухая + влажная уборка",
-		  "mop": "Влажная уборка",
-		  "cut_hair": "Очистка от волос"
-		}  
-	  },
+          "off": "Выключен",
+          "random": "Случайный маршрут",
+          "auto": "Авто",
+          "wall": "Вдоль стены",
+          "spiral": "Спираль",
+          "recharge": "Возврат на базу",
+          "spot": "Точечная",
+          "wet_cleaning": "Влажная уборка",
+          "edge": "Периметр",
+          "classic": "Классический",
+          "intensive_cleaning_area": "Зона интенсивной уборки",
+          "create_map": "Создать карту",
+          "mapmaking_and_cleaning": "Создание карты и уборка",
+          "scheduled_room_cleaning": "Уборка в комнате по расписанию",
+          "area_cleaning": "Уборка в зоне",
+          "y_shaped_wet_cleaning": "Y-образная влажная уборка",
+          "double_cleaning": "Двойная уборка",
+          "cleaning_the_rag": "Чистка тряпки",
+          "mop_cleaning": "Чистка мопов",
+          "mop_drying": "Просушка мопов",
+          "self_cleaning": "Самоочистка",
+          "quick_cleaning": "Быстрая уборка",
+          "thorough_cleaning": "Тщательная уборка",
+          "sweep": "Сухая уборка",
+          "sweep_mop": "Сухая + влажная уборка",
+          "mop": "Влажная уборка",
+          "cut_hair": "Очистка от волос"
+        }  
+      },
       "select_room": {
         "name": "Выбор комнаты",
-		"state": {
-		  "all_rooms": "Все комнаты"
-		}
+        "state": {
+          "all_rooms": "Все комнаты"
+        }
       },
       "vacuum_tank": {
         "name": "Интенсивность подачи воды",
         "state": {
           "low": "Низкая",
-		  "medium": "Средняя",
-		  "high": "Высокая",
-		  "max": "Максимальная"
+          "medium": "Средняя",
+          "high": "Высокая",
+          "max": "Максимальная"
+        }
+      },
+      "select_fan_light": {
+        "name": "Подсветка",
+        "state": {
+          "off": "Выключена",
+          "half": "Средняя",
+          "full": "Максимум"
         }
       }
     },
-	"vacuum": {
-	  "vacuum": {
-		"name": "Робот пылесос",
-		"state_attributes": {
+    "vacuum": {
+      "vacuum": {
+        "name": "Робот пылесос",
+        "state_attributes": {
           "fan_speed": {
-		    "state": {
-		      "min": "Минимальная",
+            "state": {
+              "min": "Минимальная",
               "low": "Низкая",
-		      "medium": "Средняя",
-		      "high": "Высокая",
-		      "max": "Максимальная"
+              "medium": "Средняя",
+              "high": "Высокая",
+              "max": "Максимальная"
             }
-          }			
-		}  
-	  }
-	},
+          }
+        }
+      }
+    },
     "light": {
       "night_light": {
         "name": "Ночник"
@@ -1201,7 +1227,7 @@
     "boiler": "Бойлер",
     "heater": "Обогреватель",
     "cleaner": "Робот пылесос",
-	"window_cleaner": "Мойщик окон",
+    "window_cleaner": "Мойщик окон",
     "blender": "Блендер",
     "cooktop": "Варочная панель",
     "cordless_cleaner": "Ручной пылесос",
