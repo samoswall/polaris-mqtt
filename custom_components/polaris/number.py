@@ -34,6 +34,7 @@ from .const import (
     NUMBERS_IRRIGATOR,
     NUMBERS_HEATER,
     NUMBERS_THERMOSTAT,
+    NUMBERS_FAN,
     PolarisNumberEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -46,6 +47,7 @@ from .const import (
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_HEATER_TYPE,
     POLARIS_THERMOSTAT_TYPE,
+    POLARIS_FAN_TYPE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -192,6 +194,22 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
+    if (device_type in POLARIS_FAN_TYPE): 
+    # Create Fan  
+        NUMBERS_FAN_LC = copy.deepcopy(NUMBERS_FAN)
+        for description in NUMBERS_FAN_LC:
+            description.mqttTopicCurrent = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrent}" 
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.device_prefix_topic = device_prefix_topic
+            numberList.append(
+                PolarisNumber(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     async_add_entities(numberList, update_before_add=True)
 
 
@@ -228,6 +246,8 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
             self._attr_native_min_value = 35
         if self.device_type in POLARIS_THERMOSTAT_TYPE:
             self._data_zero = "00000000000000000000000000000000000000"
+        if self.device_type == "180":
+            self._data_zero = "0000"
 
 
     def set_native_value(self, value: float) -> None:
@@ -249,7 +269,19 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
         elif self.entity_description.translation_key == "bright_backlight":
             self._attr_native_value = int(value)
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{self._data_zero[:2]}{hex(int(value))[2:]}{self._data_zero[4:]}")
-
+            
+        elif self.entity_description.translation_key == "fan_tilt":
+            self._attr_native_value = int(value)
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{self._data_zero[:2]}{int(value):02x}")
+            
+        elif self.entity_description.translation_key == "fan_turn":
+            self._attr_native_value = int(value)
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{int(value):02x}{self._data_zero[-2:]}")
+            
+        elif self.entity_description.translation_key == "fan_auto_off":
+            self._attr_native_value = int(value)
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{int(value):02x}")
+            
         else:
             self._attr_native_value = int(value)
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, int(value))
@@ -270,6 +302,12 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
                 self._attr_native_value = int(self._data_zero[2:4], 16)
             elif self.entity_description.translation_key == "power_cable":
                 self._attr_native_value = int(message.payload[:2],16) + (int(message.payload[-2:],16)*256)
+            elif self.entity_description.translation_key == "fan_tilt":
+                self._attr_native_value = int(message.payload[-2:])
+            elif self.entity_description.translation_key == "fan_turn":
+                self._attr_native_value = int(message.payload[:2])
+            elif self.entity_description.translation_key == "fan_auto_off":
+                self._attr_native_value = int(message.payload, 16)
             else:
                 if self.entity_description.native_min_value <= int(message.payload):
                     self._attr_native_value = message.payload

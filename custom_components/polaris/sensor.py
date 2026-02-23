@@ -42,6 +42,7 @@ from .const import (
     SENSORS_THERMOSTAT,
     SENSOR_VACUUM_EXPENDABLE_MOP,
     SENSOR_VACUUM_EXPENDABLE_DUST,
+    SENSORS_FAN,
     PolarisSensorEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -64,6 +65,7 @@ from .const import (
     POLARIS_HEATER_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
     POLARIS_THERMOSTAT_TYPE,
+    POLARIS_FAN_TYPE,
     KETTLE_ERROR,
     HUMIDDIFIER_ERROR,
     COOKER_ERROR,
@@ -489,6 +491,34 @@ async def async_setup_entry(
             )
         SENSORS_THERMOSTAT_CP = copy.deepcopy(SENSORS_THERMOSTAT)
         for description in SENSORS_THERMOSTAT_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
+    if (devicetype in POLARIS_FAN_TYPE):
+        # Create sensors for all devices 
+        SENSORS_ALL_DEVICES_CP = copy.deepcopy(SENSORS_ALL_DEVICES)
+        for description in SENSORS_ALL_DEVICES_CP:
+            description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
+            description.device_prefix_topic = device_prefix_topic
+            sensorList.append(
+                PolarisSensor(
+                    description=description,
+                    device_friendly_name=deviceID,
+                    mqtt_root=mqttRoot,
+                    device_type=devicetype,
+                    device_id=deviceID,
+                )
+            )
+        SENSORS_FAN_CP = copy.deepcopy(SENSORS_FAN)
+        for description in SENSORS_FAN_CP:
             description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
             description.device_prefix_topic = device_prefix_topic
             sensorList.append(

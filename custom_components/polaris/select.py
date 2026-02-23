@@ -37,6 +37,7 @@ from .const import (
     SELECT_AIRCLEANER_EAP,
     SELECT_AIRCONDITIONER_SWING_HORIZONTAL,
     SELECT_AIRCONDITIONER_SWING_VERTICAL,
+    SELECT_FAN,
     PolarisSelectEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
@@ -49,6 +50,7 @@ from .const import (
     POLARIS_IRRIGATOR_TYPE,
     POLARIS_AIRCLEANER_EAP_TYPE,
     POLARIS_AIRCONDITIONER_TYPE,
+    POLARIS_FAN_TYPE,
     AIRFRYER_1_MODES,
     AIRFRYER_2_MODES,
     POLARIS_VACUUM_01_MODE_TYPE,
@@ -271,6 +273,22 @@ async def async_setup_entry(
     if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type in ("813","815")):
         SELECT_AIRCONDITIONER_SWING_VERTICAL_LC = copy.deepcopy(SELECT_AIRCONDITIONER_SWING_VERTICAL)
         for description in SELECT_AIRCONDITIONER_SWING_VERTICAL_LC:
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.device_prefix_topic = device_prefix_topic
+            selectList.append(
+                PolarisSelect(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
+                )
+            )
+    if (device_type in POLARIS_FAN_TYPE):
+        SELECT_FAN_LC = copy.deepcopy(SELECT_FAN)
+        for description in SELECT_FAN_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
             description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
             description.device_prefix_topic = device_prefix_topic
@@ -530,7 +548,8 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "cleaner":
             if int(self.device_type) not in POLARIS_VACUUM_NOT_WATER_TYPE:
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, str(self.entity_description.options[option]))
-
+        if self.device_type == "180":
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option])
 
 
     async def async_added_to_hass(self):
@@ -577,6 +596,9 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"speed", "10" if self._preset_1[0] == "a" else self._preset_1[0])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"ioniser", self._preset_1[1])
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode+"smart_mode", self._preset_1[2])
+            elif self.device_type == "180":
+                self._attr_current_option = self._attr_options[int(payload)]
+                self.async_write_ha_state()
 #            else:
 #                _LOGGER.debug(f"Type {POLARIS_DEVICE[int(self.device_type)]['class']} Options {self.entity_description.options}")
 #                self._attr_current_option = list(self.entity_description.options.keys())[list(self.entity_description.options.values()).index(payload)]

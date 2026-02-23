@@ -10,6 +10,11 @@ from zoneinfo import ZoneInfo
 import voluptuous as vol
 
 from homeassistant.components.image import Image, ImageEntityDescription
+from homeassistant.components.fan import (
+    FanEntity,
+    FanEntityDescription,
+    FanEntityFeature,
+)
 from homeassistant.components.vacuum import (
     DOMAIN,
     ATTR_CLEANED_AREA,
@@ -34,7 +39,6 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
-from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.number import NumberDeviceClass, NumberEntityDescription
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.components.sensor import (
@@ -83,7 +87,8 @@ PLATFORMS = [
     Platform.BUTTON,
     Platform.TIME,
     Platform.CLIMATE,
-    Platform.VACUUM
+    Platform.VACUUM,
+    Platform.FAN
 #    Platform.IMAGE
 ]
 
@@ -432,6 +437,7 @@ POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
 POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815"]
 POLARIS_THERMOSTAT_TYPE = ["878"]
+POLARIS_FAN_TYPE = ["180"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
 KETTLE_WITH_KEEP_WITH_WARM_MODES = {"off": "0", "performance": "1", "high_demand": "2", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
@@ -1976,6 +1982,26 @@ SENSORS_THERMOSTAT = [
     ),
 ]
 
+SENSORS_FAN = [
+    PolarisSensorEntityDescription(
+        key="battery",
+        name="battery",
+        translation_key="vacuum_battery",
+        device_class=SensorDeviceClass.BATTERY,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=None,
+    ),
+    PolarisSensorEntityDescription(
+        key="battery_state",
+        name="battery_state",
+        translation_key="vacuum_battery_state",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        icon="mdi:battery",
+    ),
+]
+
 @dataclass
 class PolarisSwitchEntityDescription(SwitchEntityDescription):
 
@@ -2985,6 +3011,66 @@ SWITCHES_THERMOSTAT = [
     ),
 ]
 
+SWITCHES_FAN = [
+    PolarisSwitchEntityDescription(
+        key="volume",
+        translation_key="sound_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Volume",
+        mqttTopicCommand="control/volume",
+        mqttTopicCurrentValue="state/volume",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="child_lock",
+        translation_key="child_lock_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Child lock",
+        mqttTopicCommand="control/child_lock",
+        mqttTopicCurrentValue="state/child_lock",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+    ),
+    PolarisSwitchEntityDescription(
+        key="effect_3d",
+        translation_key="effect_3d",
+        entity_category=EntityCategory.CONFIG,
+        name="effect_3d",
+        mqttTopicCommand="control/turbo",
+        mqttTopicCurrentValue="state/turbo",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:rotate-3d",
+    ),
+    PolarisSwitchEntityDescription(
+        key="winter_storage",
+        translation_key="winter_storage",
+        entity_category=EntityCategory.CONFIG,
+        name="winter_storage",
+        mqttTopicCommand="control/smart_mode",
+        mqttTopicCurrentValue="state/smart_mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="true",
+        payload_off="false",
+        icon="mdi:archive",
+    ),
+   PolarisSwitchEntityDescription(
+        key="night_light_mode",
+        translation_key="night_light_mode",
+        entity_category=EntityCategory.CONFIG,
+        name="Night light",
+        mqttTopicCommand="control/mode",
+        mqttTopicCurrentValue="state/mode",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="6",
+        payload_off="0",
+    ),
+]
+
 @dataclass
 class PolarisWaterHeaterEntityDescription(WaterHeaterEntityDescription):                                                              # breaks_in_ha_version="2026.1"
 
@@ -3417,6 +3503,56 @@ NUMBERS_THERMOSTAT = [
     ),
 ]
 
+NUMBERS_FAN = [
+    PolarisNumberEntityDescription(
+        key="fan_tilt",
+        name="tilt",
+        translation_key="fan_tilt",
+        mqttTopicCurrent = "state/program_data/0",
+        mqttTopicCommand = "control/program_data/0",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=True,
+        native_max_value=2,
+        native_min_value=0,
+        native_step=1,
+        native_value=2,
+        mode="slider",
+        icon="mdi:arrow-split-horizontal",
+    ),
+    PolarisNumberEntityDescription(
+        key="fan_turn",
+        name="turn",
+        translation_key="fan_turn",
+        mqttTopicCurrent = "state/program_data/0",
+        mqttTopicCommand = "control/program_data/0",
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=True,
+        native_max_value=2,
+        native_min_value=0,
+        native_step=1,
+        native_value=2,
+        mode="slider",
+        icon="mdi:arrow-split-vertical",
+    ),
+    PolarisNumberEntityDescription(
+        key="fan_auto_off",
+        name="auto_off",
+        translation_key="fan_auto_off",
+        mqttTopicCurrent = "state/program_data/4",
+        mqttTopicCommand = "control/program_data/4",
+        entity_category=EntityCategory.CONFIG,
+        device_class=NumberDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        entity_registry_enabled_default=True,
+        native_max_value=24,
+        native_min_value=1,
+        native_step=1,
+        native_value=1,
+        mode="box",
+        icon="mdi:timer"
+    ),
+]
+
 @dataclass
 class PolarisSelectEntityDescription(SelectEntityDescription):
 
@@ -3696,6 +3832,20 @@ SELECT_IRRIGATOR = [
     )
 ]
 
+SELECT_FAN = [
+    PolarisSelectEntityDescription(
+        key="select_fan_light",
+        name="light",
+        translation_key="select_fan_light",
+        mqttTopicCurrentMode="state/amount",
+        mqttTopicCommandMode="control/amount",
+        options={"off": "0", "half": "1", "full": "2"},
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        icon="mdi:lightbulb-on",
+        entity_registry_enabled_default=True,
+    )
+]
 
 @dataclass
 class PolarisLightEntityDescription(SelectEntityDescription):
@@ -4283,5 +4433,46 @@ IMAGE = [
         translation_key = "image",
         mqttTopicCommandGoArea = "control/go_area",
         device_class = None,
+    )
+]
+
+
+@dataclass
+class PolarisFanEntityDescription(FanEntityDescription):
+
+#    current_direction: str | None = None
+#    oscillating: bool | None = None
+#    percentage: str | None = None
+    preset_mode: str | None = None
+    preset_modes: list[str] | None = None
+    percentage_list: list[str] | None = None
+    supported_features:  int | None = None
+    mqttTopicCommandFanMode: str | None = None
+    mqttTopicCurrentFanMode: str | None = None
+    mqttTopicCommandPower: str | None = None
+    mqttTopicCurrentPresetMode: str | None = None
+    mqttTopicCommandPresetMode: str | None = None
+
+FANS = [
+    PolarisFanEntityDescription(
+        name = "fan",
+        key = "fan",
+        translation_key = "fan",
+#        fan_mode = "off",
+#        fan_modes = {"off": "0", "1_speed": "1", "2_speed": "2", "3_speed": "3", "4_speed": "4", "5_speed": "5", "6_speed": "6", "7_speed": "7"},
+        percentage_list = [1,2,3,4,5,6,7,8,9],
+        preset_mode = "passive",
+        preset_modes = {"off": "0", "standart": "1", "breeze": "2", "night": "3", "eco": "4", "auto": "5"},
+        supported_features = (
+            FanEntityFeature.SET_SPEED
+            | FanEntityFeature.PRESET_MODE
+            | FanEntityFeature.TURN_OFF
+            | FanEntityFeature.TURN_ON
+        ),
+        mqttTopicCurrentFanMode = "state/speed",
+        mqttTopicCommandFanMode = "control/speed",
+        mqttTopicCommandPower = "control/mode",
+        mqttTopicCurrentPresetMode = "state/mode",
+        mqttTopicCommandPresetMode = "control/mode",
     )
 ]
