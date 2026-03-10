@@ -723,6 +723,8 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             elif self.entity_description.key == "self_cleaning":
                 self._aircond_data0 = str(message.payload)
                 self._attr_is_on = True if (self._aircond_data0[:2] == "01") else False
+            elif self.entity_description.key == "night_light_mode":
+                self._attr_is_on = True if (message.payload == "6") else False
             else:
                 if str(message.payload).lower() in ("1", "01", "2", "3", "4", "5", "true"):
                     self._attr_is_on = True
@@ -768,32 +770,39 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             
         @callback
         def mode_conditioner_data_message_received(message):
-          if self.entity_description.key in ("auto_heater_switch", "eco_mode_switch", "turbo", "night", "self_cleaning", "anti_fingus"):
-            if (message.payload == "5"): #FAN
-                if self.entity_description.key == "night":
+            if self.entity_description.key in ("auto_heater_switch", "eco_mode_switch", "turbo", "night", "self_cleaning", "anti_fingus"):
+                if (message.payload == "5"): #FAN
+                    if self.entity_description.key == "night":
+                        self._attr_available = False
+                elif self.entity_description.key == "night":
+                    self._attr_available = True
+                if (message.payload == "4"): #HEAT
+                    if self.entity_description.key in ("auto_heater_switch", "turbo"):
+                        self._attr_available = True
+                elif self.entity_description.key == "auto_heater_switch":
                     self._attr_available = False
-            elif self.entity_description.key == "night":
-                self._attr_available = True
-            if (message.payload == "4"): #HEAT
-                if self.entity_description.key in ("auto_heater_switch", "turbo"):
-                    self._attr_available = True
-            elif self.entity_description.key == "auto_heater_switch":
-                self._attr_available = False
-            if (message.payload == "2"): #COOL
-                if self.entity_description.key in ("eco_mode_switch", "turbo"): 
-                    self._attr_available = True
-            elif self.entity_description.key == "eco_mode_switch":
-                self._attr_available = False
-            if (message.payload == "0"): #OFF
-                if self.entity_description.key in ("self_cleaning", "anti_fingus"): 
-                    self._attr_available = True
-            elif self.entity_description.key in ("self_cleaning", "anti_fingus"):
-                self._attr_available = False
-            if message.payload in ("0", "1", "3", "5"):
-                if self.entity_description.key == "turbo":
+                if (message.payload == "2"): #COOL
+                    if self.entity_description.key in ("eco_mode_switch", "turbo"): 
+                        self._attr_available = True
+                elif self.entity_description.key == "eco_mode_switch":
                     self._attr_available = False
-            self.async_write_ha_state()
-        if self.device_type in POLARIS_AIRCONDITIONER_TYPE:
+                if (message.payload == "0"): #OFF
+                    if self.entity_description.key in ("self_cleaning", "anti_fingus"): 
+                        self._attr_available = True
+                elif self.entity_description.key in ("self_cleaning", "anti_fingus"):
+                    self._attr_available = False
+                if message.payload in ("0", "1", "3", "5"):
+                    if self.entity_description.key == "turbo":
+                        self._attr_available = False
+                self.async_write_ha_state()
+            if self.entity_description.key == "night_light_mode":
+                if message.payload in ("0","6"):
+                    self._attr_available = True
+                else:
+                    self._attr_available = False
+                self.async_write_ha_state()
+
+        if (self.device_type in POLARIS_AIRCONDITIONER_TYPE) or (self.device_type in POLARIS_FAN_TYPE):
             await mqtt.async_subscribe(
                 self.hass,
                 f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/mode",

@@ -94,7 +94,7 @@ class PolarisFan(PolarisBaseEntity, FanEntity):
 
         self._attr_has_entity_name = True
         self._attr_available = False
-
+        self._attr_is_on = False
         self._percentage_list = self.entity_description.percentage_list
         self._attr_supported_features = self.entity_description.supported_features
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
@@ -106,13 +106,18 @@ class PolarisFan(PolarisBaseEntity, FanEntity):
     async def async_added_to_hass(self):
         @callback
         def preset_mode_message_received(message):
-            self._attr_preset_mode = list(self.entity_description.preset_modes.keys())[list(self.entity_description.preset_modes.values()).index(message.payload)]
-            self.async_write_ha_state()
+            if int(message.payload) < 6:
+                self._attr_preset_mode = list(self.entity_description.preset_modes.keys())[list(self.entity_description.preset_modes.values()).index(message.payload)]
+                if int(message.payload) == 0:
+                    self._attr_is_on = False
+                else:
+                    self._attr_is_on = True
+                self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentPresetMode, preset_mode_message_received, 1)
 
         @callback
         def percentage_message_received(message):
-            self._attr_percentage = ranged_value_to_percentage(self._speed_range, int(message.payload))
+            self._attr_percentage = ranged_value_to_percentage(self._speed_range, int(message.payload, 16))
             self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentFanMode, percentage_message_received, 1)
 
@@ -126,6 +131,11 @@ class PolarisFan(PolarisBaseEntity, FanEntity):
                 self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/connection", entity_availability, 1)
 
+    @property
+    def is_on(self) -> bool | None:
+        """Return true if device is on."""
+        # The default for FanEntity is to compute it based on percentage
+        return self._attr_is_on
 
     async def async_turn_on(
         self,
@@ -139,13 +149,11 @@ class PolarisFan(PolarisBaseEntity, FanEntity):
             await self.async_set_preset_mode(preset_mode)
         if percentage == None and preset_mode == None:
             await self.async_set_preset_mode("auto")
-        _LOGGER.debug(f"TURN ON % {percentage} preset {preset_mode}")
         self.async_write_ha_state()
 
     async def async_turn_off(self, **kwargs):
         mqtt.publish(self.hass, f"{self.entity_description.mqttTopicCommandPower}", "0")
         self._attr_preset_mode = "off"
-        _LOGGER.debug("TURN OFF")
         self.async_write_ha_state()
         
     async def async_set_preset_mode(self, preset_mode: str) -> None:

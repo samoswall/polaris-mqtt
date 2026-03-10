@@ -270,11 +270,11 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
             self._attr_native_value = int(value)
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{self._data_zero[:2]}{hex(int(value))[2:]}{self._data_zero[4:]}")
             
-        elif self.entity_description.translation_key == "fan_tilt":
+        elif self.entity_description.translation_key == "fan_turn":
             self._attr_native_value = int(value)
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{self._data_zero[:2]}{int(value):02x}")
             
-        elif self.entity_description.translation_key == "fan_turn":
+        elif self.entity_description.translation_key == "fan_tilt":
             self._attr_native_value = int(value)
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, f"{int(value):02x}{self._data_zero[-2:]}")
             
@@ -302,9 +302,9 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
                 self._attr_native_value = int(self._data_zero[2:4], 16)
             elif self.entity_description.translation_key == "power_cable":
                 self._attr_native_value = int(message.payload[:2],16) + (int(message.payload[-2:],16)*256)
-            elif self.entity_description.translation_key == "fan_tilt":
-                self._attr_native_value = int(message.payload[-2:])
             elif self.entity_description.translation_key == "fan_turn":
+                self._attr_native_value = int(message.payload[-2:])
+            elif self.entity_description.translation_key == "fan_tilt":
                 self._attr_native_value = int(message.payload[:2])
             elif self.entity_description.translation_key == "fan_auto_off":
                 self._attr_native_value = int(message.payload, 16)

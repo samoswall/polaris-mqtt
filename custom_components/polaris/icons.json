@@ -274,6 +274,22 @@
           }
         }
       }
+    },
+    "fan": {
+      "fan":{
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "off": "mdi:fan-off",
+              "standart": "mdi:wind-power",
+              "breeze": "mdi:weather-windy",
+              "night": "mdi:weather-night",
+              "eco": "mdi:leaf",
+              "auto": "mdi:fan-auto"
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -329,11 +329,11 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
         """Start or resume the cleaning task."""
 #        if self._attr_state != "cleaning":
 #            self._attr_state = "cleaning"
-        if self._attr_activity != VacuumActivity.CLEANING:
+#        if self._attr_activity != VacuumActivity.CLEANING:
 #            self._attr_activity = VacuumActivity.CLEANING
 #            self.schedule_update_ha_state()
-            state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_mode_vacuum").state
-            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.my_mode_list[state_mode])
+        state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_mode_vacuum").state
+        mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.my_mode_list[state_mode])
 
     def stop(self, **kwargs: Any) -> None:
         """Stop the cleaning task, do not return to dock."""
@@ -358,12 +358,23 @@ class PolarisVacuum(PolarisBaseEntity, StateVacuumEntity):
 #        _LOGGER.debug("room in select %s ", select_room)
 #        _LOGGER.debug("room in select %s ", self._rooms_js[select_room]["coordinate"])
 #        _LOGGER.debug("int16_to_bytes %s",self.int16_array_to_bytes(self._rooms_js[select_room]["coordinate"]))
-        mqtt.publish(
-            self.hass, self.entity_description.mqttTopicCommandGoArea,
-            self.int16_array_to_bytes(self._rooms_js[select_room]["coordinate"]),
-            1,
-            None,
-        )
+        xmin = xmax = ymin = ymax = 0
+        if select_room == "all_rooms":
+            for i in self._rooms_js:
+                xmin = min(xmin, self._rooms_js[i]["coordinate"][0], self._rooms_js[i]["coordinate"][2], self._rooms_js[i]["coordinate"][4], self._rooms_js[i]["coordinate"][6])
+                xmax = max(xmax, self._rooms_js[i]["coordinate"][0], self._rooms_js[i]["coordinate"][2], self._rooms_js[i]["coordinate"][4], self._rooms_js[i]["coordinate"][6])
+                ymin = min(ymin, self._rooms_js[i]["coordinate"][1], self._rooms_js[i]["coordinate"][3], self._rooms_js[i]["coordinate"][5], self._rooms_js[i]["coordinate"][7])
+                ymax = max(ymax, self._rooms_js[i]["coordinate"][1], self._rooms_js[i]["coordinate"][3], self._rooms_js[i]["coordinate"][5], self._rooms_js[i]["coordinate"][7])
+            all_rooms_coordinate = [xmin,ymin,xmin,ymax,xmax,ymax,xmax,ymin]
+#            _LOGGER.debug("all rooms selected %s", all_rooms_coordinate)
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandGoArea, self.int16_array_to_bytes(all_rooms_coordinate), 1, None)
+        else:
+            mqtt.publish(
+                self.hass, self.entity_description.mqttTopicCommandGoArea,
+                self.int16_array_to_bytes(self._rooms_js[select_room]["coordinate"]),
+                1,
+                None,
+            )
 
     def set_fan_speed(self, fan_speed: str, **kwargs: Any) -> None:
         """Set the vacuum's fan speed."""
