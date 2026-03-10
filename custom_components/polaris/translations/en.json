@@ -1213,6 +1213,23 @@
           }
         }
       }
+    },
+    "fan": {
+      "fan":{
+      "name": "Fan",
+      "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "off": "Off",
+              "standart": "Standart",
+              "breeze": "Breeze",
+              "night": "Night",
+              "eco": "Eco",
+              "auto": "Auto"
+            }
+          }
+        }
+      }
     }
   },
   "common": {

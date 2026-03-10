@@ -1213,6 +1213,23 @@
           }
         }
       }
+    },
+    "fan": {
+      "fan":{
+      "name": "Вентилятор",
+      "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "off": "Выключен",
+              "standart": "Стандарт",
+              "breeze": "Природный бриз",
+              "night": "Ночной",
+              "eco": "Эко",
+              "auto": "Авто"
+            }
+          }
+        }
+      }
     }
   },
   "common": {
