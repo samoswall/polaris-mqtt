@@ -233,7 +233,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         if device_type in {"806","847","849","814"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
-        if device_type in {"820","808"}:
+        if device_type in {"820","808","868"}:
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}
         if self.entity_description.fan_modes is not None:
            self._attr_fan_modes = list(self.entity_description.fan_modes.keys())
@@ -244,11 +244,14 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         
         self._attr_precision = self.entity_description.temp_step
         self._attr_target_temperature = 20
-        if device_type == "820":
+        if device_type in ("820","868"):
             self._attr_max_temp = 32
         else:
             self._attr_max_temp = self.entity_description.max_temp
-        self._attr_min_temp = self.entity_description.min_temp
+        if device_type == "868":
+            self._attr_min_temp = 18
+        else:
+            self._attr_min_temp = self.entity_description.min_temp
         self._attr_preset_mode = self.entity_description.preset_mode
         self._attr_hvac_mode = HVACMode.OFF
         self._attr_available = False

@@ -553,21 +553,22 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type == "820"):
+    if (device_type in ("820","868")):
         SWITCHES_AIRCONDITIONER_820_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER_820)
         for description in SWITCHES_AIRCONDITIONER_820_LC:
-            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
-            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
-            description.device_prefix_topic = device_prefix_topic
-            switchList.append(
-                PolarisSwitch(
-                    description=description,
-                    device_friendly_name=device_id,
-                    mqtt_root=mqtt_root,
-                    device_type=device_type,
-                    device_id=device_id
+            if (device_type != "868" or description.translation_key not in ("ioniser_switch", "self_cleaning", "anti_fingus_switch")):
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
                 )
-            )
     if (device_type in ("813","815")):
         SWITCHES_AIRCONDITIONER_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER)
         for description in SWITCHES_AIRCONDITIONER_LC:
