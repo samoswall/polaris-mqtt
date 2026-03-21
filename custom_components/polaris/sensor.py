@@ -421,7 +421,7 @@ async def async_setup_entry(
     if (devicetype in POLARIS_BOILER_TYPE):
         SENSORS_WATER_BOILER_CP = copy.deepcopy(SENSORS_WATER_BOILER)
         for description in SENSORS_WATER_BOILER_CP:
-            if (devicetype not in {"833","802"} or description.translation_key != "anode_retain"):
+            if (devicetype not in {"833","807","802"} or description.translation_key != "anode_retain"):
                 description.mqttTopicCurrentValue = (f"{mqttRoot}/{device_prefix_topic}/state/{description.key}")
                 description.device_prefix_topic = device_prefix_topic
                 sensorList.append(

@@ -5,8 +5,8 @@ import logging
 from homeassistant.helpers.device_registry import DeviceInfo
 from .const import DOMAIN, MANUFACTURER, POLARIS_DEVICE
 
-#_LOGGER = logging.getLogger(__name__)
-#_LOGGER.setLevel(logging.DEBUG)
+# _LOGGER = logging.getLogger(__name__)
+# _LOGGER.setLevel(logging.DEBUG)
 
 class PolarisBaseEntity:
 
@@ -23,13 +23,15 @@ class PolarisBaseEntity:
         self.mqtt_root = mqtt_root
         self.device_type=device_type
         self.device_id=device_id
+        
+#        _LOGGER.debug("------------------ %s", self.device_info["identifiers"])    # {('polaris', '000000000007', 'rusclimate')}
 
 
     @property
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             name=POLARIS_DEVICE[int(self.device_type)]["class"]+" "+ POLARIS_DEVICE[int(self.device_type)]["model"],
-            identifiers={(DOMAIN, self.device_id, self.mqtt_root)},
+            identifiers={(DOMAIN, self.device_id, self.mqtt_root)},      #    f"{self.device_id}-{self.mqtt_root}")},
             manufacturer=MANUFACTURER,
             model=POLARIS_DEVICE[int(self.device_type)]["class"]+" - "+ POLARIS_DEVICE[int(self.device_type)]["model"],
         )

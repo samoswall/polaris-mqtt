@@ -57,10 +57,11 @@
           "operation_mode": {
             "state": {
               "off": "mdi:power",
-              "performance": "mdi:chart-bubble",
-              "electric": "mdi:heat-wave",
-              "heat_pump": "mdi:water-thermometer",
-              "eco": "mdi:water-plus"
+              "performance": "mdi:thermometer-low",
+              "electric": "mdi:thermometer",
+              "heat_pump": "mdi:thermometer-high",
+              "eco": "mdi:leaf",
+              "gas": "mdi:snowflake-off"
             }
           }
         }

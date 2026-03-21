@@ -235,6 +235,9 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
         if device_type in {"820","808","868"}:
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}
+        if device_type == "851":
+            self.entity_description.fan_modes = {"auto": "0", "low": "1", "high": "2"}
+            self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT, HVACMode.COOL, HVACMode.FAN_ONLY, HVACMode.DRY]
         if self.entity_description.fan_modes is not None:
            self._attr_fan_modes = list(self.entity_description.fan_modes.keys())
            self._attr_fan_mode = self.entity_description.fan_mode
@@ -244,18 +247,20 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         
         self._attr_precision = self.entity_description.temp_step
         self._attr_target_temperature = 20
-        if device_type in ("820","868"):
+        if device_type in ("820","851","868"):
             self._attr_max_temp = 32
         else:
             self._attr_max_temp = self.entity_description.max_temp
-        if device_type == "868":
+        if device_type in ("851","868"):
             self._attr_min_temp = 18
         else:
             self._attr_min_temp = self.entity_description.min_temp
         self._attr_preset_mode = self.entity_description.preset_mode
         self._attr_hvac_mode = HVACMode.OFF
         self._attr_available = False
-        
+        if device_type == "851":
+            self.entity_description.swing_mode = "off"
+            self.entity_description.swing_modes = {"off": "0", "vertical": "2"}
         if self.entity_description.swing_mode is not None:
             self._attr_swing_mode = self.entity_description.swing_mode
             self._attr_swing_modes = list(self.entity_description.swing_modes.keys())
@@ -265,7 +270,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
             self._EAP_data0 = "0000"
         if device_type == "882":
             self._swing_message = "000000000000"
-        if device_type == "808":
+        if device_type in ("808","851"):
             self._swing_message = "0000"
 
     async def async_added_to_hass(self):
@@ -327,15 +332,21 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         def message_received_swing_mode(message):
 #            _LOGGER.debug("swing message %s", message.payload)
             self._swing_message = message.payload    # 00112233  00-качание верх/низ 11-качание влево/вправо 22-эко режим охлаждения 33-автообогрев
-            match self._swing_message[:4]:
-                case "0000": 
-                    swmode = "off"
-                case "0001": 
-                    swmode = "horizontal"
-                case "0100": 
+            if self.device_type == "851":
+                if self._swing_message[:2] == "01":
                     swmode = "vertical"
-                case "0101": 
-                    swmode = "both"
+                else:
+                    swmode = "off"
+            else:
+                match self._swing_message[:4]:
+                    case "0000": 
+                        swmode = "off"
+                    case "0001": 
+                        swmode = "horizontal"
+                    case "0100": 
+                        swmode = "vertical"
+                    case "0101": 
+                        swmode = "both"
 #            _LOGGER.debug("swing mode %s", swmode)
             self._attr_swing_mode = swmode
             self.async_write_ha_state()
@@ -507,6 +518,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
                 swmessage = "0101"
         if self.device_type == "808":
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage)
+        elif self.device_type == "851":
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage[:2] + self._swing_message[-2:])
         else:
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage + self._swing_message[4:])
         self.async_write_ha_state()

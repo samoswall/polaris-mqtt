@@ -444,7 +444,7 @@ async def async_setup_entry(
         # Create switches for boiler
         SWITCHES_WATER_BOILER_LC = copy.deepcopy(SWITCHES_WATER_BOILER)
         for description in SWITCHES_WATER_BOILER_LC:
-            if (device_type not in {"802","833","844"} or description.translation_key != "child_lock_switch") and (device_type != "833" or description.translation_key != "smart_mode"):
+            if (device_type not in {"802","807","833","844"} or description.translation_key != "child_lock_switch") and (device_type not in {"807","833"} or description.translation_key != "smart_mode"):
                 description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
                 description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
                 description.device_prefix_topic = device_prefix_topic
@@ -616,6 +616,21 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
+    if (device_type == "851"):
+        SWITCH_HUMIDIFIER_NIGHT_LC = copy.deepcopy(SWITCH_HUMIDIFIER_NIGHT)
+        for description in SWITCH_HUMIDIFIER_NIGHT_LC:
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     if (device_type in POLARIS_THERMOSTAT_TYPE):
         SWITCHES_THERMOSTAT_LC = copy.deepcopy(SWITCHES_THERMOSTAT)
         for description in SWITCHES_THERMOSTAT_LC:
