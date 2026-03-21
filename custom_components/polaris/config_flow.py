@@ -115,6 +115,13 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input=None):
         await self._get_devtypes_from_mqtt()
         await self.hass.async_add_executor_job(time.sleep, 2)
+        current_entries = self._async_current_entries()
+        configured_devices = {
+            entry.data[DEVICEID] 
+            for entry in current_entries 
+            if DEVICEID in entry.data
+        }
+#        _LOGGER.debug(f"Configured devices: {configured_devices}")
         errors = {}
         if user_input is None:
             return self.async_show_form(
@@ -128,7 +135,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
                                         value=dev_mac,
                                         label=f"{await self.get_translated_type(POLARIS_DEVICE[int(dev_type) if int(dev_type) in POLARIS_DEVICE else 0]["class"])} {POLARIS_DEVICE[int(dev_type) if int(dev_type) in POLARIS_DEVICE else 0]["model"].replace('_','/')} (mac: {dev_mac})",
                                     )
-                                    for dev_mac, dev_type in self._device_found.items()
+                                    for dev_mac, dev_type in self._device_found.items() if dev_mac not in configured_devices
                                 ],
                                 mode=SelectSelectorMode.DROPDOWN,
                                 translation_key="config_selector_devicetype",
@@ -164,7 +171,9 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
                 ),
             )
         
-#        _LOGGER.debug("input3 %s", user_input)
+#        _LOGGER.debug("User input 3: %s", user_input)
+        # {'DEVICEID': '000000000180', 'MQTT_ROOT_TOPIC': 'polaris', 'DEVICETYPE': '180', 'DEVPREFIXTOPIC': '000000000180'}
+        # {'DEVICEID': '000000000068', 'MQTT_ROOT_TOPIC': 'rusclimate', 'DEVICETYPE': '868', 'DEVPREFIXTOPIC': '68/aaabbbcccdddeeefff068'}
         title = f"{POLARIS_DEVICE[int(user_input[DEVICETYPE])]['class']}-{POLARIS_DEVICE[int(user_input[DEVICETYPE])]['model']}-{user_input[DEVICEID]}"
         await self.async_set_unique_id(title)
         self._abort_if_unique_id_configured(error="already_configured")
@@ -192,3 +201,82 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
             data=user_input,
         )
         
+#   async def async_step_mqtt(self, discovery_info: MqttServiceInfo) -> FlowResult:
+#       """Handle a flow initialized by MQTT discovery."""
+#       device_mac = discovery_info.payload
+#       topic_parts = discovery_info.topic.split("/")
+#   # polaris/+/state/mac + get devtype
+#       if len(topic_parts) == 4:
+#           device_id = topic_parts[1]
+#           topic_check = f"polaris/{device_id}/state/devtype"
+#           topic_bool = await self.topic_exists(topic_check)
+#           if not topic_bool:
+#               device_type = "0"
+#           else:
+#               device_type = self._device_type
+#           prefix_topic = device_id
+#           root_topic = "polaris"
+#   # polaris/+/+/state/mac
+#       elif len(topic_parts) == 5 and topic_parts[0] == "polaris":
+#           device_type = topic_parts[1]
+#           device_id = topic_parts[2]
+#           prefix_topic = f"{device_type}/{device_id}"
+#           root_topic = "polaris"
+#   # rusclimate/+/+/state/mac
+#       elif len(topic_parts) == 5 and topic_parts[0] == "rusclimate":
+#           device_type = str(int(topic_parts[1]) + 800)
+#           device_id = topic_parts[2]
+#           prefix_topic = f"{topic_parts[1]}/{device_id}"
+#           root_topic = "rusclimate"
+#       else:
+#           return self.async_abort(reason="unknown_topic")
+#       
+#       # Проверяем, поддерживается ли тип устройства
+#       if int(device_type) not in POLARIS_DEVICE:
+#           return self.async_abort(reason="unsupported_device")
+#       # Формируем уникальный ID
+#       unique_id = f"{POLARIS_DEVICE[int(device_type)]['class']}-{POLARIS_DEVICE[int(device_type)]['model']}-{device_mac}"
+#       _LOGGER.debug("MQTT Found: %s %s", device_type, unique_id)
+#       # Проверяем, не настроено ли уже устройство
+#       await self.async_set_unique_id(unique_id)
+#       self._abort_if_unique_id_configured()
+#       
+#       
+#       
+#       
+#       # title = f"{POLARIS_DEVICE[int(user_input[DEVICETYPE])]['class']}-{POLARIS_DEVICE[int(user_input[DEVICETYPE])]['model']}-{user_input[DEVICEID]}"
+#       # await self.async_set_unique_id(title)
+#       # self._abort_if_unique_id_configured(error="already_configured")
+#       # # Create entities
+#       # return self.async_create_entry(
+#           # title=title,
+#           # data=user_input,
+#       # )
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       
+#       # Сохраняем информацию об устройстве
+#       self._device_mac = device_mac
+#       self._device_type = device_type
+#       self._device_id = device_id
+#       self._root_topic = root_topic
+#       self._prefix_topic = prefix_topic
+#       
+#       # Показываем форму с информацией об устройстве
+#       device_info = POLARIS_DEVICE[int(self._device_type)]
+#       #_LOGGER.debug(F"device_info {device_info}")
+#       placeholders = {"name": f"{await self.get_translated_type(device_info['class'])} {device_info['model']}"}
+#       self.context["title_placeholders"] = placeholders
+#
+#       return await self.async_step_user()

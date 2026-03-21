@@ -444,7 +444,7 @@ async def async_setup_entry(
         # Create switches for boiler
         SWITCHES_WATER_BOILER_LC = copy.deepcopy(SWITCHES_WATER_BOILER)
         for description in SWITCHES_WATER_BOILER_LC:
-            if (device_type not in {"802","807","833","844"} or description.translation_key != "child_lock_switch") and (device_type not in {"807","833"} or description.translation_key != "smart_mode"):
+            if (device_type not in {"802","807","833","844","877"} or description.translation_key != "child_lock_switch") and (device_type not in {"807","833"} or description.translation_key != "smart_mode"):
                 description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
                 description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
                 description.device_prefix_topic = device_prefix_topic
@@ -457,7 +457,7 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
-    if (device_type in ("844","815")):
+    if (device_type in ("844","815","877")):
         # Create switches for boiler bright 50%
         SWITCHES_WATER_BOILER_BACKLIGHT_LC = copy.deepcopy(SWITCHES_WATER_BOILER_BACKLIGHT)
         for description in SWITCHES_WATER_BOILER_BACKLIGHT_LC:
@@ -680,10 +680,15 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             device_id=device_id,
         )
         self.entity_description = description
+        if device_type == "877" and self.entity_description.translation_key == "backlight_bright":
+            self.entity_description.mqttTopicCommand = self.entity_description.mqttTopicCommand.replace("backlight","program_data/0")
+            self.entity_description.mqttTopicCurrentValue = self.entity_description.mqttTopicCurrentValue.replace("backlight","program_data/0")
+            self.entity_description.payload_on = "01"
+            self.entity_description.payload_off = "00"
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
         self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
-        self.payload_on=description.payload_on
-        self.payload_off=description.payload_off
+        self.payload_on=self.entity_description.payload_on
+        self.payload_off=self.entity_description.payload_off
         self._attr_has_entity_name = True
 #        self._old_mode = "0"
         self._attr_available = False

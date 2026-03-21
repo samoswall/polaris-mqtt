@@ -391,6 +391,7 @@ POLARIS_DEVICE = {
     802: {"model": "SmartInverter", "class": "boiler"},
     844: {"model": "Royal-Thermo-Aqua-Inverter_Royal-Thermo-Aqua-Inox-Inverter", "class": "boiler"},
     807: {"model": "Zanussi-Artendo_Azurro-PRO", "class": "boiler"},
+    877: {"model": "Royal-Thermo-Major-Inverter_Smalto-Inverter", "class": "boiler"},
     806: {"model": "Transformer-DI-3", "class": "heater"},
     846: {"model": "Transformer-DI-4", "class": "heater"},
     847: {"model": "Wi-Fi-Convection-Heater", "class": "heater"},
@@ -435,7 +436,7 @@ POLARIS_CLIMATE_TYPE = ["69", "869", "859"]
 POLARIS_AIRCLEANER_TYPE = ["140", "151", "152", "172", "203", "204", "236", "238", "239", "250", "251"]
 POLARIS_AIRCLEANER_EAP_TYPE = ["826"]
 POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81","88","100","101","102","104","107","108","109","110","112","113","115","119","122","123","124","125","126","127","128","129","130","131","133","134","135","142","146","148","149","150","154","156","160","163","178","181","186","187","193","195","197","198","199","201","202","211","212","213","217","218","219","220","221","241","242","256","257","264","269","307"]
-POLARIS_BOILER_TYPE = ["802","807","833","844","876"]
+POLARIS_BOILER_TYPE = ["802","807","833","844","876","877"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
 POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815","868","851"]

@@ -131,7 +131,7 @@ class PolarisWaterHeater(PolarisBaseEntity, WaterHeaterEntity):
         elif (self.device_type in POLARIS_KETTLE_WITH_TEA_TIME_MODE_TYPE):
             self._modes = KETTLE_WITH_TEA_TIME_MODES
 #            self._attr_operation_list = list(KETTLE_WITH_TEA_TIME_MODES.keys())
-        elif (self.device_type in {"802","844"}):
+        elif (self.device_type in {"802","844","877"}):
             self._modes = {"off": "0", "performance": "1", "electric": "2", "heat_pump": "3"}
         elif (self.device_type == "807"):
             self._modes = {"off": "0", "performance": "1", "electric": "2", "heat_pump": "3", "gas": "5"}
