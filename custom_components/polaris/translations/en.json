@@ -154,7 +154,8 @@
           "performance": "Low",
           "electric": "Mid",
           "heat_pump": "Turbo",
-          "eco": "Eco"
+          "eco": "Eco",
+          "gas": "No frost"
         }
       }
     },
