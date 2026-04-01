@@ -553,10 +553,10 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type in ("820","868")):
+    if (device_type in ("820","868","821")):
         SWITCHES_AIRCONDITIONER_820_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER_820)
         for description in SWITCHES_AIRCONDITIONER_820_LC:
-            if (device_type != "868" or description.translation_key not in ("ioniser_switch", "self_cleaning", "anti_fingus_switch")):
+            if (device_type not in ("868","821") or description.translation_key not in ("ioniser_switch", "self_cleaning", "anti_fingus_switch")):
                 description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
                 description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
                 description.device_prefix_topic = device_prefix_topic

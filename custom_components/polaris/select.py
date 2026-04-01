@@ -445,8 +445,12 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         self._attr_current_option = option
-        if POLARIS_DEVICE[int(self.device_type)]['class'] == "cooker":
-            cook_time = json.loads(self.entity_description.options[option])
+        if POLARIS_DEVICE[int(self.device_type)]['class'] in ("cooker", "air_fryer"):
+# multi mode command +
+            cook_time = json.loads(self.entity_description.options[option])[0]
+            if isinstance(cook_time, dict):
+                cook_time = [cook_time]
+                
             service_data = {}
             service_data["entity_id"] = f"time.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_cooking_time"
             service_data["time"] = str(datetime.timedelta(seconds=cook_time[0]["time"]))
@@ -455,16 +459,16 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_set_temperature"
             service_data["value"] = cook_time[0]["temperature"]
             await self.hass.services.async_call("number", "set_value", service_data)
-        if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer":
-            cook_time = json.loads(self.entity_description.options[option])
-            service_data = {}
-            service_data["entity_id"] = f"time.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_cooking_time"
-            service_data["time"] = str(datetime.timedelta(seconds=cook_time[0]["time"]))
-            await self.hass.services.async_call("time", "set_value", service_data)
-            service_data = {}
-            service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_set_temperature"
-            service_data["value"] = cook_time[0]["temperature"]
-            await self.hass.services.async_call("number", "set_value", service_data)
+#        if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer":
+#            cook_time = json.loads(self.entity_description.options[option])
+#            service_data = {}
+#            service_data["entity_id"] = f"time.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_cooking_time"
+#            service_data["time"] = str(datetime.timedelta(seconds=cook_time[0]["time"]))
+#            await self.hass.services.async_call("time", "set_value", service_data)
+#            service_data = {}
+#            service_data["entity_id"] = f"number.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_set_temperature"
+#            service_data["value"] = cook_time[0]["temperature"]
+#            await self.hass.services.async_call("number", "set_value", service_data)
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle":
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandTemperature, self.entity_description.options[option])
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, 3)

@@ -404,9 +404,12 @@ POLARIS_DEVICE = {
     882: {"model": "Goldstar-GSAC_GSACI", "class": "air_conditioner"},
     868: {"model": "Electrolux-Loft-DC_Ballu-Platinum-Black-DC", "class": "air_conditioner"},
     851: {"model": "Zanussi-Massimo-Solar-2023", "class": "air_conditioner"},
+    821: {"model": "Zanussi-Moderno-DC_Electrolux-Loft-DC", "class": "air_conditioner"},
     881: {"model": "UHB-960-ET", "class": "humidifier"},
     835: {"model": "Electrolux-YOGAhealthline-2", "class": "humidifier"},
     878: {"model": "Electrolux_Royal-Thermo", "class": "thermostat"},
+    867: {"model": "Electrolux_Royal-Thermo", "class": "thermostat"},
+    829: {"model": "Electrolux_Royal-Thermo", "class": "thermostat"},
 }
 
 POLARIS_KETTLE_TYPE = ["2","6","8","29","36","37","38","51","52","53","54","56","57","58","59","60","61","62","63","67","82","83","84","85","86","97","105","106","117","121","139","165","175","176","177","189","194","196","205","209","253","254","255","260","271","308"]
@@ -439,8 +442,8 @@ POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81
 POLARIS_BOILER_TYPE = ["802","807","833","844","876","877"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
-POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815","868","851"]
-POLARIS_THERMOSTAT_TYPE = ["878"]
+POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815","868","851","821"]
+POLARIS_THERMOSTAT_TYPE = ["878","867","829"]
 POLARIS_FAN_TYPE = ["180"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}

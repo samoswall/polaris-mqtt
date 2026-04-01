@@ -37,7 +37,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         self._topic_prefix = {}
         self._device_found = {}
         self._device_prefix_topic = {}
-        self._unknown_devtype = 0
+        self._unknown_devtype = {}
 
 
     async def _get_devtypes_from_mqtt(self):
@@ -47,6 +47,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @callback
     async def _mqtt_message_newdev(self, message: ReceiveMessage):
+        unknown_type = "0"
         topic = message.topic
         device_id = topic.split("/")[1]
         topic_check = f"polaris/{device_id}/state/devtype"
@@ -55,39 +56,44 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
             self._device_type = "0"
         if int(self._device_type) not in POLARIS_DEVICE:
 #            _LOGGER.debug("newdevice unknown - %s", self._device_type)
-            self._unknown_devtype = int(self._device_type)
+            unknown_type = self._device_type
         if device_id not in self._device_found:
             self._device_found[device_id] = self._device_type
             self._device_prefix_topic[device_id] = device_id
             self._topic_prefix[device_id] = "polaris"
+            self._unknown_devtype[device_id] = unknown_type
 
     @callback
     async def _mqtt_message_olddev(self, message: ReceiveMessage):
+        unknown_type = "0"
         topic = message.topic
         device_id = message.payload
         device_type = topic.split("/")[1]
         device_oldid = topic.split("/")[2]
         if int(device_type) not in POLARIS_DEVICE:
 #            _LOGGER.debug("olddevice unknown - %s", device_type)
-            self._unknown_devtype = int(device_type)
+            unknown_type = device_type
         if device_id not in self._device_found:
             self._device_found[device_id] = device_type
             self._device_prefix_topic[device_id] = f"{device_type}/{device_oldid}"
             self._topic_prefix[device_id] = "polaris"
+            self._unknown_devtype[device_id] = unknown_type
 
     @callback
     async def _mqtt_message_rusclidev(self, message: ReceiveMessage):
+        unknown_type = "0"
         topic = message.topic
         device_id = message.payload
         device_type = str(int(topic.split("/")[1]) + 800)
         device_oldid = topic.split("/")[2]
         if int(device_type) not in POLARIS_DEVICE:
 #            _LOGGER.debug("rusclidevice unknown - %s", device_type)
-            self._unknown_devtype = int(device_type)
+            unknown_type = device_type
         if device_id not in self._device_found:
             self._device_found[device_id] = device_type
             self._device_prefix_topic[device_id] = f"{topic.split("/")[1]}/{device_oldid}"
             self._topic_prefix[device_id] = "rusclimate"
+            self._unknown_devtype[device_id] = unknown_type
 
     async def topic_exists(self, topic: str, timeout: float = 1.0) -> bool:
         loop = asyncio.get_running_loop()
@@ -148,9 +154,10 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         user_input[MQTT_ROOT_TOPIC] = self._topic_prefix[user_input[DEVICEID]]
         user_input[DEVICETYPE] = self._device_found[user_input[DEVICEID]]
         user_input["DEVPREFIXTOPIC"] = self._device_prefix_topic[user_input[DEVICEID]]
+        user_input["UNKNOWNTYPE"] = self._unknown_devtype[user_input[DEVICEID]]
         self.oldstep = user_input
-#        _LOGGER.debug("input1 %s", user_input)
-        if user_input[DEVICETYPE] == "0" or self._unknown_devtype > 0:
+        _LOGGER.debug("input1 %s unknown %s", user_input, self._unknown_devtype)
+        if user_input[DEVICETYPE] == "0" or int(user_input["UNKNOWNTYPE"]) > 0:
             return self.async_show_form(
                 step_id="undef",
                 data_schema=vol.Schema(
@@ -252,14 +259,6 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
 #           # title=title,
 #           # data=user_input,
 #       # )
-#       
-#       
-#       
-#       
-#       
-#       
-#       
-#       
 #       
 #       
 #       

@@ -349,7 +349,6 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommand+"amount", state_amount)
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommand+"temperature", state_temp)
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommand+"tank", state_tank)
- # !!!
                     command_mode = self._select_options[state_mode]
                     coffee_mode = json.loads(command_mode)
                     mqtt.publish(self.hass, self.entity_description.mqttTopicCommand+"mode", coffee_mode[0]["mode"])
@@ -365,15 +364,14 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
                 state_time_obj = datetime.strptime(state_time, "%H:%M:%S")
                 state_time_seconds = state_time_obj.hour * 3600 + state_time_obj.minute * 60 + state_time_obj.second
                 state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_mode_cooker").state
- # !!!
+# multi mode command +
                 command_mode = self._select_options[state_mode]
-                cook_mode = json.loads(command_mode)
-                payload = "[{" + f'"mode":{cook_mode[0]["mode"]}, "time":{state_time_seconds}, "temperature":{state_temp}' + "}]"
-#                state_time_delay = self.hass.states.get(f"time.{POLARIS_DEVICE[int(self.device_type)]['class']}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_')}_delay_start").state
-#                state_time_delay_obj = datetime.strptime(state_time_delay, "%H:%M:%S")
-#                state_time_delay_seconds = state_time_delay_obj.hour * 3600 + state_time_delay_obj.minute * 60 + state_time_delay_obj.second
-#                if state_time_delay_seconds > 59:
-#                    mqtt.publish(self.hass, f"{self.mqtt_root}/{self.device_prefix_topic}/control/delay_start", state_time_delay_seconds)
+                cook_mode = json.loads(command_mode)[0]
+                if isinstance(cook_mode, dict):
+                    cook_mode = [cook_mode]
+                    payload = "[{" + f'"mode":{cook_mode[0]["mode"]}, "time":{state_time_seconds}, "temperature":{state_temp}' + "}]"
+                else:
+                    payload = "[{"+f'"mode":{cook_mode[0]["mode"]}, "time":{state_time_seconds}, "temperature":{state_temp}' + "}," + ','.join(json.dumps(dat) for dat in cook_mode[1:]) + "]"
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, payload)
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "humidifier":
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommand, self.entity_description.payloads)

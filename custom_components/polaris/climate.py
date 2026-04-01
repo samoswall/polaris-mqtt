@@ -233,7 +233,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         if device_type in {"806","847","849","814"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
-        if device_type in {"820","808","868"}:
+        if device_type in {"820","808","868","821"}:
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}
         if device_type == "851":
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "high": "2"}
@@ -247,11 +247,11 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         
         self._attr_precision = self.entity_description.temp_step
         self._attr_target_temperature = 20
-        if device_type in ("820","851","868"):
+        if device_type in ("820","851","868","821"):
             self._attr_max_temp = 32
         else:
             self._attr_max_temp = self.entity_description.max_temp
-        if device_type in ("851","868"):
+        if device_type in ("851","868","821"):
             self._attr_min_temp = 18
         else:
             self._attr_min_temp = self.entity_description.min_temp
@@ -523,3 +523,11 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         else:
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandSwingMode, swmessage + self._swing_message[4:])
         self.async_write_ha_state()
+        
+    @property
+    def fan_modes(self) -> list[str] | None:
+        return self._attr_fan_modes
+        
+    @property
+    def fan_mode(self) -> list[str] | None:
+        return self._attr_fan_mode
