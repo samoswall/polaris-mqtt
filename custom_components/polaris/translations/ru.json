@@ -2,14 +2,16 @@
   "config": {
     "abort": {
       "already_configured": "Это устройство уже было настроено.",
-      "not_supported": "Ошибка. Не выбран тип устройства."
+      "not_supported": "Ошибка. Не выбран тип устройства.",
+      "already_in_progress": "Устройство уже в процессе настройки. Добавьте его из карточки обнаруженных устройств."
     },
     "error": {
       "cannot_connect": "Не удалось подключиться, пожалуйста, повторите попытку.",
       "invalid_auth": "Неверная аутентификация.",
       "too_many_requests": "Слишком много запросов, повторите попытку позже.",
       "unknown": "Неожиданная ошибка.",
-      "Unknown error occurred": "Неожиданная ошибка."
+      "Unknown error occurred": "Неожиданная ошибка.",
+      "already_in_progress": "Устройство уже в процессе настройки. Добавьте его из карточки обнаруженных устройств."
     },
     "step": {
       "user": {
@@ -25,6 +27,10 @@
         "data": {
           "DEVICETYPE": "Выберите тип устройства"
         },
+        "title": "Polaris Local MQTT"
+      },
+      "confirm": {
+        "description": "Хотите добавить устройство {class} {device} (mac: {mac}) в Home Assistant?",
         "title": "Polaris Local MQTT"
       }
     }
@@ -917,6 +923,16 @@
           "preset1": "Режим 1",
           "preset2": "Режим 2",
           "preset3": "Режим 3"
+        }
+      },
+      "select_night_mode": {
+        "name": "Ночной режим",
+        "state": {
+          "off": "Выключен",
+          "standard": "Стандартный",
+          "child": "Детский",
+          "teen": "Подростковый",
+          "the_aged": "Для пожилых"
         }
       },
       "select_night_backlight": {

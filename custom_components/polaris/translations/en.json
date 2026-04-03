@@ -2,14 +2,16 @@
   "config": {
     "abort": {
       "already_configured": "This device has already been configured.",
-      "not_supported": "Error. Not selected device type."
+      "not_supported": "Error. Not selected device type.",
+      "already_in_progress": "The device is already in the process of setting up. Add it from the card of detected devices."
     },
     "error": {
       "cannot_connect": "Failed to connect, please try again.",
       "invalid_auth": "Invalid authentication.",
       "too_many_requests": "Too many requests, retry later.",
       "unknown": "Unexpected error.",
-      "Unknown error occurred": "Unexpected error."
+      "Unknown error occurred": "Unexpected error.",
+      "already_in_progress": "The device is already in the process of setting up. Add it from the card of detected devices."
     },
     "step": {
       "user": {
@@ -25,6 +27,10 @@
         "data": {
           "DEVICETYPE": "Select device type"
         },
+        "title": "Polaris Local MQTT"
+      },
+      "confirm": {
+        "description": "Do you want to add the device {class} {device} (mac: {mac}) to Home Assistant?",
         "title": "Polaris Local MQTT"
       }
     }
@@ -917,6 +923,16 @@
           "preset1": "Mode 1",
           "preset2": "Mode 2",
           "preset3": "Mode 3"
+        }
+      },
+      "select_night_mode": {
+        "name": "Night mode",
+        "state": {
+          "off": "Off",
+          "standard": "Standard",
+          "child": "Child",
+          "teen": "Teen",
+          "the_aged": "The aged"
         }
       },
       "select_night_backlight": {
