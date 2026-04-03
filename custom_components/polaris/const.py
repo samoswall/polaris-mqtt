@@ -3734,6 +3734,27 @@ SELECT_AIRCLEANER_EAP = [
     )
 ]
 
+SELECT_AIRCONDITIONER_NIGHT_MODE = [
+    PolarisSelectEntityDescription(
+        key="select_night_mode",
+        name="Night mode",
+        translation_key="select_night_mode",
+        mqttTopicCurrentMode="state/night",
+        mqttTopicCommandMode="control/night",
+        options={
+          "off": 0,
+          "standard": 1,
+          "child": 2,
+          "teen": 3,
+          "the_aged": 4,
+        },
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        icon="mdi:weather-night",
+    )
+]
+
 SELECT_AIRCONDITIONER_SWING_HORIZONTAL  = [
     PolarisSelectEntityDescription(
         key="select_swing_horizontal",

@@ -233,7 +233,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         if device_type in {"806","847","849","814"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
-        if device_type in {"820","808","868","821"}:
+        if device_type in {"820","808"}:
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}
         if device_type == "851":
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "high": "2"}
@@ -247,11 +247,11 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         
         self._attr_precision = self.entity_description.temp_step
         self._attr_target_temperature = 20
-        if device_type in ("820","851","868","821"):
+        if device_type in ("820","851"):
             self._attr_max_temp = 32
         else:
             self._attr_max_temp = self.entity_description.max_temp
-        if device_type in ("851","868","821"):
+        if device_type == "851":
             self._attr_min_temp = 18
         else:
             self._attr_min_temp = self.entity_description.min_temp
@@ -268,7 +268,7 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._swing_message = "00000000"
         if device_type == "826":
             self._EAP_data0 = "0000"
-        if device_type == "882":
+        if device_type in ("882","821","868"):
             self._swing_message = "000000000000"
         if device_type in ("808","851"):
             self._swing_message = "0000"

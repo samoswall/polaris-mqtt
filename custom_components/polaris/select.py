@@ -35,6 +35,7 @@ from .const import (
     SELECT_VACUUM,
     SELECT_IRRIGATOR,
     SELECT_AIRCLEANER_EAP,
+    SELECT_AIRCONDITIONER_NIGHT_MODE,
     SELECT_AIRCONDITIONER_SWING_HORIZONTAL,
     SELECT_AIRCONDITIONER_SWING_VERTICAL,
     SELECT_FAN,
@@ -241,6 +242,22 @@ async def async_setup_entry(
     if (device_type in POLARIS_AIRCLEANER_EAP_TYPE):
         SELECT_AIRCLEANER_EAP_LC = copy.deepcopy(SELECT_AIRCLEANER_EAP)
         for description in SELECT_AIRCLEANER_EAP_LC:
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.device_prefix_topic = device_prefix_topic
+            selectList.append(
+                PolarisSelect(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
+                )
+            )
+    if (device_type in POLARIS_AIRCONDITIONER_TYPE) and (device_type in ("821","868")):
+        SELECT_AIRCONDITIONER_NIGHT_MODE_LC = copy.deepcopy(SELECT_AIRCONDITIONER_NIGHT_MODE)
+        for description in SELECT_AIRCONDITIONER_NIGHT_MODE_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
             description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
             description.device_prefix_topic = device_prefix_topic
