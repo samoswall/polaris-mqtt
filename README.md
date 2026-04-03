@@ -79,7 +79,8 @@
   },
   "SELECT_COOKER_options": {
     "Мой рецепт 1": {"mode": 1, "time": 1200, "temperature": 115},
-    "Мой рецепт 2": {"mode": 2, "time": 1300, "temperature": 105}
+    "Мой рецепт 2": {"mode": 2, "time": 1300, "temperature": 105},
+    "Мой рецепт 3": [{"mode": 1, "time": 1200, "temperature": 115},{"mode": 2, "time": 1300, "temperature": 105}]
   },
   "SELECT_COFFEEMAKER_options": {
     "Мой кофе": {"mode": 2, "amount": 30, "weight": 11, "tank": 0, "pressure": 0, "speed": 0, "temperature": 92}
@@ -457,15 +458,15 @@
 |813|Electrolux Smartline/ Ballu Eco Smart/ Ice Peak|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/b8/462f8-ce2b-466f-a3fd-19f10b09ddb4/60.webp)
 |815|Electrolux Viking DC / Zanussi Perfecto DC / Ballu Greenland DC|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/7/be/01024-1bc0-4591-9820-cfee40ff3efc/60.webp)
 |820|Ballu Platinum Evol. DC/Olympio Legend|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/c/2f/bf74f-cf56-454a-8131-86cb4ca6be11/60.webp)
-|821|Zanussi Moderno DC/Electrolux Loft DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/f/7e/a2a32-9cba-452e-b8ad-0ca146ef34d5/60.webp)
+|821|Zanussi Moderno DC/Electrolux Loft DC|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/f/7e/a2a32-9cba-452e-b8ad-0ca146ef34d5/60.webp)
 |838|Toshiba Shorai EE|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/b1/30a44-26ae-40b1-aa01-2050bcf54111/60.webp)
 |841|Electrolux Monaco DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/f1/5a9ab-521d-424d-b09a-51fa341a1b42/60.webp)
-|851|Zanussi Massimo Solar 2023|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/9/5f/0f996-7c0b-4347-8b66-837ce254bf8b/60.webp)
+|851|Zanussi Massimo Solar 2023|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/9/5f/0f996-7c0b-4347-8b66-837ce254bf8b/60.webp)
 |855|Zanussi Barocco DC/ Royal Thermo Barocco DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/25/1ed97-c608-45be-9c9e-4ed15f5f27e9/60.webp)
 |856|Toshiba|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/b/ae/2fadb-de06-4d04-bcd9-e49ffc849f7b/60.webp)
 |857|Shuft Berg/ MBO M-1|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/24/90a69-8ec9-4ae4-9d1a-76a91286c1e0/60.webp)
 |860|Ballu Discovery DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/5/80/16337-6860-4cfe-a4f3-76c58a6e6bdd/60.webp)
-|868|Electrolux Loft DC/Ballu Platinum Black DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/8/3d/084c3-decd-4af1-bb0c-479c20bd5965/60.webp)
+|868|Electrolux Loft DC/Ballu Platinum Black DC|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/8/3d/084c3-decd-4af1-bb0c-479c20bd5965/60.webp)
 |870|Ballu Universal 3, DC, Free Match|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/2/09/9639a-fb15-4ab4-803f-846eaa6376f2/60.webp)
 |872|Zanussi Barocco/ Royal Thermo Barocco|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/d/25/1ed97-c608-45be-9c9e-4ed15f5f27e9/60.webp)
 |882|Goldstar GSAC/GSACI|air-conditioner|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/d/f9/55d2b-71e6-4767-b1db-5475175bc517/60.webp)
@@ -476,7 +477,7 @@
 |899|AURUS A|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/37/873be-aa4d-4b99-a6f8-d3c6dc6aed47/60.webp)
 |908|Royal Thermo Diamond DC|air-conditioner|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/3/dc/5fcf5-e6fb-48c0-9841-ac4f20800e57/60.webp)
 |802|SmartInverter|boiler|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/2/05/e77f7-5d89-42bb-b4ea-c5ae77872c5b/60.webp)
-|807|Zanussi Artendo WiFi/ Azurro PRO WiFi|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/3/5e/5aa2e-de87-4ab6-9d55-da7ce2b2f07d/60.webp)
+|807|Zanussi Artendo WiFi/ Azurro PRO WiFi|boiler|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/3/5e/5aa2e-de87-4ab6-9d55-da7ce2b2f07d/60.webp)
 |812|Electrolux Centurio IQ 2.0/ Maximus WiFi|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/7d/052d7-a4b4-4b59-b906-39dd8e2dc6bc/60.webp)
 |816|Ballu Smart WiFi|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/ae/dbe41-2195-47a3-90bb-41592329be83/60.webp)
 |818|Electrolux Maximus/ Megapolis WiFi/ Zanussi Splendore XP 2.0/ Artendo PRO-C WiFi|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/77/fa842-cb9a-4d98-a875-2dfc11be1232/60.webp)
@@ -485,7 +486,7 @@
 |844|Royal Thermo Aqua Inverter/ Royal Thermo Aqua Inox Inverter|boiler|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/a4/4efd3-7b6c-4e56-92c7-41b5f2a2a4f7/60.webp)
 |874|Aurus S|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/b/7d/f1e52-2725-44b4-99e0-8eb0231f9f74/60.webp)
 |876|Electrolux Royal Flash/ Centurio IQ Inverter|boiler|✔️ WiFi|mode, temperature, smart, bss, child_lock |![all](https://images.cdn.rusklimat.ru/4/7d/052d7-a4b4-4b59-b906-39dd8e2dc6bc/60.webp)
-|877|Royal Thermo Major Inverter/ Smalto Inverter|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/8d/27904-4db3-4bfb-92f5-fedfe051d5f2/60.webp)
+|877|Royal Thermo Major Inverter/ Smalto Inverter|boiler|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/c/8d/27904-4db3-4bfb-92f5-fedfe051d5f2/60.webp)
 |880|Aurus F|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/9f/a9f33-729b-43e1-9bc9-dba9460d6457/60.webp)
 |890|Ballu Cetrion Inverter/ Ballu Cetrion Inox Inverter|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/c/8d/27904-4db3-4bfb-92f5-fedfe051d5f2/60.webp)
 |891|Royal Thermo Regency|boiler|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/f/fc/fc57a-c3f4-4b16-a751-f5bbfdd3b77d/60.webp)
@@ -533,9 +534,9 @@
 |894|Smart socket RKNZ02|socket|❌ Zigbee| |![all](https://images.cdn.rusklimat.ru/f/3f/1473b-253c-4aa7-bc4c-4c62f8142009/60.webp)
 |903|Inwall outlet RKNWOZ01W|socket|❌ Zigbee| |![all](https://images.cdn.rusklimat.ru/3/78/7d451-9a6f-4e97-90b9-8720ababb20e/60.webp)
 |904|Dimmer switch rotary DSWZBN01W|socket|❌ Zigbee| |![all](https://images.cdn.rusklimat.ru/7/5d/f64b2-b2c0-4df2-ac09-c7058e12d938/60.webp)
-|829|Electrolux/Royal Thermo|thermostat|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/4/6d/834bb-ca32-45d4-9b00-2009e9035816/60.webp)
+|829|Electrolux/Royal Thermo|thermostat|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/6d/834bb-ca32-45d4-9b00-2009e9035816/60.webp)
 |865|SmartControl|thermostat|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/fa/b75ab-2e92-49eb-9c1a-38eb03a4853e/60.webp)
-|867|Electrolux/Royal Thermo|thermostat|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/1/37/4f271-8d3b-4e8e-a598-dfdfcfbacbbb/60.webp)
+|867|Electrolux/Royal Thermo|thermostat|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/1/37/4f271-8d3b-4e8e-a598-dfdfcfbacbbb/60.webp)
 |873|SmartControl Pro|thermostat|❌ WiFi| |![all](https://images.cdn.rusklimat.ru/6/fa/b75ab-2e92-49eb-9c1a-38eb03a4853e/60.webp)
 |878|Electrolux/Royal Thermo|thermostat|✔️ WiFi| |![all](https://images.cdn.rusklimat.ru/4/6d/834bb-ca32-45d4-9b00-2009e9035816/60.webp)
 |823|TZE200|thermostatic-radiator|❌ Zigbee| |![all](https://images.cdn.rusklimat.ru/8/92/8a703-7713-41c4-a74a-c5b47df67a84/60.webp)
