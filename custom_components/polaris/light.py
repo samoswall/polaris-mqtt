@@ -221,7 +221,7 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
         bright_factor_old = max(self._attr_rgb_color)/255
         bright_factor_new = self._attr_brightness/ 100 / max(bright_factor_old, 1)
         self._attr_rgb_color = [int(value * bright_factor_new) for value in self._attr_rgb_color]
-        if self.device_type in ("175", "176", "254", "255"):
+        if self.device_type in ("176", "254", "255"): # тип 175 принимает 3 байта, а отдает 4 байта
             mqtt.publish(self.hass, topic, f"{self._attr_rgb_color[0]:02x}{self._attr_rgb_color[1]:02x}{self._attr_rgb_color[2]:02x}00")
         elif self.device_type == "835":
             if self.entity_description.key == "night_up":
