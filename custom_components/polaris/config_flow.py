@@ -236,7 +236,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="unknown_topic")
         
         # Проверяем, поддерживается ли тип устройства
-        if int(device_type) not in POLARIS_DEVICE:
+        if int(device_type) not in POLARIS_DEVICE or int(device_type) == 0:
             return self.async_abort(reason="unsupported_device")
         unique_id = f"{POLARIS_DEVICE[int(device_type)]['class']}-{POLARIS_DEVICE[int(device_type)]['model']}-{device_mac}"  # mac или ID ???
         # Проверяем, не настроено ли уже устройство
