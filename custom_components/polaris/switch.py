@@ -569,10 +569,26 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
-    if (device_type in ("813","815")):
+    if (device_type in ("813","815","857")):
         SWITCHES_AIRCONDITIONER_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER)
         for description in SWITCHES_AIRCONDITIONER_LC:
-            if (device_type != "815" or description.translation_key != "delicate_blowing"):
+            if (device_type not in ("815","857") or description.translation_key != "delicate_blowing") and (device_type != "857" or description.translation_key not in ("self_cleaning", "turbo_switch")):
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+        if device_type == "857":
+            # Create backlight
+            SWITCH_KETTLE_BACKLIGHT_LC = copy.deepcopy(SWITCH_KETTLE_BACKLIGHT)
+            for description in SWITCH_KETTLE_BACKLIGHT_LC:
                 description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
                 description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
                 description.device_prefix_topic = device_prefix_topic
@@ -795,29 +811,40 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         @callback
         def mode_conditioner_data_message_received(message):
             if self.entity_description.key in ("auto_heater_switch", "eco_mode_switch", "turbo", "night", "self_cleaning", "anti_fingus"):
-                if (message.payload == "5"): #FAN
+                if self.device_type == "857": # air_conditioner "Shuft-Berg_MBO-M1"
                     if self.entity_description.key == "night":
-                        self._attr_available = False
-                elif self.entity_description.key == "night":
-                    self._attr_available = True
-                if (message.payload == "4"): #HEAT
-                    if self.entity_description.key in ("auto_heater_switch", "turbo"):
-                        self._attr_available = True
-                elif self.entity_description.key == "auto_heater_switch":
-                    self._attr_available = False
-                if (message.payload == "2"): #COOL
-                    if self.entity_description.key in ("eco_mode_switch", "turbo"): 
-                        self._attr_available = True
-                elif self.entity_description.key == "eco_mode_switch":
-                    self._attr_available = False
-                if (message.payload == "0"): #OFF
-                    if self.entity_description.key in ("self_cleaning", "anti_fingus"): 
-                        self._attr_available = True
-                elif self.entity_description.key in ("self_cleaning", "anti_fingus"):
-                    self._attr_available = False
-                if message.payload in ("0", "1", "3", "5"):
-                    if self.entity_description.key == "turbo":
-                        self._attr_available = False
+                        # night доступен при режиме HEAT ("4") и COOL ("2")
+                        self._attr_available = message.payload in ("4", "2")
+                    elif self.entity_description.key == "eco_mode_switch":
+                        # eco_mode_switch доступен при COOL ("2")
+                        self._attr_available = message.payload == "2"
+                    elif self.entity_description.key == "auto_heater_switch":
+                        # auto_heater_switch доступен при HEAT ("4")
+                        self._attr_available = message.payload == "4"
+                else:
+                    if (message.payload == "5"): #FAN
+                        if self.entity_description.key == "night":
+                                self._attr_available = False
+                        elif self.entity_description.key == "night":
+                            self._attr_available = True
+                        if (message.payload == "4"): #HEAT
+                            if self.entity_description.key in ("auto_heater_switch", "turbo"):
+                                self._attr_available = True
+                        elif self.entity_description.key == "auto_heater_switch":
+                            self._attr_available = False
+                        if (message.payload == "2"): #COOL
+                            if self.entity_description.key in ("eco_mode_switch", "turbo"): 
+                                self._attr_available = True
+                        elif self.entity_description.key == "eco_mode_switch":
+                            self._attr_available = False
+                        if (message.payload == "0"): #OFF
+                            if self.entity_description.key in ("self_cleaning", "anti_fingus"): 
+                                self._attr_available = True
+                        elif self.entity_description.key in ("self_cleaning", "anti_fingus"):
+                            self._attr_available = False
+                        if message.payload in ("0", "1", "3", "5"):
+                            if self.entity_description.key == "turbo":
+                                self._attr_available = False
                 self.async_write_ha_state()
             if self.entity_description.key == "night_light_mode":
                 if message.payload in ("0","6"):
