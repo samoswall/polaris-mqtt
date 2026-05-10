@@ -16,7 +16,6 @@ from homeassistant.components.fan import (
     FanEntityFeature,
 )
 from homeassistant.components.vacuum import (
-    DOMAIN,
     ATTR_CLEANED_AREA,
     StateVacuumEntity,
     VacuumActivity,
@@ -446,6 +445,7 @@ POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
 POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815","868","851","821","857"]
 POLARIS_THERMOSTAT_TYPE = ["878","867","829"]
 POLARIS_FAN_TYPE = ["180"]
+POLARIS_WINDOWCLEANER_TYPE = ["246"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
 KETTLE_WITH_KEEP_WITH_WARM_MODES = {"off": "0", "performance": "1", "high_demand": "2", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
@@ -622,6 +622,12 @@ AIRCLEANER_ERROR = {
 "00": "no_error",
 "01": "replace_filter",
 "02": "child_lock"
+}
+
+WINDOWCLEANER_ERROR = {
+"00": "no_error",
+"02": "pressure_sensor",
+"05": "low_water",
 }
 
 POLARIS_VACUUM_01_ERROR_CODE = [7,22,23,24,76,81,88,100,101,102,107,108,109,110,112,115,127]
@@ -1774,6 +1780,57 @@ SENSORS_VACUUM_TOTAL_CLEAN = [
     ),
 ]
 
+SENSORS_WINDOWCLEANER = [
+    PolarisSensorEntityDescription(
+        key="firmware",
+        name="Firmware Version",
+        translation_key="firmware_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_registry_enabled_default=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="devtype",
+        name="Device Type",
+        translation_key="type_sensor",
+        device_class=None,
+        native_unit_of_measurement=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:information-outline",
+    ),
+    PolarisSensorEntityDescription(
+        key="diag/rssi",
+        name="RSSI",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:wifi",
+    ),
+    PolarisSensorEntityDescription(
+        key="error/code",
+        name="error",
+        translation_key="error",
+        device_class=None,
+        native_unit_of_measurement=None,
+        state_class=None,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        icon="mdi:alert",
+    ),
+    PolarisSensorEntityDescription(
+        key="battery",
+        name="battery",
+        translation_key="vacuum_battery",
+        device_class=SensorDeviceClass.BATTERY,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=None,
+    ),
+]
+
 SENSORS_WATER_BOILER = [
     PolarisSensorEntityDescription(
         key="firmware",
@@ -2542,6 +2599,21 @@ SWITCHES_VACUUM = [
         payload_on="true",
         payload_off="false",
         icon="mdi:heat-wave",
+    ),
+]
+
+SWITCHES_WINDOWCLEANER = [
+    PolarisSwitchEntityDescription(
+        key="auto_sprinkle",
+        translation_key="auto_sprinkle_switch",
+        entity_category=EntityCategory.CONFIG,
+        name="Auto Sprinkle",
+        mqttTopicCommand="control/tank",
+        mqttTopicCurrentValue="state/tank",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="0",
+        payload_off="1",
+        icon="mdi:sprinkler-variant",
     ),
 ]
 
@@ -3840,6 +3912,19 @@ SELECT_VACUUM = [
         icon="mdi:water",
         entity_registry_enabled_default=True,
     )
+]
+
+SELECT_WINDOWCLEANER = [
+    PolarisSelectEntityDescription(
+        key="select_mode_windowcleaner",
+        name="Mode",
+        translation_key="select_mode_windowcleaner",
+        mqttTopicCurrentMode="state/mode",
+        mqttTopicCommandMode="control/mode",
+        options={"off": "0", "up": "2", "left": "3", "right": "4"},
+        device_class=None,
+        entity_registry_enabled_default=True,
+    ),
 ]
 
 SELECT_IRRIGATOR = [

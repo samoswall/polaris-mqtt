@@ -724,7 +724,8 @@
           "v11_error_85": "Battery is low",
           "v11_error_88": "Relocation failed, appointment not executed",
           "v11_error_91": "Positioning failed, recharge",
-          "v11_error_94": "Please install the Mop holder"
+          "v11_error_94": "Please install the Mop holder",
+          "pressure_sensor": "Pressure sensor issue. Please refer to the manual or APP"
         }
       },
       "filter_retain": {
@@ -1020,6 +1021,15 @@
           "off": "Off",
           "half": "Half",
           "full": "Full"
+        }
+      },
+      "select_mode_windowcleaner": {
+        "name": "Mode",
+        "state": {
+          "off": "Stop",
+          "up": "Up then down",
+          "left": "Left then down",
+          "right": "Right then down"
         }
       }
     },
