@@ -51,6 +51,7 @@ from .const import (
     SWITCHES_AIRCONDITIONER_882,
     SWITCHES_THERMOSTAT,
     SWITCHES_FAN,
+    SWITCHES_WINDOWCLEANER,
     SWITCH_CHILD_LOCK,
     PolarisSwitchEntityDescription,
     POLARIS_KETTLE_TYPE,
@@ -78,6 +79,7 @@ from .const import (
     POLARIS_VACUUM_SWITCH_IONISER,
     POLARIS_VACUUM_SWITCH_STREAM_WARM,
     POLARIS_VACUUM_SWITCH_BACKLIGHT,
+    POLARIS_WINDOWCLEANER_TYPE,
     VACUUM_SWITCH_01_TURBO,
     VACUUM_SWITCH_02_TURBO,
     VACUUM_SWITCH_03_TURBO
@@ -678,6 +680,20 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
+    if (device_type in POLARIS_WINDOWCLEANER_TYPE):
+        for description in copy.deepcopy(SWITCHES_WINDOWCLEANER):
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
     async_add_entities(switchList, update_before_add=True)
 
 class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
@@ -706,8 +722,8 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
 #            self.entity_description.translation_key = "eco_mode_switch"
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
         self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
-        self.payload_on=self.entity_description.payload_on
-        self.payload_off=self.entity_description.payload_off
+        self.payload_on = self.entity_description.payload_on
+        self.payload_off = self.entity_description.payload_off
         self._attr_has_entity_name = True
 #        self._old_mode = "0"
         self._attr_available = False
@@ -756,7 +772,6 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             elif self.entity_description.key == "half_power_heater":
                 self._heater_prog_data0 = str(message.payload)
                 self._attr_is_on = True if (self._heater_prog_data0[-2:] == "01") else False
-                
             elif self.entity_description.key == "quiet_mode":
                 self._aircond_data0 = str(message.payload)
                 self._attr_is_on = True if (self._aircond_data0[-2:] == "01") else False
@@ -766,7 +781,11 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             elif self.entity_description.key == "night_light_mode":
                 self._attr_is_on = True if (message.payload == "6") else False
             else:
-                if str(message.payload).lower() in ("1", "01", "2", "3", "4", "5", "true"):
+                if message.payload == self.payload_on:
+                    self._attr_is_on = True
+                elif message.payload == self.payload_off:
+                    self._attr_is_on = False
+                elif str(message.payload).lower() in ("1", "01", "2", "3", "4", "5", "true"):
                     self._attr_is_on = True
                 elif str(message.payload).lower() in ("0", "00", "false"):
                    self._attr_is_on = False
