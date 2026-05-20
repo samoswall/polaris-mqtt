@@ -138,6 +138,9 @@
       },
       "night_light_mode": {
         "name": "Night light"
+      },
+      "auto_sprinkle_switch": {
+        "name": "Auto sprinkle"
       }
     },
     "water_heater": {
@@ -725,7 +728,7 @@
           "v11_error_88": "Relocation failed, appointment not executed",
           "v11_error_91": "Positioning failed, recharge",
           "v11_error_94": "Please install the Mop holder",
-          "pressure_sensor": "Pressure sensor issue. Please refer to the manual or APP"
+          "pressure_sensor": "Pressure sensor issue. Please refer to the manual or APP."
         }
       },
       "filter_retain": {
@@ -1218,8 +1221,10 @@
         "state_attributes": {
           "fan_mode": {
             "state": {
+              "quite": "Quite",
               "min": "Max",
-              "max": "Min"
+              "max": "Min",
+              "turbo": "Turbo"
             }
           }
         }

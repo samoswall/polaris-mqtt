@@ -138,6 +138,9 @@
       },
       "night_light_mode": {
         "name": "Ночник"
+      },
+      "auto_sprinkle_switch": {
+        "name": "Автораспыление"
       }
     },
     "water_heater": {
@@ -1218,8 +1221,10 @@
         "state_attributes": {
           "fan_mode": {
             "state": {
+              "quite": "Тихий",
               "min": "Минимум",
-              "max": "Максимум"
+              "max": "Максимум",
+              "turbo": "Турбо"
             }
           }
         }
