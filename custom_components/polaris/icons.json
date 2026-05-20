@@ -253,11 +253,13 @@
         "state_attributes": {
           "fan_mode": {
             "state": {
+              "quite": "mdi:fan",
               "min": "mdi:fan-minus",
               "low": "mdi:fan-speed-1",
               "middle": "mdi:fan-speed-2",
               "high": "mdi:fan-speed-3",
-              "max": "mdi:fan-plus"
+              "max": "mdi:fan-plus",
+              "turbo": "mdi:fan-plus"
             }
           }
         }

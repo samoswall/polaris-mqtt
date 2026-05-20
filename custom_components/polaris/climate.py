@@ -233,10 +233,14 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         if device_type in {"806","847","849","814"}:
             self.entity_description.fan_modes = {"auto": "0", "20_5_percent": "1", "40_5_percent": "2", "60_5_percent": "3", "80_5_percent": "4", "100_5_percent": "5"}
-        if device_type in {"820","808","857"}:
+        if device_type in {"820","808"}:
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3"}
+        if device_type == "857":
+            self.entity_description.fan_modes = {"auto": "0", "low": "1", "middle": "2", "high": "3", "turbo": "4"}
         if device_type == "851":
             self.entity_description.fan_modes = {"auto": "0", "low": "1", "high": "2"}
+        if device_type == "860":
+            self.entity_description.fan_modes = {"auto": "0", "quite": "1", "min": "2", "low": "3", "middle": "4", "high": "5", "max": "6"}
             self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT, HVACMode.COOL, HVACMode.FAN_ONLY, HVACMode.DRY]
         if self.entity_description.fan_modes is not None:
            self._attr_fan_modes = list(self.entity_description.fan_modes.keys())
@@ -456,6 +460,8 @@ class PolarisClimate(PolarisBaseEntity, ClimateEntity):
         """Set new fan mode."""
         if (fan_mode == "9_speed"):
             fan_mode = "8_speed"
+        if self.device_type == "857" and self._attr_hvac_mode not in ("heat", "cool") and fan_mode == "turbo":
+            fan_mode = "high"
         if (self.device_type == "826" and fan_mode == "off"):
             fan_mode = "low"
         self._attr_fan_mode = fan_mode

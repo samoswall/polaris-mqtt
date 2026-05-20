@@ -459,7 +459,7 @@ async def async_setup_entry(
                         device_id=device_id
                     )
                 )
-    if (device_type in ("844","815","877")):
+    if (device_type in ("844","815","877","860")):
         # Create switches for boiler bright 50%
         SWITCHES_WATER_BOILER_BACKLIGHT_LC = copy.deepcopy(SWITCHES_WATER_BOILER_BACKLIGHT)
         for description in SWITCHES_WATER_BOILER_BACKLIGHT_LC:
@@ -618,10 +618,10 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if device_type in ("808","882","821","868"):
+    if device_type in ("808","882","821","868","860"):
         SWITCHES_AIRCONDITIONER_882_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER_882)
         for description in SWITCHES_AIRCONDITIONER_882_LC:
-            if (device_type != "808" or description.translation_key not in ("backlight_switch", "smart_mode", "sound_switch")):
+            if (device_type not in ("808","860") or description.translation_key not in ("backlight_switch", "smart_mode", "sound_switch")):
                 if (device_type not in ("821","868") or description.translation_key not in ("turbo_switch", "night_switch", "sound_switch")):
                     description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
                     description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
@@ -635,6 +635,22 @@ async def async_setup_entry(
                             device_id=device_id
                         )
                     )
+    if device_type =="860":
+        SWITCHES_AIRCONDITIONER_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER)
+        for description in SWITCHES_AIRCONDITIONER_LC:
+            if description.translation_key in ("auto_heater_switch", "night_switch", "eco_mode_switch"):
+                description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+                description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+                description.device_prefix_topic = device_prefix_topic
+                switchList.append(
+                    PolarisSwitch(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
     if (device_type == "851"):
         SWITCH_HUMIDIFIER_NIGHT_LC = copy.deepcopy(SWITCH_HUMIDIFIER_NIGHT)
         for description in SWITCH_HUMIDIFIER_NIGHT_LC:
@@ -718,12 +734,17 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             self.entity_description.mqttTopicCurrentValue = self.entity_description.mqttTopicCurrentValue.replace("backlight","program_data/0")
             self.entity_description.payload_on = "01"
             self.entity_description.payload_off = "00"
-#        if device_type in ("821","868") and self.entity_description.translation_key == "smart_mode":
-#            self.entity_description.translation_key = "eco_mode_switch"
+#        if device_type in ("860"):
+#            if self.entity_description.translation_key == "smart_mode":
+#                self.entity_description.translation_key = "eco_mode_switch"
+#                self.entity_description.key = "eco_mode_switch"
+#            if self.entity_description.translation_key == "backlight_bright":
+#                self.entity_description.translation_key = "backlight_switch"
+#                self.entity_description.key = "night"
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
         self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
-        self.payload_on = self.entity_description.payload_on
-        self.payload_off = self.entity_description.payload_off
+        self.payload_on=self.entity_description.payload_on
+        self.payload_off=self.entity_description.payload_off
         self._attr_has_entity_name = True
 #        self._old_mode = "0"
         self._attr_available = False
@@ -772,6 +793,7 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             elif self.entity_description.key == "half_power_heater":
                 self._heater_prog_data0 = str(message.payload)
                 self._attr_is_on = True if (self._heater_prog_data0[-2:] == "01") else False
+                
             elif self.entity_description.key == "quiet_mode":
                 self._aircond_data0 = str(message.payload)
                 self._attr_is_on = True if (self._aircond_data0[-2:] == "01") else False
@@ -830,7 +852,7 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         @callback
         def mode_conditioner_data_message_received(message):
             if self.entity_description.key in ("auto_heater_switch", "eco_mode_switch", "turbo", "night", "self_cleaning", "anti_fingus"):
-                if self.device_type == "857": # air_conditioner "Shuft-Berg_MBO-M1"
+                if self.device_type in ("857","860"): # air_conditioner "Shuft-Berg_MBO-M1" & "Ballu-Discovery-DC"
                     if self.entity_description.key == "night":
                         # night доступен при режиме HEAT ("4") и COOL ("2")
                         self._attr_available = message.payload in ("4", "2")

@@ -16,6 +16,7 @@ from homeassistant.components.fan import (
     FanEntityFeature,
 )
 from homeassistant.components.vacuum import (
+    DOMAIN,
     ATTR_CLEANED_AREA,
     StateVacuumEntity,
     VacuumActivity,
@@ -405,6 +406,7 @@ POLARIS_DEVICE = {
     851: {"model": "Zanussi-Massimo-Solar-2023", "class": "air_conditioner"},
     821: {"model": "Zanussi-Moderno-DC_Electrolux-Loft-DC", "class": "air_conditioner"},
     857: {"model": "Shuft-Berg_MBO-M1", "class": "air_conditioner"},
+    860: {"model": "Ballu-Discovery-DC", "class": "air_conditioner"},
     881: {"model": "UHB-960-ET", "class": "humidifier"},
     835: {"model": "Electrolux-YOGAhealthline-2", "class": "humidifier"},
     878: {"model": "Electrolux_Royal-Thermo", "class": "thermostat"},
@@ -442,7 +444,7 @@ POLARIS_VACUUM_TYPE = ["7","12","19","21","22","23","24","43","66","68","76","81
 POLARIS_BOILER_TYPE = ["802","807","833","844","876","877"]
 POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
-POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815","868","851","821","857"]
+POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815","868","851","821","857","860"]
 POLARIS_THERMOSTAT_TYPE = ["878","867","829"]
 POLARIS_FAN_TYPE = ["180"]
 POLARIS_WINDOWCLEANER_TYPE = ["246"]
@@ -629,7 +631,6 @@ WINDOWCLEANER_ERROR = {
 "02": "pressure_sensor",
 "05": "low_water",
 }
-
 POLARIS_VACUUM_01_ERROR_CODE = [7,22,23,24,76,81,88,100,101,102,107,108,109,110,112,115,127]
 POLARIS_VACUUM_02_ERROR_CODE = [12,19,21,43,66,68,113,122,130,131,133,134,135,142,163,193,195,197]
 POLARIS_VACUUM_03_ERROR_CODE = [119,123,124,125,146,148,149,150,154,201,202,213,217,218,219,220,221]
@@ -1830,7 +1831,6 @@ SENSORS_WINDOWCLEANER = [
         state_class=None,
     ),
 ]
-
 SENSORS_WATER_BOILER = [
     PolarisSensorEntityDescription(
         key="firmware",
@@ -2616,7 +2616,6 @@ SWITCHES_WINDOWCLEANER = [
         icon="mdi:sprinkler-variant",
     ),
 ]
-
 SWITCHES_WATER_BOILER = [
     PolarisSwitchEntityDescription(
         key="power",
@@ -3926,7 +3925,6 @@ SELECT_WINDOWCLEANER = [
         entity_registry_enabled_default=True,
     ),
 ]
-
 SELECT_IRRIGATOR = [
     PolarisSelectEntityDescription(
         key="select_irrigator",
