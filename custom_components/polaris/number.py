@@ -194,10 +194,26 @@ async def async_setup_entry(
                     device_id=device_id
                 )
             )
-    if (device_type in POLARIS_FAN_TYPE): 
+    if device_type == "180":     #POLARIS_FAN_TYPE 
     # Create Fan  
         NUMBERS_FAN_LC = copy.deepcopy(NUMBERS_FAN)
         for description in NUMBERS_FAN_LC:
+            description.mqttTopicCurrent = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrent}" 
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.device_prefix_topic = device_prefix_topic
+            numberList.append(
+                PolarisNumber(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if device_type == "248":     #POLARIS_FAN_TYPE 
+    # Create Fan  
+        NUMBERS_AIRCLEANER_LC = copy.deepcopy(NUMBERS_AIRCLEANER)
+        for description in NUMBERS_AIRCLEANER_LC:
             description.mqttTopicCurrent = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrent}" 
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.device_prefix_topic = device_prefix_topic

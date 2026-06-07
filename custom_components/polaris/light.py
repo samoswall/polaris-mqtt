@@ -147,7 +147,7 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
                     rgb = rgb_up
                 else:
                     rgb = rgb_down
-                level = int(max(rgb)/255*100)
+                level = max(rgb)/255*100
                 self._attr_brightness = level
                 rgb_color = rgb
                 bright_factor_old = max(rgb)/255
@@ -165,7 +165,7 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
             @callback
             def message_received_rgb(message):
                 rgb = color_util.rgb_hex_to_rgb_list(message.payload)
-                level = int(max(rgb)/255*100)
+                level = max(rgb)/255*100
                 self._attr_brightness = level
                 if self.device_type in ("175", "176", "254", "255"):
                     rgb_color = [rgb[0], rgb[1], rgb[2]]
@@ -216,12 +216,13 @@ class PolarisLight(PolarisBaseEntity, LightEntity):
             color = color_util.color_rgb_to_hex(*kwargs[ATTR_RGB_COLOR])
             self._attr_rgb_color = color_util.rgb_hex_to_rgb_list(color)
         elif ATTR_BRIGHTNESS in kwargs:
-            level = int((kwargs.get(ATTR_BRIGHTNESS, 100) * 100) / 255)
-            self._attr_brightness = level
-        bright_factor_old = max(self._attr_rgb_color)/255
-        bright_factor_new = self._attr_brightness/ 100 / max(bright_factor_old, 1)
+            level = kwargs.get(ATTR_BRIGHTNESS, 255) / 255.0
+            self._attr_brightness = level * 100
+        bright_factor_old = max(self._attr_rgb_color) / 255.0
+        bright_factor_new = self._attr_brightness / 100.0 / max(bright_factor_old, 0.01)
         self._attr_rgb_color = [int(value * bright_factor_new) for value in self._attr_rgb_color]
-        if self.device_type in ("176", "254", "255"): # тип 175 принимает 3 байта, а отдает 4 байта
+        
+        if self.device_type == "254": # тип 254 принимает 4 байта, а отдает 4 байта, типы "175", "176", "255" принимают 3 байта, отдают 4
             mqtt.publish(self.hass, topic, f"{self._attr_rgb_color[0]:02x}{self._attr_rgb_color[1]:02x}{self._attr_rgb_color[2]:02x}00")
         elif self.device_type == "835":
             if self.entity_description.key == "night_up":

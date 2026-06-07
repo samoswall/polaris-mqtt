@@ -95,8 +95,11 @@ class PolarisFan(PolarisBaseEntity, FanEntity):
         self._attr_has_entity_name = True
         self._attr_available = False
         self._attr_is_on = False
-        self._percentage_list = self.entity_description.percentage_list
         self._attr_supported_features = self.entity_description.supported_features
+        if device_type == "248":
+            self.entity_description.percentage_list = [1,2,3,4,5,6,7,8,9,10,11,12]
+            self.entity_description.preset_modes = {"off": "0", "standart": "1", "breeze": "2", "night": "3"}
+        self._percentage_list = self.entity_description.percentage_list
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         self._attr_preset_mode = self._attr_preset_modes[0]
         self._attr_speed_count = max(self._percentage_list)
@@ -117,7 +120,10 @@ class PolarisFan(PolarisBaseEntity, FanEntity):
 
         @callback
         def percentage_message_received(message):
-            self._attr_percentage = ranged_value_to_percentage(self._speed_range, int(message.payload, 16))
+            if self.device_type == "248":
+                self._attr_percentage = ranged_value_to_percentage(self._speed_range, int(message.payload))
+            else:
+                self._attr_percentage = ranged_value_to_percentage(self._speed_range, int(message.payload, 16))
             self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentFanMode, percentage_message_received, 1)
 

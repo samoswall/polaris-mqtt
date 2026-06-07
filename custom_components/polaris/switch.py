@@ -51,6 +51,7 @@ from .const import (
     SWITCHES_AIRCONDITIONER_882,
     SWITCHES_THERMOSTAT,
     SWITCHES_FAN,
+    SWITCH_ROTATION_FAN,
     SWITCHES_WINDOWCLEANER,
     SWITCH_CHILD_LOCK,
     PolarisSwitchEntityDescription,
@@ -684,6 +685,22 @@ async def async_setup_entry(
     if (device_type in POLARIS_FAN_TYPE):
         SWITCHES_FAN_LC = copy.deepcopy(SWITCHES_FAN)
         for description in SWITCHES_FAN_LC:
+          if (device_type != "248" or description.translation_key not in ("effect_3d", "winter_storage", "night_light_mode")):
+            description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
+            description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
+            description.device_prefix_topic = device_prefix_topic
+            switchList.append(
+                PolarisSwitch(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id
+                )
+            )
+    if (device_type == "248"):
+        SWITCH_ROTATION_FAN_LC = copy.deepcopy(SWITCH_ROTATION_FAN)
+        for description in SWITCH_ROTATION_FAN_LC:
             description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
             description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
             description.device_prefix_topic = device_prefix_topic
@@ -734,13 +751,9 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             self.entity_description.mqttTopicCurrentValue = self.entity_description.mqttTopicCurrentValue.replace("backlight","program_data/0")
             self.entity_description.payload_on = "01"
             self.entity_description.payload_off = "00"
-#        if device_type in ("860"):
-#            if self.entity_description.translation_key == "smart_mode":
-#                self.entity_description.translation_key = "eco_mode_switch"
-#                self.entity_description.key = "eco_mode_switch"
-#            if self.entity_description.translation_key == "backlight_bright":
-#                self.entity_description.translation_key = "backlight_switch"
-#                self.entity_description.key = "night"
+        if device_type == "248" and self.entity_description.translation_key == "sound_switch":
+            self.entity_description.mqttTopicCommand = self.entity_description.mqttTopicCommand.replace("volume","sound")
+            self.entity_description.mqttTopicCurrentValue = self.entity_description.mqttTopicCurrentValue.replace("volume","sound")
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
         self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self.payload_on=self.entity_description.payload_on

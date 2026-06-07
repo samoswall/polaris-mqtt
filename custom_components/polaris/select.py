@@ -305,7 +305,7 @@ async def async_setup_entry(
                     custom_data_select=custom_data_select
                 )
             )
-    if (device_type in POLARIS_FAN_TYPE):
+    if (device_type in POLARIS_FAN_TYPE) and (device_type == "180"):
         SELECT_FAN_LC = copy.deepcopy(SELECT_FAN)
         for description in SELECT_FAN_LC:
             description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"

@@ -1,4 +1,7 @@
-"""The Polaris IQ Home component."""
+"""
+The Polaris IQ Home component.
+v1.1.4-alpha.3
+"""
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -446,7 +449,7 @@ POLARIS_IRRIGATOR_TYPE = ["132", "252"]
 POLARIS_HEATER_TYPE = ["806","846","847","849","814"]
 POLARIS_AIRCONDITIONER_TYPE = ["813","820","882","808","815","868","851","821","857","860"]
 POLARIS_THERMOSTAT_TYPE = ["878","867","829"]
-POLARIS_FAN_TYPE = ["180"]
+POLARIS_FAN_TYPE = ["180","248"]
 POLARIS_WINDOWCLEANER_TYPE = ["246"]
 
 KETTLE_WITH_TEA_TIME_MODES = {"off": "0", "performance": "1", "electric": "3", "heat_pump": "4", "eco": "5", "gas": "6"}
@@ -3150,6 +3153,21 @@ SWITCHES_FAN = [
     ),
 ]
 
+SWITCH_ROTATION_FAN = [
+    PolarisSwitchEntityDescription(
+        key="auto_rotation",
+        translation_key="auto_rotation",
+        entity_category=EntityCategory.CONFIG,
+        name="Auto rotation",
+        mqttTopicCommand="control/program_data/0",
+        mqttTopicCurrentValue="state/program_data/0",
+        device_class=SwitchDeviceClass.SWITCH,
+        payload_on="01",
+        payload_off="00",
+        icon="mdi:swap-horizontal",
+    ),
+]
+
 @dataclass
 class PolarisWaterHeaterEntityDescription(WaterHeaterEntityDescription):                                                              # breaks_in_ha_version="2026.1"
 
@@ -4570,8 +4588,6 @@ FANS = [
         name = "fan",
         key = "fan",
         translation_key = "fan",
-#        fan_mode = "off",
-#        fan_modes = {"off": "0", "1_speed": "1", "2_speed": "2", "3_speed": "3", "4_speed": "4", "5_speed": "5", "6_speed": "6", "7_speed": "7"},
         percentage_list = [1,2,3,4,5,6,7,8,9],
         preset_mode = "passive",
         preset_modes = {"off": "0", "standart": "1", "breeze": "2", "night": "3", "eco": "4", "auto": "5"},
