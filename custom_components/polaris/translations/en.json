@@ -141,6 +141,9 @@
       },
       "auto_sprinkle_switch": {
         "name": "Auto sprinkle"
+      },
+      "auto_rotation": {
+        "name": "Auto rotation"
       }
     },
     "water_heater": {
