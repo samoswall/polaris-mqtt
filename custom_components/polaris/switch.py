@@ -639,7 +639,7 @@ async def async_setup_entry(
     if device_type =="860":
         SWITCHES_AIRCONDITIONER_LC = copy.deepcopy(SWITCHES_AIRCONDITIONER)
         for description in SWITCHES_AIRCONDITIONER_LC:
-            if description.translation_key in ("auto_heater_switch", "night_switch", "eco_mode_switch"):
+            if description.translation_key in ("auto_heater_switch", "eco_mode_switch"):
                 description.mqttTopicCommand = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommand}"
                 description.mqttTopicCurrentValue = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentValue}"
                 description.device_prefix_topic = device_prefix_topic
