@@ -98,7 +98,7 @@ class PolarisFan(PolarisBaseEntity, FanEntity):
         self._attr_supported_features = self.entity_description.supported_features
         if device_type == "248":
             self.entity_description.percentage_list = [1,2,3,4,5,6,7,8,9,10,11,12]
-            self.entity_description.preset_modes = {"off": "0", "standart": "1", "breeze": "2", "night": "3"}
+            self.entity_description.preset_modes = {"off": "0", "standart": "3", "breeze": "1", "night": "2"}
         self._percentage_list = self.entity_description.percentage_list
         self._attr_preset_modes = list(self.entity_description.preset_modes.keys())
         self._attr_preset_mode = self._attr_preset_modes[0]
