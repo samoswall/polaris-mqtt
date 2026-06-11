@@ -640,9 +640,11 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 self._attr_current_option = self._attr_options[int(payload)]
                 self.async_write_ha_state()
             else:
-#                _LOGGER.debug(f"Type {POLARIS_DEVICE[int(self.device_type)]['class']} Options {self.entity_description.options}")
+              try:
                 self._attr_current_option = list(self.entity_description.options.keys())[list(self.entity_description.options.values()).index(payload)]
-                self.async_write_ha_state()
+              except ValueError:
+                pass
+            self.async_write_ha_state()
         await mqtt.async_subscribe(self.hass, self.entity_description.mqttTopicCurrentMode, message_received_sel, 1)
         
         @callback
