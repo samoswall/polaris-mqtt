@@ -2,16 +2,16 @@
   "config": {
     "abort": {
       "already_configured": "This device has already been configured.",
-      "not_supported": "Error. Not selected device type.",
-      "already_in_progress": "The device is already in the process of setting up. Add it from the card of detected devices."
+      "not_supported": "Error: no device type selected.",
+      "already_in_progress": "The device is already being set up. Add it from the discovered devices card."
     },
     "error": {
       "cannot_connect": "Failed to connect, please try again.",
       "invalid_auth": "Invalid authentication.",
-      "too_many_requests": "Too many requests, retry later.",
+      "too_many_requests": "Too many requests, try again later.",
       "unknown": "Unexpected error.",
       "Unknown error occurred": "Unexpected error.",
-      "already_in_progress": "The device is already in the process of setting up. Add it from the card of detected devices."
+      "already_in_progress": "The device is already being set up. Add it from the discovered devices card."
     },
     "step": {
       "user": {
@@ -74,10 +74,10 @@
         "name": "BSS"
       },
       "smart_mode_switch": {
-        "name": "Массаж"
+        "name": "Massage"
       },
       "damper_switch": {
-        "name": "Recycling"
+        "name": "Recirculation"
       },
       "damper_heater": {
         "name": "Detecting open window"
@@ -89,7 +89,7 @@
         "name": "Half power"
       },
       "backlight_bright": {
-        "name": "Bright 50/100"
+        "name": "Brightness 50/100"
       },
       "turbo_switch": {
         "name": "Turbo mode"
@@ -161,11 +161,11 @@
         "state": {
           "off": "Off",
           "performance": "Boiling",
-          "high_demand": "Keep with warm up",
-          "electric": "Warm up",
-          "heat_pump": "Warm up with keep",
+          "high_demand": "Boil & keep warm",
+          "electric": "Heating",
+          "heat_pump": "Heat & keep warm",
           "eco": "IQ boiling",
-          "gas": "Tea Time"
+          "gas": "Tea time"
         }
       },
       "water_boiler": {
@@ -193,7 +193,7 @@
               "boost": "Intensity",
               "home": "Custom",
               "eco": "Humidity",
-              "fitnes": "Fitnes",
+              "fitnes": "Fitness",
               "yoga": "Yoga",
               "meditation": "Meditation",
               "prana_hand": "Prana hand",
@@ -283,10 +283,10 @@
         "name": "Time to end Turbo"
       },
       "quality": {
-        "name": "Качество чистки"
+        "name": "Cleaning quality"
       },
       "power_consume": {
-        "name": "Power consume"
+        "name": "Power consumption"
       },
       "error": {
         "name": "Error",
@@ -297,9 +297,9 @@
           "temperature_sensor_failure": "Temperature sensor failure",
           "child_lock": "Child lock operated",
           "recommended_to_change_water": "It is recommended to change the water in the kettle",
-          "changed_water_for_long_time": "You probably haven't changed water for a long time. It is desirable to boil it",
+          "changed_water_for_long_time": "You probably haven't changed the water for a long time. It is recommended to boil it",
           "replace_filter": "It is recommended to replace the filter",
-          "maximum_schedules": "Maximum number of schedules 4",
+          "maximum_schedules": "Maximum number of schedules is 4",
           "clean_tank": "Clean the tank",
           "cup_not_present": "Cup is not present",
           "gesture_sensor_error": "Gesture sensor error",
@@ -311,19 +311,19 @@
           "waste_container_full": "Waste container is full",
           "not_enough_coffee_beans": "Not enough coffee beans",
           "water_supply_blocked": "Water supply is blocked",
-          "code_e001": "The coffee machine is faulty (code E001) Contact service center",
-          "code_e002": "The coffee machine is faulty (code E002) Contact service center",
-          "code_e003": "The coffee machine is faulty (code E003) Contact service center",
-          "code_e004": "The coffee machine is faulty (code E004) Contact service center",
-          "code_e005": "The coffee machine is faulty (code E005) Contact service center",
+          "code_e001": "The coffee machine is faulty (code E001). Contact the service center",
+          "code_e002": "The coffee machine is faulty (code E002). Contact the service center",
+          "code_e003": "The coffee machine is faulty (code E003). Contact the service center",
+          "code_e004": "The coffee machine is faulty (code E004). Contact the service center",
+          "code_e005": "The coffee machine is faulty (code E005). Contact the service center",
           "decalcification_required": "Decalcification required",
           "water_changed_for_long_time": "Water in the tank hasn't been changed for a long time. It's recommended to change the water",
           "cleaning_milk_system": "Cleaning the milk system",
           "cleaning_brewing_system": "Cleaning the brewing system",
           "decalcification_progress": "Decalcification in progress",
           "cleaning_hydraulic_system": "Cleaning the hydraulic system",
-          "check_water_tank": "Сheck the water tank",
-          "cappuccinator_false": "Cappuccinator false",
+          "check_water_tank": "Check the water tank",
+          "cappuccinator_false": "Milk frother not installed",
           "nothing_is_selected": "Nothing is selected",
           "v01_error_1": "Cliff error",
           "v01_error_2": "Check front collision plate",
@@ -336,7 +336,7 @@
           "v01_error_16": "Check fan motor",
           "v01_error_22": "The robot is not on the floor",
           "v01_error_32": "Check roll brush",
-          "v01_error_64": "Low batttery",
+          "v01_error_64": "Low battery",
           "v01_error_128": "Child lock operated",
           "v02_error_2": "Check rollbrush",
           "v02_error_4": "Check left wheel",
@@ -358,7 +358,7 @@
           "v02_error_40": "The map has been reset and is no longer accurate. A new one will be created while cleaning.",
           "v03_error_2": "Rolling Brush Error. Please refer to the manual or APP.",
           "v03_error_3": "Wheel Module Error. Please refer to the manual or APP.",
-          "v03_error_4": "Wheel stuck. Check the wheel and Move it to a new position and try again.",
+          "v03_error_4": "Wheel stuck. Check the wheel, move it to a new position and try again.",
           "v03_error_6": "Side Brush Error. Please refer to the manual or APP.",
           "v03_error_7": "Side Brush Error. Please refer to the manual or APP.",
           "v03_error_8": "The machine tilts, please put the machine on the level ground to start it",
@@ -371,7 +371,7 @@
           "v03_error_16": "Laser Sensor Error. Please refer to the manual or APP.",
           "v03_error_18": "Water Pump Error. Please refer to the manual or APP.",
           "v03_error_19": "The machine is trapped. Please put the machine on the ground to restart.",
-          "v03_error_20": "Please put the machine to the new location to start",
+          "v03_error_20": "Please place the machine in a new location to start",
           "v03_error_22": "Laser sensor blocked, please wipe",
           "v03_error_24": "Restricted area detected, please move to a new location to start",
           "v03_error_25": "Battery Error. Please refer to the manual or APP.",
@@ -391,7 +391,7 @@
           "v03_error_41": "Do Not Disturb time, schedule not implemented",
           "v03_error_42": "Robot is working, schedule not implemented.",
           "v03_error_44": "Low battery, automatic shutdown.",
-          "v03_error_45": "Continuous cleaning，schedule not implemented.",
+          "v03_error_45": "Continuous cleaning, schedule not implemented.",
           "v03_error_46": "Relocation failed, schedule not implemented.",
           "v03_error_47": "System upgrading, please wait patiently.",
           "v03_error_48": "Low Battery. Please charge and try again.",
@@ -402,10 +402,10 @@
           "v04_error_4": "Right wheel failure, please check",
           "v04_error_5": "Radar sensor failure, please check",
           "v04_error_6": "Please place the robot on the floor to start",
-          "v04_error_8": "Device has trapped",
+          "v04_error_8": "Device is trapped",
           "v04_error_9": "Check the height sensor",
           "v04_error_10": "Laser sensor is stuck, please check",
-          "v04_error_11": "Check the front bumper, please check",
+          "v04_error_11": "Check the front bumper",
           "v04_error_12": "Wheel stuck object",
           "v04_error_13": "Side brush failure, please check",
           "v04_error_14": "Main brush failure, please check",
@@ -437,7 +437,7 @@
           "v04_error_57": "The dirty water tank is full, please empty it",
           "v04_error_58": "The device is not at the charging station",
           "v04_error_59": "The mop is not in place and cannot be cleaned",
-          "v04_error_60": "The base of the tray is set uncorrectly",
+          "v04_error_60": "The base of the tray is installed incorrectly",
           "v04_error_61": "Not enough water in the tank",
           "v04_error_62": "The dirty water tank is full",
           "v04_error_63": "Faulty clean water pump",
@@ -445,18 +445,18 @@
           "v04_error_65": "Faulty drying system pump",
           "v04_error_66": "Faulty clean water pump",
           "v04_error_67": "Heating of water",
-          "v05_error_1": "Wheel Motor Error.Please refer to the manual or APP.",
+          "v05_error_1": "Wheel Motor Error. Please refer to the manual or APP.",
           "v05_error_2": "Rolling brush stuck. please remove and clean it.",
-          "v05_error_4": "Wheel stuck. Check the wheel and Move it to a new position and try again.",
-          "v05_error_6": "Side Brush Error.Please refer to the manual or APP.",
+          "v05_error_4": "Wheel stuck. Check the wheel, move it to a new position and try again.",
+          "v05_error_6": "Side Brush Error. Please refer to the manual or APP.",
           "v05_error_7": "Side brush stuck. please check",
           "v05_error_8": "The machine tilts, please put the machine on the level ground to start it.",
-          "v05_error_9": "Front bumper stuck，please check",
+          "v05_error_9": "Front bumper stuck, please check",
           "v05_error_10": "Please install the dustbin",
-          "v05_error_12": "Anti-drop sensor  blocked, please wipe",
+          "v05_error_12": "Anti-drop sensor blocked, please wipe",
           "v05_error_13": "Rolling Brush Error. Please refer to the manual or APP.",
           "v05_error_14": "The laser sensor is stuck or entangled, please check",
-          "v05_error_15": "Suction Fan Error. Please refer to the manual or APP",
+          "v05_error_15": "Suction Fan Error. Please refer to the manual or APP.",
           "v05_error_16": "Laser sensor blocked, please wipe",
           "v05_error_17": "The air duct of the dust collector is blocked, please clean it.",
           "v05_error_18": "Water Pump Error. Please refer to the manual or APP.",
@@ -476,14 +476,14 @@
           "v05_error_47": "Upgrading failed. Please try again",
           "v05_error_48": "Successfully upgraded",
           "v05_error_49": "Please clean and replace the dust bag in the bucket",
-          "v05_error_50": "During the do not disturb time period, the breakpoint continuous scan is not executed",
+          "v05_error_50": "During the Do Not Disturb period, resumable cleaning will not be executed",
           "v05_error_51": "During the Do Not Disturb time period, scheduled cleaning has not been performed",
           "v05_error_52": "Robot is working, schedule not implemented",
           "v05_error_53": "Please put it on the floor to start or remove the mop stand and start it again",
           "v05_error_54": "Low battery, automatic shutdown.",
           "v05_error_55": "The air pressure sensor fails, please pay attention to cleaning the dust bag",
           "v05_error_57": "Low Battery. Heading Home.",
-          "v05_error_69": "The carpet detection sensor error，Please refer to the manual or APP.",
+          "v05_error_69": "The carpet detection sensor error. Please refer to the manual or APP.",
           "v05_error_70": "Please do not collect dust frequently",
           "v06_error_1": "Right side wall sensor is obscured, please wipe it.",
           "v06_error_2": "Rolling Brush Stuck",
@@ -501,10 +501,10 @@
           "v06_error_14": "The laser sensor is stuck or entangled, please check",
           "v06_error_15": "Suction Fan Error. Please refer to the manual or APP.",
           "v06_error_16": "Laser Sensor Error. Please refer to the manual or APP.",
-          "v06_error_17": "Camera Error.Please refer to the manual or APP.",
+          "v06_error_17": "Camera Error. Please refer to the manual or APP.",
           "v06_error_18": "Water Pump Error.",
           "v06_error_19": "The machine is trapped. Please put the machine on the ground to restart",
-          "v06_error_20": "Please put the machine to the new location to start",
+          "v06_error_20": "Please place the machine in a new location to start",
           "v06_error_21": "Line laser sensor data is abnormal, please consult the manual.",
           "v06_error_22": "Laser sensor blocked, please wipe",
           "v06_error_23": "Please start spot cleaning after moving away from the base station.",
@@ -552,27 +552,27 @@
           "v06_error_80": "Abnormal air pressure sensor",
           "v06_error_81": "Duct blockage",
           "v06_error_82": "Abnormal overflow recovery",
-          "v06_error_83": "Open circuit thermometer",
+          "v06_error_83": "Thermometer open circuit",
           "v06_error_84": "Abnormal PTC temperature",
           "v06_error_86": "Host is not present",
           "v06_error_87": "Overflow",
-          "v06_error_88": "The stepper motor is in place abnormally",
-          "v06_error_89": "Dustbag not in place",
-          "v06_error_90": "dust bag full",
+          "v06_error_88": "The stepper motor is installed incorrectly",
+          "v06_error_89": "Dust bag not in place",
+          "v06_error_90": "Dust bag full",
           "v06_error_91": "Dust compartment door open",
           "v06_error_92": "Frequent dust collection",
           "v06_error_93": "Clean water tank empty",
           "v06_error_94": "Clean water tank is not in place",
-          "v06_error_95": "waste water tank full",
-          "v06_error_96": "waste water tank not in place",
+          "v06_error_95": "Waste water tank full",
+          "v06_error_96": "Waste water tank not in place",
           "v06_error_97": "Cleaning tank is not in place",
           "v06_error_101": "The clean water tank is empty",
-          "v06_error_102": "Clean wаter tank not installed",
+          "v06_error_102": "Clean water tank not installed",
           "v06_error_103": "Sewage tank full",
           "v06_error_104": "Sewage tank not installed",
           "v06_error_105": "Dust bag full",
-          "v06_error_106": "Dust bug not installed",
-          "v06_error_121": "Cleaning stoped，please check the mop holder",
+          "v06_error_106": "Dust bag not installed",
+          "v06_error_121": "Cleaning stopped, please check the mop holder",
           "v06_error_122": "Unable to reach the designated area.",
           "v06_error_131": "Camera is turned off.",
           "v07_error_1": "Wheel lift",
@@ -580,10 +580,10 @@
           "v07_error_3": "Positioning error",
           "v07_error_4": "Positioning error, cleaning paused",
           "v07_error_5": "Virtual wall or restricted area detected",
-          "v07_error_6": "Return to the charging station recharging error",
+          "v07_error_6": "Error returning to the charging station to recharge",
           "v07_error_7": "Dust bin is not installed",
           "v07_error_8": "The mop pad is not installed",
-          "v07_error_9": "Water tank Is empty",
+          "v07_error_9": "Water tank is empty",
           "v07_error_10": "No wet mop installed",
           "v07_error_11": "Clean water tank is not installed",
           "v07_error_12": "Dirty water tank is full",
@@ -604,7 +604,7 @@
           "v07_error_27": "The cleaning tank is full",
           "v07_error_28": "Hair cutting device stuck",
           "v07_error_29": "Low battery, needs to be recharged",
-          "v07_error_30": "Creating map failure",
+          "v07_error_30": "Map creation failed",
           "v07_error_31": "Target area is unreachable",
           "v07_error_32": "There is an obstacle on the way, please check",
           "v07_error_33": "Cleaning zone location failure",
@@ -651,18 +651,18 @@
           "v08_error_39": "Dust bag full of dust",
           "v08_error_40": "New environment detected, restart cleaning",
           "v08_error_50": "The dust bag is full. It is recommended that you replace it.",
-          "v09_error_1": "Front bumper stuck，please check",
-          "v09_error_4": "Anti-drop sensor  blocked, please wipe",
+          "v09_error_1": "Front bumper stuck, please check",
+          "v09_error_4": "Anti-drop sensor blocked, please wipe",
           "v09_error_5": "Wheel lift detected",
           "v09_error_9": "Side brush is blocked",
-          "v09_error_10": "Left wheel  is locked, please check and clean it.",
-          "v09_error_11": "Right wheel is locked, please check and alean it.",
+          "v09_error_10": "Left wheel is locked, please check and clean it.",
+          "v09_error_11": "Right wheel is locked, please check and clean it.",
           "v09_error_12": "Main brush is blocked, please check",
           "v09_error_13": "Fan motor problem",
           "v09_error_16": "Dust bin is not installed",
           "v09_error_20": "Gyro module error",
           "v09_error_21": "Lidar module error",
-          "v09_error_23": "Robot is stuck, please check it's position.",
+          "v09_error_23": "Robot is stuck, please check its position.",
           "v09_error_30": "Change side brushes",
           "v09_error_31": "Change the main brush",
           "v09_error_32": "Change filter",
@@ -687,12 +687,12 @@
           "v10_error_16": "Robot vacuum wheel problem",
           "v10_error_17": "The battery temperature is too low. Wait for it to return to normal",
           "v10_error_18": "The battery temperature is too high. Wait for it to return to normal",
-          "v10_error_19": "Side Brush Error.Please refer to the manual or APP",
+          "v10_error_19": "Side Brush Error. Please refer to the manual or APP",
           "v10_error_20": "Main brush error",
-          "v10_error_21": "No work for a long time. The robot vacuum is about to turn off",
+          "v10_error_21": "Not used for a long time. The robot vacuum is about to turn off",
           "v10_error_22": "Low battery, turning off",
           "v10_error_23": "Wheels error",
-          "v10_error_24": "Left  wheel is locked, please check",
+          "v10_error_24": "Left wheel is locked, please check",
           "v10_error_25": "Right wheel is locked, please check",
           "v10_error_50": "Robot vacuum is returning to base",
           "v10_error_51": "Robot vacuum is returning to charge",
@@ -701,13 +701,13 @@
           "v10_error_54": "Unable to return to charging dock",
           "v10_error_55": "Charging completed",
           "v10_error_56": "Charging error",
-          "v11_error_2": "The wheels are not touching the floor. Please move Robot cleaner onto flat floor.",
+          "v11_error_2": "The wheels are not touching the floor. Please move the robot cleaner onto a flat floor.",
           "v11_error_3": "Please remove foreign material from the brushes on the bottom.",
           "v11_error_4": "Remove foreign material from the side brush",
-          "v11_error_5": "Dual sweep mop Stuck",
+          "v11_error_5": "Dual sweep mop stuck",
           "v11_error_7": "The front bumper is stuck",
           "v11_error_8": "Laser Sensor is blocked",
-          "v11_error_9": "Lidar Stuck,",
+          "v11_error_9": "Lidar stuck.",
           "v11_error_10": "The lidar turret bumper is stuck",
           "v11_error_11": "Cliff edge detected",
           "v11_error_12": "The robot tilts",
@@ -717,29 +717,29 @@
           "v11_error_18": "Right side wall sensor is obscured, please wipe it.",
           "v11_error_19": "The dust box is missing",
           "v11_error_20": "Dust bag not installed",
-          "v11_error_21": "Battery open or short circuit or high battery temperature",
-          "v11_error_40": "A problem has been detected with the wheel motor.Please refer to the manual or APP",
-          "v11_error_41": "A problem has been detected with the brush motor.Please refer to the manual or APP",
-          "v11_error_42": "A problem has been detected with the side brush motor.Please refer to the manual or APP",
-          "v11_error_43": "A problem has been detected with the Dual sweep mop motor, Please refer to the manual or APP",
+          "v11_error_21": "Battery compartment open, short circuit, or high battery temperature",
+          "v11_error_40": "A problem has been detected with the wheel motor. Please refer to the manual or APP",
+          "v11_error_41": "A problem has been detected with the brush motor. Please refer to the manual or APP",
+          "v11_error_42": "A problem has been detected with the side brush motor. Please refer to the manual or APP",
+          "v11_error_43": "A problem has been detected with the Dual sweep mop motor. Please refer to the manual or APP",
           "v11_error_45": "Suction Motor Error",
-          "v11_error_47": "Insufficient battery, automatic shutdown",
+          "v11_error_47": "Insufficient battery charge, automatic shutdown",
           "v11_error_52": "The machine's battery is too low",
-          "v11_error_55": "problem has been detected with the LiDAR sensor. Please refer to the manual or APP.",
-          "v11_error_59": "The carpet detection sensor error, Please refer to the manual or APP.",
-          "v11_error_61": "Could not find the home station. home station search terminated. Please move the robot cleaner to the home station for charging.",
+          "v11_error_55": "A problem has been detected with the LiDAR sensor. Please refer to the manual or APP.",
+          "v11_error_59": "Carpet detection sensor error. Please refer to the manual or APP.",
+          "v11_error_61": "Could not find the home station. Home station search terminated. Please move the robot cleaner to the home station for charging.",
           "v11_error_62": "Battery is low. Please move Robot onto the Dock to charge",
           "v11_error_63": "Dust bag in the station is full. Please replace the bag",
           "v11_error_64": "Carpet with mop on the carpet startup error",
-          "v11_error_65": "collect dust frequently",
+          "v11_error_65": "Collect dust frequently",
           "v11_error_81": "Start Scheduled Cleaning",
           "v11_error_82": "After charging, continue cleaning",
-          "v11_error_83": "Software upgrade failed. Please try it again",
+          "v11_error_83": "Software upgrade failed. Please try again",
           "v11_error_84": "Battery is low. Searching for the Home Station",
           "v11_error_85": "Battery is low",
           "v11_error_88": "Relocation failed, appointment not executed",
-          "v11_error_91": "Positioning failed, recharge",
-          "v11_error_94": "Please install the Mop holder",
+          "v11_error_91": "Positioning failed, please recharge",
+          "v11_error_94": "Please install the mop holder",
           "pressure_sensor": "Pressure sensor issue. Please refer to the manual or APP."
         }
       },
@@ -878,7 +878,7 @@
           "fry": "Fry",
           "pilaf": "Pilaf",
           "yogurt": "Yogurt",
-          "oatmeal": "Catmeal",
+          "oatmeal": "Oatmeal",
           "milk_porridge": "Milk porridge",
           "soup": "Soup",
           "meat": "Meat",
@@ -894,7 +894,7 @@
         }
       },
       "select_mode_cofeemaker": {
-        "name": "Напиток",
+        "name": "Drink",
         "state": {
           "not_selected": "Not selected",
           "espresso": "Espresso",
@@ -918,7 +918,7 @@
           "hot_milk": "Hot milk",
           "doppio": "Doppio",
           "lungo": "Lungo",
-          "clearing": "Clearing",
+          "clearing": "Cleaning",
           "heating": "Heating"
         }
       },
@@ -948,7 +948,7 @@
           "standard": "Standard",
           "child": "Child",
           "teen": "Teen",
-          "the_aged": "The aged"
+          "the_aged": "Elderly"
         }
       },
       "select_night_backlight": {
@@ -956,7 +956,7 @@
         "state": {
           "off": "Off",
           "all_on": "All on",
-          "high_on": "Hight on",
+          "high_on": "High on",
           "mid_on": "Mid on",
           "low_on": "Low on"
         }
@@ -1107,7 +1107,7 @@
         "name": "Lid",
         "state": {
           "on": "Open",
-          "off": "Close"
+          "off": "Closed"
         }
       },
       "water_tank_binary_sensor": {
@@ -1118,7 +1118,7 @@
         }
       },
       "cappuccinator_binary_sensor": {
-        "name": "Cappuccinator",
+        "name": "Milk frother",
         "state": {
           "on": "Installed",
           "off": "Not installed"
@@ -1128,7 +1128,7 @@
         "name": "Heating",
         "state": {
           "on": "Heats",
-          "off": "Not heat"
+          "off": "Not heating"
         }
       },
       "available_binary_sensor": {
@@ -1161,13 +1161,13 @@
         "name": "Start"
       },
       "button_reset_filter": {
-        "name": "Reset time filter"
+        "name": "Reset filter timer"
       },
       "button_reset_prefilter": {
-        "name": "Reset time pre-filter"
+        "name": "Reset pre-filter timer"
       },
       "button_reset_tank": {
-        "name": "Reset time water tank"
+        "name": "Reset water tank timer"
       }
     },
     "climate": {
@@ -1189,7 +1189,7 @@
           },
           "preset_mode": {
             "state": {
-              "hands": "Hands",
+              "hands": "Manual",
               "auto": "Auto",
               "night": "Night",
               "turbo": "Turbo",
@@ -1223,7 +1223,7 @@
           },
           "preset_mode": {
             "state": {
-              "hands": "Hands"
+              "hands": "Manual"
             }
           }
         }
@@ -1231,12 +1231,12 @@
       "aircleaner": {
         "name": "Air cleaner",
         "state": {
-          "dry": "Сlearing"
+          "dry": "Purifying"
         },
         "state_attributes": {
           "preset_mode": {
             "state": {
-              "hands": "Hands",
+              "hands": "Manual",
               "auto": "Auto",
               "night": "Night"
             }
@@ -1249,13 +1249,13 @@
         }
       },
       "conditioner": {
-        "name": "Conditioner",
+        "name": "Air conditioner",
         "state_attributes": {
           "fan_mode": {
             "state": {
-              "quite": "Quite",
-              "min": "Max",
-              "max": "Min",
+              "quite": "Quiet",
+              "min": "Minimum",
+              "max": "Maximum",
               "turbo": "Turbo"
             }
           }
@@ -1285,7 +1285,7 @@
           "preset_mode": {
             "state": {
               "off": "Off",
-              "standart": "Standart",
+              "standart": "Standard",
               "breeze": "Breeze",
               "night": "Night",
               "eco": "Eco",
@@ -1319,11 +1319,11 @@
     "iron": "Iron",
     "kitchen_machine": "Kitchen machine",
     "meat_grinder": "Meat grinder",
-    "other": "Smart Lid",
+    "other": "Smart device",
     "oven": "Oven",
     "steamer": "Steamer",
     "toothbrush": "Toothbrush",
-    "air_conditioner": "Conditioner",
+    "air_conditioner": "Air conditioner",
     "thermostat": "Thermostat"
   }
 }
