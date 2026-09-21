@@ -400,7 +400,17 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 self.entity_description.options = {"off": "00","auto": "01", "top": "02", "high": "03", "middle": "04", "low": "05", "bottom": "06"}
             if device_type == "856":
                 self._conditioner_data1 = "00000000"
-        if device_type in ("190","207","235"): #ROG_TYPE_2
+        if device_type == "190": #PCM-1560, verified against real hardware traffic
+            self.entity_description.options = {
+                'not_selected': '[{"mode": 0, "amount": 30, "tank": 0, "temperature": 95}]',
+                'single': '[{"mode": 1, "amount": 40, "tank": 0, "temperature": 95}]',
+                'double': '[{"mode": 2, "amount": 90, "tank": 0, "temperature": 95}]',
+                'cappuccino': '[{"mode": 3, "amount": 50, "tank": 20, "temperature": 95}]',
+                'latte': '[{"mode": 4, "amount": 30, "tank": 90, "temperature": 95}]',
+                'foam': '[{"mode": 5, "amount": 0, "tank": 40, "temperature": 95}]',
+                'clean': '[{"mode": 6, "amount": 0, "tank": 0, "temperature": 95}]'
+            }
+        elif device_type in ("207","235"): #ROG_TYPE_2, unverified - left as-is
             self.entity_description.options = {
                 'not_selected': '[{"mode": 0, "amount": 30, "tank": 0, "temperature": 95}]',
                 'espresso': '[{"mode": 1, "amount": 65, "tank": 0, "temperature": 95}]',

@@ -247,7 +247,17 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
                         'heating': '[{"mode": 5, "amount": 0, "tank": 0, "temperature": 95}]',
                         'hot_milk': '[{"mode": 6, "amount": 0, "tank": 15, "temperature": 95}]'
                     }
-                elif device_type in ("190","207","235"): #ROG_TYPE_2
+                elif device_type == "190": #PCM-1560, verified against real hardware traffic
+                     self._select_options = {
+                         'not_selected': '[{"mode": 0, "amount": 30, "tank": 0, "temperature": 95}]',
+                         'single': '[{"mode": 1, "amount": 40, "tank": 0, "temperature": 95}]',
+                         'double': '[{"mode": 2, "amount": 90, "tank": 0, "temperature": 95}]',
+                         'cappuccino': '[{"mode": 3, "amount": 50, "tank": 20, "temperature": 95}]',
+                         'latte': '[{"mode": 4, "amount": 30, "tank": 90, "temperature": 95}]',
+                         'foam': '[{"mode": 5, "amount": 0, "tank": 40, "temperature": 95}]',
+                         'clean': '[{"mode": 6, "amount": 0, "tank": 0, "temperature": 95}]'
+                     }
+                elif device_type in ("207","235"): #ROG_TYPE_2, unverified - left as-is
                      self._select_options = {
                          'not_selected': '[{"mode": 0, "amount": 30, "tank": 0, "temperature": 95}]',
                          'espresso': '[{"mode": 1, "amount": 65, "tank": 0, "temperature": 95}]',
@@ -364,7 +374,14 @@ class PolarisButton(PolarisBaseEntity, ButtonEntity):
                 state_mode = self.hass.states.get(f"select.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_select_mode_cofeemaker_rog").state
                 state_cappuccinator = self.hass.states.get(f"binary_sensor.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_cappuccinator").state
                 state_power = self.hass.states.get(f"switch.{POLARIS_DEVICE[int(self.device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(self.device_type)]['model'].replace('-', '_').lower()}_power").state
-                if state_power == "off":
+                # PCM-1560 (190): verified against real hardware traffic - state/mode reports
+                # "0" both when asleep and when warmed-up/ready, so the Power switch can't
+                # reliably tell those apart here. This auto-wake used to fire "5" (which is
+                # actually the "foam" command, not wake) on every start whenever the switch
+                # read "off" - which on this model is most of the time even when the machine
+                # is genuinely ready. Skipped for 190; the user wakes the machine explicitly
+                # via its own dedicated wake button/switch before selecting a drink.
+                if self.device_type != "190" and state_power == "off":
                     mqtt.publish(self.hass, f"{self.mqtt_root}/{self.device_prefix_topic}/control/mode", 5)
                 if state_cappuccinator == "off" and state_mode in ("cappuccino", "double_cappuccino", "latte", "double_latte", "flat_white", "hot_milk"):
                     mqtt.publish(self.hass, f"{self.mqtt_root}/{self.device_prefix_topic}/state/error/code", "99")

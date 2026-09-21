@@ -207,11 +207,22 @@ class PolarisBinarySensor(PolarisBaseEntity, BinarySensorEntity, ConfigEntry):
         self.device_entities = []
         if self.entity_description.name != "available":
             self._attr_available = False
+        # PCM-1560 (190): verified against real hardware traffic - this model does not
+        # report cappuccinator presence via state/tank at all (tank just carries the
+        # milk volume for the current drink). It reports the cappuccinator/side door
+        # being open via the real device error channel instead (state/error/code == "01").
+        if self.device_type == "190" and self.entity_description.key == "cappuccinator":
+            self.entity_description.mqttTopicStatus = f"{self.mqtt_root}/{self.entity_description.device_prefix_topic}/state/error/code"
 
     async def async_added_to_hass(self):
         @callback
         async def message_received_base(message):
-            if self.device_type in POLARIS_COFFEEMAKER_ROG_TYPE and self.entity_description.key == "cappuccinator":
+            if self.device_type == "190" and self.entity_description.key == "cappuccinator":
+                if str(message.payload) == "01":
+                    self._attr_is_on = False
+                else:
+                    self._attr_is_on = True
+            elif self.device_type in POLARIS_COFFEEMAKER_ROG_TYPE and self.entity_description.key == "cappuccinator":
                 if int(message.payload) == 255:
                     self._attr_is_on = False
                     service_data = {}

@@ -773,6 +773,11 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         if device_type == "248" and self.entity_description.translation_key == "sound_switch":
             self.entity_description.mqttTopicCommand = self.entity_description.mqttTopicCommand.replace("volume","sound")
             self.entity_description.mqttTopicCurrentValue = self.entity_description.mqttTopicCurrentValue.replace("volume","sound")
+        if device_type == "190" and self.entity_description.key == "power":
+            # PCM-1560: verified against real hardware traffic - the real wake/warm-up
+            # command is mode 8, not mode 5 ("heating", which the shared ROG_TYPE_2
+            # table assumed). Sending "5" made the machine beep and ignore the command.
+            self.entity_description.payload_on = "8"
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
         self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self.payload_on=self.entity_description.payload_on
@@ -819,7 +824,7 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         def message_received(message):
             if POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker":
                 if self.device_type in POLARIS_COFFEEMAKER_ROG_TYPE:
-                    if str(message.payload) in ("1", "2", "3", "4", "5", "6", "true"):
+                    if str(message.payload) in ("1", "2", "3", "4", "5", "6", "8", "true"):
                         self._attr_is_on = True
                     else:
                         self._attr_is_on = False
@@ -1015,6 +1020,17 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
 
     def turn_on(self, **kwargs):
 #        self._attr_is_on = True # optimistic mode
+        if self.device_type == "190" and self.entity_description.key == "power":
+            # PCM-1560: DISABLED pending investigation. We only ever observed mode=8 as a
+            # STATE readback (the machine reporting its own warm-up, triggered by its
+            # physical wake button - which never goes through MQTT control/* at all).
+            # We assumed the same value would work as a CONTROL command to wake it
+            # remotely, but sending control/mode=8 instead triggered something that looks
+            # like the "clean" cycle (panel showed "001" with "clean" blinking) rather than
+            # a wake. The correct remote wake command (if any exists) is not yet known -
+            # do not publish anything here until it is confirmed safe.
+            _LOGGER.warning("Polaris PCM-1560: remote power-on is disabled pending investigation - see comments in switch.py")
+            return
         topic = f"{self.entity_description.mqttTopicCommand}"
         if self.entity_description.key == "display_off_heater":
             if self.device_type == "806":
