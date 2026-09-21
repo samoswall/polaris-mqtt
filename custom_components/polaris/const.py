@@ -4144,6 +4144,39 @@ BINARYSENSOR_CAPPUCCINATOR = [
     )
 ]
 
+BINARYSENSOR_AWAKE = [
+    # PCM-1560 (190): verified against real hardware traffic - state/mode reports "0"
+    # both when asleep and when warmed-up/ready, so it cannot tell the two apart.
+    # state/program_data/1 changes from its idle baseline "000000" to "010000" when
+    # the machine wakes (physical button, or now also switch.*_power - see switch.py)
+    # and back to "000000" when it goes to sleep, whether by timeout or remotely.
+    # Confirmed reliable both ways against real hardware.
+    PolarisBinarySensorEntityDescription(
+        key="awake",
+        name="Awake",
+        translation_key="awake_binary_sensor",
+        mqttTopicStatus="state/program_data/1",
+        device_class=BinarySensorDeviceClass.POWER,
+        entity_registry_enabled_default=True,
+    )
+]
+
+BINARYSENSOR_BREWING = [
+    # PCM-1560 (190): read-only "a program is actively running" indicator, based on
+    # state/mode (0 = idle/asleep either way, 1-6 = single/double/cappuccino/latte/
+    # foam/clean in progress, 8 = warming up). This is what the old (mis-wired) Power
+    # switch used to show before it was fixed to track Awake instead - kept as its own
+    # sensor since "device is brewing/cleaning/warming" is still useful on its own.
+    PolarisBinarySensorEntityDescription(
+        key="brewing",
+        name="Brewing",
+        translation_key="brewing_binary_sensor",
+        mqttTopicStatus="state/mode",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        entity_registry_enabled_default=True,
+    )
+]
+
 BINARYSENSOR_THERMOSTAT = [
     PolarisBinarySensorEntityDescription(
         key="heating",

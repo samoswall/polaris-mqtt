@@ -774,10 +774,17 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
             self.entity_description.mqttTopicCommand = self.entity_description.mqttTopicCommand.replace("volume","sound")
             self.entity_description.mqttTopicCurrentValue = self.entity_description.mqttTopicCurrentValue.replace("volume","sound")
         if device_type == "190" and self.entity_description.key == "power":
-            # PCM-1560: verified against real hardware traffic - the real wake/warm-up
-            # command is mode 8, not mode 5 ("heating", which the shared ROG_TYPE_2
-            # table assumed). Sending "5" made the machine beep and ignore the command.
-            self.entity_description.payload_on = "8"
+            # PCM-1560: verified against real hardware traffic (captured via a MITM
+            # relay of the official app's cloud MQTT session) - the real wake/sleep
+            # mechanism is NOT control/mode at all. It's a dedicated, otherwise-unused
+            # topic: publishing "010000" to control/program_data/1 wakes the machine,
+            # and "000000" puts it back to sleep. state/program_data/1 mirrors this
+            # live (matches the "Awake" binary_sensor added earlier). Confirmed working
+            # against real hardware by the user.
+            self.entity_description.mqttTopicCommand = f"{mqtt_root}/{description.device_prefix_topic}/control/program_data/1"
+            self.entity_description.mqttTopicCurrentValue = f"{mqtt_root}/{description.device_prefix_topic}/state/program_data/1"
+            self.entity_description.payload_on = "010000"
+            self.entity_description.payload_off = "000000"
         self._attr_unique_id = slugify(f"{device_id}_{description.name}")
         self.entity_id = f"{DOMAIN}.{POLARIS_DEVICE[int(device_type)]['class'].replace('-', '_').lower()}_{POLARIS_DEVICE[int(device_type)]['model'].replace('-', '_').lower()}_{description.key}"
         self.payload_on=self.entity_description.payload_on
@@ -823,7 +830,13 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
         @callback
         def message_received(message):
             if POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker":
-                if self.device_type in POLARIS_COFFEEMAKER_ROG_TYPE:
+                if self.device_type == "190" and self.entity_description.key == "power":
+                    # PCM-1560: now subscribed to state/program_data/1 (see __init__) -
+                    # "000000" = asleep, anything else = awake. Matches the Awake
+                    # binary_sensor and is a reliable, self-reverting signal (confirmed
+                    # against real hardware for both wake and natural sleep timeout).
+                    self._attr_is_on = str(message.payload) != "000000"
+                elif self.device_type in POLARIS_COFFEEMAKER_ROG_TYPE:
                     if str(message.payload) in ("1", "2", "3", "4", "5", "6", "8", "true"):
                         self._attr_is_on = True
                     else:
@@ -1020,17 +1033,9 @@ class PolarisSwitch(PolarisBaseEntity, SwitchEntity):
 
     def turn_on(self, **kwargs):
 #        self._attr_is_on = True # optimistic mode
-        if self.device_type == "190" and self.entity_description.key == "power":
-            # PCM-1560: DISABLED pending investigation. We only ever observed mode=8 as a
-            # STATE readback (the machine reporting its own warm-up, triggered by its
-            # physical wake button - which never goes through MQTT control/* at all).
-            # We assumed the same value would work as a CONTROL command to wake it
-            # remotely, but sending control/mode=8 instead triggered something that looks
-            # like the "clean" cycle (panel showed "001" with "clean" blinking) rather than
-            # a wake. The correct remote wake command (if any exists) is not yet known -
-            # do not publish anything here until it is confirmed safe.
-            _LOGGER.warning("Polaris PCM-1560: remote power-on is disabled pending investigation - see comments in switch.py")
-            return
+        # PCM-1560 (190): re-enabled - confirmed against real hardware that
+        # control/program_data/1 = "010000" genuinely wakes the machine (see __init__
+        # comment). Falls through to the generic publish below using payload_on.
         topic = f"{self.entity_description.mqttTopicCommand}"
         if self.entity_description.key == "display_off_heater":
             if self.device_type == "806":

@@ -41,6 +41,8 @@ from .const import (
     BINARYSENSOR_LID,
     BINARYSENSOR_WATER_TANK,
     BINARYSENSOR_CAPPUCCINATOR,
+    BINARYSENSOR_AWAKE,
+    BINARYSENSOR_BREWING,
     BINARYSENSOR_AVAILABLE,
     BINARYSENSOR_THERMOSTAT,
     PolarisBinarySensorEntityDescription,
@@ -123,6 +125,35 @@ async def async_setup_entry(
     if (device_type in POLARIS_COFFEEMAKER_ROG_TYPE):
             BINARYSENSOR_CAPPUCCINATOR_LC = copy.deepcopy(BINARYSENSOR_CAPPUCCINATOR)
             for description in BINARYSENSOR_CAPPUCCINATOR_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+    if (device_type == "190"):
+            # PCM-1560: read-only "awake" indicator, see comment in const.py.
+            BINARYSENSOR_AWAKE_LC = copy.deepcopy(BINARYSENSOR_AWAKE)
+            for description in BINARYSENSOR_AWAKE_LC:
+                description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
+                description.device_prefix_topic = device_prefix_topic
+                binarysensorList.append(
+                    PolarisBinarySensor(
+                        description=description,
+                        device_friendly_name=device_id,
+                        mqtt_root=mqtt_root,
+                        device_type=device_type,
+                        device_id=device_id
+                    )
+                )
+            # PCM-1560: read-only "brewing/cleaning/warming" indicator, see const.py.
+            BINARYSENSOR_BREWING_LC = copy.deepcopy(BINARYSENSOR_BREWING)
+            for description in BINARYSENSOR_BREWING_LC:
                 description.mqttTopicStatus = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicStatus}"
                 description.device_prefix_topic = device_prefix_topic
                 binarysensorList.append(
@@ -219,6 +250,18 @@ class PolarisBinarySensor(PolarisBaseEntity, BinarySensorEntity, ConfigEntry):
         async def message_received_base(message):
             if self.device_type == "190" and self.entity_description.key == "cappuccinator":
                 if str(message.payload) == "01":
+                    self._attr_is_on = False
+                else:
+                    self._attr_is_on = True
+            elif self.device_type == "190" and self.entity_description.key == "awake":
+                # Read-only observation of state/program_data/1 - see const.py comment.
+                if str(message.payload) == "000000":
+                    self._attr_is_on = False
+                else:
+                    self._attr_is_on = True
+            elif self.device_type == "190" and self.entity_description.key == "brewing":
+                # Read-only observation of state/mode - see const.py comment.
+                if str(message.payload) == "0":
                     self._attr_is_on = False
                 else:
                     self._attr_is_on = True
