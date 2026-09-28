@@ -229,6 +229,9 @@
       "speed": {
         "name": "Speed"
       },
+      "milk_ml": {
+        "name": "Milk"
+      },
       "temperature": {
         "name": "Temperature"
       },
@@ -894,7 +897,7 @@
         }
       },
       "select_mode_cofeemaker": {
-        "name": "Напиток",
+        "name": "Drink",
         "state": {
           "not_selected": "Not selected",
           "espresso": "Espresso",
@@ -1136,6 +1139,20 @@
         "state": {
           "on": "Online",
           "off": "Offline"
+        }
+      },
+      "awake_binary_sensor": {
+        "name": "Awake",
+        "state": {
+          "on": "Yes",
+          "off": "No"
+        }
+      },
+      "brewing_binary_sensor": {
+        "name": "Brewing",
+        "state": {
+          "on": "Brewing",
+          "off": "Idle"
         }
       }
     },

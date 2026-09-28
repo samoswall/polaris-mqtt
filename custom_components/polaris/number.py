@@ -9,14 +9,14 @@ import copy
 
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt.models import ReceiveMessage
-from homeassistant.components.number import NumberEntity, DOMAIN
+from homeassistant.components.number import NumberEntity, NumberDeviceClass, DOMAIN
 from homeassistant.helpers.entity import DeviceInfo, EntityCategory
 from homeassistant.util import slugify
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .common import PolarisBaseEntity
-from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.const import STATE_UNAVAILABLE, UnitOfVolume
 
 # Import global values.
 from .const import (
@@ -273,6 +273,39 @@ class PolarisNumber(PolarisBaseEntity, NumberEntity):
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "coffeemaker":
             if self.entity_description.name != "display_time":
                 self._attr_native_value = STATE_UNAVAILABLE
+        if self.device_type == "190" and self.entity_description.key == "tank":
+            # PCM-1560: the shared ROG_TYPE_2 table mislabels this as a DURATION in
+            # seconds with translation_key="speed" (copy-paste from another device
+            # template, e.g. a fan) - it's actually the milk volume in ml (real
+            # captured values: cappuccino=20, latte=90, foam=40). NOTE: ru.json's
+            # "speed" text already happened to read "Объём молока" (milk volume,
+            # correct!) while only en.json's was wrong ("Speed") - but "speed" is
+            # also used, unrelated, by the non-ROG coffeemaker table for a real
+            # DURATION field on other devices, so it can't just be redefined here.
+            # Using a dedicated translation_key instead avoids touching that other
+            # device family and keeps the already-correct Russian text intact.
+            # Fix the displayed name/unit/class and raise the cap so higher-milk
+            # drinks (e.g. a bigger cappuccino/latte) can be dialed in - user
+            # requested up to 100ml. Not verified against real hardware above the
+            # previously-confirmed values (max observed was 90 for latte) - watch
+            # the machine the first time you push this past 90-100, same as with
+            # any new value on this device.
+            self.entity_description.translation_key = "milk_ml"
+            self.entity_description.name = "Milk"
+            self._attr_device_class = NumberDeviceClass.VOLUME
+            self._attr_native_unit_of_measurement = UnitOfVolume.MILLILITERS
+            self._attr_native_max_value = 100
+        if self.device_type == "190" and self.entity_description.key == "amount":
+            # PCM-1560: the shared ROG_TYPE_2 table mislabels this as WEIGHT/grams
+            # (copy-paste default) - translation_key="amount" already resolves to
+            # the correct Russian text ("Объём кофе" = coffee volume), only the
+            # unit/device_class were wrong. Real captured values are small
+            # espresso-shot-sized amounts (well within the ~20-200 range already
+            # configured), consistent with mL, not grams of ground coffee.
+            # Already max=200 in the shared table, well above the requested 100 -
+            # no range change needed here, just the unit/class.
+            self._attr_device_class = NumberDeviceClass.VOLUME
+            self._attr_native_unit_of_measurement = UnitOfVolume.MILLILITERS
         if self.device_type in POLARIS_HUMIDDIFIER_LOW_FAN_TYPE:
             self._attr_native_max_value = 3
         if POLARIS_DEVICE[int(self.device_type)]['class'] == "air_fryer":
