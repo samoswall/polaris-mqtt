@@ -42,10 +42,12 @@ from .const import (
     SELECT_FAN,
     SELECT_VENTILATION,
     SELECT_WINDOWCLEANER,
+    SELECT_HUMIDIFIER_BACKLIGHT_COLOR,
     PolarisSelectEntityDescription,
     POLARIS_KETTLE_TYPE,
     POLARIS_KETTLE_WITH_WEIGHT_TYPE,
     POLARIS_HUMIDDIFIER_TYPE,
+    POLARIS_HUMIDDIFIER_BACKLIGHT_COLOR_TYPE,
     POLARIS_COOKER_TYPE,
     POLARIS_COFFEEMAKER_TYPE,
     POLARIS_COFFEEMAKER_ROG_TYPE,
@@ -370,6 +372,21 @@ async def async_setup_entry(
                     custom_data_select=custom_data_select
                 )
             )
+    if (device_type in POLARIS_HUMIDDIFIER_BACKLIGHT_COLOR_TYPE):
+        for description in copy.deepcopy(SELECT_HUMIDIFIER_BACKLIGHT_COLOR):
+            description.mqttTopicCurrentMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCurrentMode}"
+            description.mqttTopicCommandMode = f"{mqtt_root}/{device_prefix_topic}/{description.mqttTopicCommandMode}"
+            description.device_prefix_topic = device_prefix_topic
+            selectList.append(
+                PolarisSelect(
+                    description=description,
+                    device_friendly_name=device_id,
+                    mqtt_root=mqtt_root,
+                    device_type=device_type,
+                    device_id=device_id,
+                    custom_data_select=custom_data_select
+                )
+            )
     async_add_entities(selectList, update_before_add=True)
 
 
@@ -449,6 +466,8 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 'heating': '[{"mode": 5, "amount": 0, "tank": 0, "temperature": 95}]',
                 'hot_milk': '[{"mode": 6, "amount": 0, "tank": 15, "temperature": 95}]'
             }
+        if device_type == "158" and self.entity_description.key == "select_backlight_color":
+            self.entity_description.options = {"off": "00", "gradient": "01", "blue": "02", "green": "03", "orange": "04"}
         if self._custom_data_select is not None:
             if POLARIS_DEVICE[int(self.device_type)]['class'] == "kettle" and "SELECT_KETTLE_options" in self._custom_data_select:
 #                self.entity_description.options = json.loads(json.dumps(self.entity_description.options))
@@ -666,6 +685,8 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, str(self.entity_description.options[option]))
         if self.device_type == "180":
             mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option])
+        if self.device_type in POLARIS_HUMIDDIFIER_BACKLIGHT_COLOR_TYPE and self.entity_description.key == "select_backlight_color":
+            mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option])
         if self.device_type in POLARIS_VENTILATION_TYPE:
             if self.entity_description.translation_key == "filter_life":
                 mqtt.publish(self.hass, self.entity_description.mqttTopicCommandMode, self.entity_description.options[option] + self.vent_data0[2:4])
@@ -724,6 +745,14 @@ class PolarisSelect(PolarisBaseEntity, SelectEntity):
             elif self.device_type == "180":
                 self._attr_current_option = self._attr_options[int(payload)]
                 self.async_write_ha_state()
+            elif self.device_type in POLARIS_HUMIDDIFIER_BACKLIGHT_COLOR_TYPE and self.entity_description.key == "select_backlight_color":
+                try:
+                    value = int(payload[:2], 16)
+                    self._attr_current_option = next(
+                        key for key, val in self.entity_description.options.items() if int(val, 16) == value
+                    )
+                except (ValueError, StopIteration):
+                    pass
             elif int(self.device_type) == 834:
                 self._attr_current_option = self._attr_options[int(payload[:2])]
                 self.vent_data0 = payload

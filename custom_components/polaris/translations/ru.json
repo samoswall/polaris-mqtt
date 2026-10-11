@@ -1117,6 +1117,16 @@
           "middle": "Средняя",
           "high": "Высокая"
         }
+      },
+      "select_backlight_color": {
+        "name": "Цвет подсветки",
+        "state": {
+          "off": "Выкл",
+          "gradient": "Переливающийся",
+          "green": "Зелёный",
+          "blue": "Синий",
+          "orange": "Оранжевый"
+        }
       }
     },
     "vacuum": {

@@ -432,6 +432,7 @@ POLARIS_HUMIDDIFIER_LOW_FAN_TYPE = ["25","71","72","73","74","75","87","99","137
 POLARIS_HUMIDDIFIER_7_MODE_TYPE = ["17","18","44","70"]
 POLARIS_HUMIDDIFIER_5A_MODE_TYPE = ["4"]
 POLARIS_HUMIDDIFIER_5B_MODE_TYPE = ["72","74","87","147","155"]
+POLARIS_HUMIDDIFIER_BACKLIGHT_COLOR_TYPE = ["155","158"]
 POLARIS_HUMIDDIFIER_4_MODE_TYPE = ["15","71","73","75","99"]
 POLARIS_HUMIDDIFIER_3A_MODE_TYPE = ["25"]
 POLARIS_HUMIDDIFIER_3B_MODE_TYPE = ["153","157","158"]
@@ -4136,6 +4137,21 @@ SELECT_WINDOWCLEANER = [
         options={"off": "0", "up": "2", "left": "3", "right": "4"},
         device_class=None,
         entity_registry_enabled_default=True,
+    ),
+]
+SELECT_HUMIDIFIER_BACKLIGHT_COLOR = [
+    PolarisSelectEntityDescription(
+        key="select_backlight_color",
+        name="Backlight color",
+        translation_key="select_backlight_color",
+        mqttTopicCurrentMode="state/program_data/0",
+        mqttTopicCommandMode="control/program_data/0",
+        # program_data/0 = backlight_rgb, 1 byte, hex payload (PUH-8802 order; PUH-6060 swaps green/blue)
+        options={"off": "00", "gradient": "01", "green": "02", "blue": "03", "orange": "04"},
+        entity_category=EntityCategory.CONFIG,
+        device_class=None,
+        entity_registry_enabled_default=True,
+        icon="mdi:palette",
     ),
 ]
 SELECT_IRRIGATOR = [

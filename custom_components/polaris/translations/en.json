@@ -1066,6 +1066,16 @@
           "left": "Left then down",
           "right": "Right then down"
         }
+      },
+      "select_backlight_color": {
+        "name": "Backlight color",
+        "state": {
+          "off": "Off",
+          "gradient": "Colorful gradient",
+          "green": "Green",
+          "blue": "Blue",
+          "orange": "Orange"
+        }
       }
     },
     "vacuum": {
