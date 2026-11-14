@@ -183,7 +183,7 @@ class PolarisConfigFlow(ConfigFlow, domain=DOMAIN):
         self._abort_if_unique_id_configured(error="already_configured")
         # Create entities
         return self.async_create_entry(
-            error=error,
+            
             title=title,
             data=user_input,
         )
